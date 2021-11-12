@@ -1,7 +1,7 @@
 
 {
-  "title": "test",
-  "description": "test",
+  "title": "Container 101",
+  "description": "Run Container on Docker",
   "difficulty": "beginner",
   "time": "30 minutes",
   "details": {
