@@ -1,13 +1,13 @@
 
 {
   "title": "test",
-  "description": "inventory, credential, modules, playbook",
+  "description": "test",
   "difficulty": "beginner",
   "time": "30 minutes",
   "details": {
     "intro": {
       "text": "intro.md",
-      "credits": "https://github.com/irixjp/katacoda-scenarios"
+      "credits": "https://github.com/mayumi00/katacoda-scenarios"
     },
     "finish": {
       "text": "finish.md"
