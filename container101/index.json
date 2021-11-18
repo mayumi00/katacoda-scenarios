@@ -28,7 +28,6 @@
     "dashboards": [
       {"name": "node-1", "port": 8081},
       {"name": "node-2", "port": 8082},
-      {"name": "node-3", "port": 8083}
     ],
     "uimessage1": "\u001b[32mYour Interactive Bash Terminal. A safe place to learn and execute commands.\u001b[m\r\n"
   },
