@@ -23,7 +23,7 @@
     "uilayout": "terminal",
     "showide": true,
     "hideintro": false,
-    "hidefinish": false,
+    "hidefinish": false
   },
   "backend": {
     "imageid": "ubuntu:2004"
