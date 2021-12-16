@@ -8,6 +8,12 @@
 `docker run hello-world`{{execute}}
 
 ```text
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+2db29710123e: Pull complete 
+Digest: sha256:cc15c5b292d8525effc0f89cb299f1804f3a725c8d05e158653a563f15e4f685
+Status: Downloaded newer image for hello-world:latest
+
 Hello from Docker!
 This message shows that your installation appears to be working correctly.
 
@@ -30,11 +36,35 @@ For more examples and ideas, visit:
  https://docs.docker.com/get-started/
  ```
 
-このコマンドで
-- コンテナレジストリから、使用しているホストにコンテナイメージを持ってくる（docker pull）
--
+このコマンドで実施されたことは以下の２つの操作です。
 
+- 自ホストに「hello-world」というイメージがなかったので、コンテナレジストリから、最新の「hello-world」イメージを持ってくる（docker pull）
+
+```text
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+2db29710123e: Pull complete 
+Digest: sha256:cc15c5b292d8525effc0f89cb299f1804f3a725c8d05e158653a563f15e4f685
+Status: Downloaded newer image for hello-world:latest
+```
+
+- 自ホストに持ってきたイメージからコンテナを起動する（docker run）
+
+```text
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+（略）
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+ ```
+ 
+ 
 `docker ps -a`{{execute}}
+
+```text
+CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                     PORTS     NAMES
+655c23e742bf   hello-world   "/hello"   8 minutes ago   Exited (0) 8 minutes ago             elegant_yonath
+ ```
 `docker images`{{execute}}
 
 `docker pull centos:latest`{{execute}}
