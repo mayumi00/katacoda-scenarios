@@ -2,7 +2,7 @@
 
 # コンテナの起動
 
-![Test Image 1](./images/image1.png)　
+![Test Image 1](./images/image01.png)　
 
 この環境ではすでにDockerが利用できる状態になっています。Dockerを利用してコンテナを起動して、動作を確認します。
 「hello-world」というDockerについての簡単な説明を出力するコンテナを起動してみます。
