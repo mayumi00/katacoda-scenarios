@@ -4,7 +4,8 @@
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)　
 
-この環境ではすでにDockerが利用できる状態になっています。Dockerを利用してコンテナを起動して、動作を確認してみましょう。
+上の図における右側の「コンテナを稼働させるホスト（自ホスト）」が、このコースの左側に表示されているterminalに対応しています。この環境は既にDockerが利用できる状態になっていますので、Dockerを利用してコンテナを起動して、動作を確認してみましょう。
+
 「hello-world」というDockerについての簡単な説明を出力するコンテナを起動してみます。
 
 `docker run hello-world`{{execute}}
@@ -42,7 +43,7 @@ For more examples and ideas, visit:
 
 このコマンドで実施されたことは以下の２つの操作です。
 
-- 自ホストに「hello-world」というイメージがなかったので、コンテナレジストリから、最新の「hello-world」イメージを持ってくる（docker pull）
+自ホスト上では「hello-world」というイメージが見つけられなかったので、コンテナレジストリから、最新の「hello-world」イメージを持ってくる処理をします（docker pull）。図の左にある既存のコンテナレジストリ（代表的なものはDocker Hubです）からpullして、自ホストのイメージ格納領域に保存します。
 
 ```text
 Unable to find image 'hello-world:latest' locally
@@ -52,7 +53,7 @@ Digest: sha256:cc15c5b292d8525effc0f89cb299f1804f3a725c8d05e158653a563f15e4f685
 Status: Downloaded newer image for hello-world:latest
 ```
 
-- 自ホストに持ってきたイメージからコンテナを起動する（docker run）
+自ホストに格納されたイメージからコンテナを起動します（docker run）
 
 ```text
 Hello from Docker!
@@ -62,7 +63,7 @@ For more examples and ideas, visit:
  https://docs.docker.com/get-started/
  ```
  
- ここで、コンテナの一覧を見てみましょう。-aオプションを付けると、起動していないコンテナも含めてすべてを表示します。-aを付けないデフォルトの場合は、実行中のコンテナーのみが表示されます。hello-worldコンテナは説明を出力すると終了するので（ExitedというSTATUSはコンテナが実行され、終了した状態を指します）-aオプションを付けないと表示されません。
+ ここで、コンテナの一覧を見てみましょう。-aオプションを付けると、起動していないコンテナも含めてすべてを表示します。-aを付けないデフォルトの場合は、実行中のコンテナーのみが表示されます。hello-worldコンテナは説明を出力すると終了してしまうので（ExitedというSTATUSはコンテナが実行され、終了した状態を指します）-aオプションを付けないと表示されません。
  
 `docker ps -a`{{execute}}
 
@@ -70,7 +71,27 @@ For more examples and ideas, visit:
 CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                     PORTS     NAMES
 655c23e742bf   hello-world   "/hello"   8 minutes ago   Exited (0) 8 minutes ago             elegant_yonath
  ```
-`docker images`{{execute}}
+ 
+ 自ホストにhello-worldのイメージを持ってくる処理をしましたが、イメージが格納されているか確認してみましょう。実は、この環境では既にいくつかのコンテナイメージが自ホスト上に準備されています。
+ 
+ `docker images`{{execute}}
+ 
+```text
+REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
+redis              latest    b8477f2e393b   2 months ago   113MB
+mongo              latest    c1a14d3979c5   2 months ago   691MB
+mariadb            10        b7220a722ce2   2 months ago   409MB
+mariadb            latest    b7220a722ce2   2 months ago   409MB
+ubuntu             latest    597ce1600cf4   2 months ago   72.8MB
+postgres           12        fe603fe275ba   2 months ago   371MB
+postgres           latest    6ce504119cc8   2 months ago   374MB
+mysql              8         2fe463762680   2 months ago   514MB
+mysql              latest    2fe463762680   2 months ago   514MB
+hello-world        latest    feb5d9fea6a5   2 months ago   13.3kB
+alpine             latest    14119a10abf4   3 months ago   5.59MB
+weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
+```
+
 
 `docker pull centos:latest`{{execute}}
 
