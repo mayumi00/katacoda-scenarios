@@ -4,10 +4,12 @@
 
 ![Test Image 1](./images/image01.png)　
 
-この環境ではすでにDockerが利用できる状態になっています。Dockerを利用してコンテナを起動して、動作を確認します。
+この環境ではすでにDockerが利用できる状態になっています。Dockerを利用してコンテナを起動して、動作を確認してみましょう。
 「hello-world」というDockerについての簡単な説明を出力するコンテナを起動してみます。
 
 `docker run hello-world`{{execute}}
+
+以下のように出力されます。
 
 ```text
 Unable to find image 'hello-world:latest' locally
@@ -60,6 +62,7 @@ For more examples and ideas, visit:
  https://docs.docker.com/get-started/
  ```
  
+ ここで、コンテナの一覧を見てみましょう。-aオプションを付けると、起動していないコンテナも含めてすべてを表示します。-aを付けないデフォルトの場合は、実行中のコンテナーのみが表示されます。hello-worldコンテナは説明を出力すると終了するので（ExitedというSTATUSはコンテナが実行され、終了した状態を指します）-aオプションを付けないと表示されません。
  
 `docker ps -a`{{execute}}
 
