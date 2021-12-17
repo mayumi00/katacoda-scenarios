@@ -11,15 +11,78 @@
 
  `docker images`{{execute}}
  
- とりあえずCentOSの最新版のコンテナをコンテナレジストリからダウンロードします。
+ とりあえずCentOSの最新版のコンテナをコンテナレジストリからダウンロードします。pullする際にlatestのタグを指定しています。
  
 `docker pull centos:latest`{{execute}}
+
+```text
+latest: Pulling from library/centos
+a1d0c7532777: Pull complete 
+Digest: sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
+Status: Downloaded newer image for centos:latest
+docker.io/library/centos:latest
+```
 
 再度、コンテナイメージを確認します。
 
 `docker images`{{execute}}
 
-> Note: 特定の文字列を含むイメージを検索することができます。`docker search centos`{{execute}}
+```text
+REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
+redis              latest    b8477f2e393b   2 months ago   113MB
+mongo              latest    c1a14d3979c5   2 months ago   691MB
+mariadb            10        b7220a722ce2   2 months ago   409MB
+mariadb            latest    b7220a722ce2   2 months ago   409MB
+ubuntu             latest    597ce1600cf4   2 months ago   72.8MB
+postgres           12        fe603fe275ba   2 months ago   371MB
+postgres           latest    6ce504119cc8   2 months ago   374MB
+mysql              8         2fe463762680   2 months ago   514MB
+mysql              latest    2fe463762680   2 months ago   514MB
+hello-world        latest    feb5d9fea6a5   2 months ago   13.3kB
+centos             latest    5d0da3dc9764   3 months ago   231MB
+alpine             latest    14119a10abf4   3 months ago   5.59MB
+weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
+```
+centosの最新版が自ホストのイメージ格納領域にダウンロードされたことがわかります。
+
+```text
+> Note: 特定の文字列を含むイメージを検索することができます。この例ではcentosという文字列を含むコンテナイメージを検索しています。
+`docker search centos`{{execute}}
+NAME                              DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
+centos                            The official build of CentOS.                   6928      [OK]       
+ansible/centos7-ansible           Ansible on Centos7                              135                  [OK]
+consol/centos-xfce-vnc            Centos container with "headless" VNC session…   132                  [OK]
+jdeathe/centos-ssh                OpenSSH / Supervisor / EPEL/IUS/SCL Repos - …   121                  [OK]
+centos/systemd                    systemd enabled base container.                 105                  [OK]
+centos/mysql-57-centos7           MySQL 5.7 SQL database server                   92                   
+imagine10255/centos6-lnmp-php56   centos6-lnmp-php56                              58                   [OK]
+tutum/centos                      Simple CentOS docker image with SSH access      48                   
+centos/postgresql-96-centos7      PostgreSQL is an advanced Object-Relational …   45                   
+kinogmt/centos-ssh                CentOS with SSH                                 29                   [OK]
+centos/mariadb                                                                    22                   [OK]
+guyton/centos6                    From official centos6 container with full up…   10                   [OK]
+nathonfowlie/centos-jre           Latest CentOS image with the JRE pre-install…   8                    [OK]
+centos/tools                      Docker image that has systems administration…   7                    [OK]
+drecom/centos-ruby                centos ruby                                     6                    [OK]
+centos/redis                      Redis built for CentOS                          6                    [OK]
+mamohr/centos-java                Oracle Java 8 Docker image based on Centos 7    3                    [OK]
+darksheer/centos                  Base Centos Image -- Updated hourly             3                    [OK]
+miko2u/centos6                    CentOS6 日本語環境                                   2                    [OK]
+amd64/centos                      The official build of CentOS.                   2                    
+dokken/centos-7                   CentOS 7 image for kitchen-dokken               2                    
+blacklabelops/centos              CentOS Base Image! Built and Updates Daily!     1                    [OK]
+mcnaughton/centos-base            centos base image                               1                    [OK]
+starlabio/centos-native-build     Our CentOS image for native builds              0                    [OK]
+smartentry/centos                 centos with smartentry                          0                    [OK]
+```
+
+それではこのCentOSのコンテナイメージを起動します。先程の章で、コンテナを起動する際に`--nameオプション`を付けるとコンテナの名前をつけることができると説明しました。今回はコンテナにmycentos1という名前を付けることにします。
+
+`-i（or --interactive）オプション`は標準入力を受け付けるもので　`-t（or --tty）オプション`は疑似TTYの割当を行うものです、これらを組み合わせて、bashをインタラクティブモードで起動し、コンテナの操作を可能にします。コンテナ起動直後に実施するコマンドとして/bin/bashを指定します。
+
+`docker run [オプション] IMAGE [COMMAND] [ARG...]`
+
+`docker run -it --name mycentos1 centos /bin/bash`{{execute}}
 
 
 
