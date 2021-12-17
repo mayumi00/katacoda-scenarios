@@ -2,6 +2,8 @@
 
 # コンテナの起動
 
+> Note: 本演習では、 `{{execute}}` とついている部分が、演習で実行するコマンドになります。この部分をクリックすることでコマンドが実行されます。 `{{execute}}` 自身は入力する必要はありません。
+
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)　
 
 上の図における右側の「コンテナを稼働させるホスト（自ホスト）」が、このコースの左側に表示されているterminalに対応しています。この環境は既にDockerが利用できる状態になっていますので、Dockerを利用してコンテナを起動して、動作を確認してみましょう。
