@@ -63,16 +63,15 @@ For more examples and ideas, visit:
  https://docs.docker.com/get-started/
  ```
  
- ここで、コンテナの一覧を見てみましょう。-aオプションを付けると、起動していないコンテナも含めてすべてを表示します。-aを付けないデフォルトの場合は、実行中のコンテナーのみが表示されます。hello-worldコンテナは説明を出力すると終了してしまうので（ExitedというSTATUSはコンテナが実行され、終了した状態を指します）-aオプションを付けないと表示されません。
- 
-`docker ps -a`{{execute}}
-
-```text
-CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                     PORTS     NAMES
-655c23e742bf   hello-world   "/hello"   8 minutes ago   Exited (0) 8 minutes ago             elegant_yonath
- ```
- 
- 自ホストにhello-worldのイメージを持ってくる処理をしましたが、イメージが格納されているか確認してみましょう。実は、この環境では既にいくつかのコンテナイメージが自ホスト上に準備されています。
+  自ホストにhello-worldのイメージを持ってくる処理をしましたが、イメージが格納されているか確認してみましょう。実は、この環境では既にいくつかのコンテナイメージが準備されています。
+  
+  | 項目 | 意味 | 
+|:-----------|:------------:|
+| REPOSITORY | レポジトリ | 
+| TAG     | イメージのタグ、バージョン情報など | 
+| IMAGE ID       | イメージID        | 
+| CREATED | イメージが作成されたタイミング（ 自ホストに持ってきた日ではありません）       |
+| SIZE | イメージのサイズ       |
  
  `docker images`{{execute}}
  
@@ -91,6 +90,18 @@ hello-world        latest    feb5d9fea6a5   2 months ago   13.3kB
 alpine             latest    14119a10abf4   3 months ago   5.59MB
 weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ```
+
+
+ ここで、コンテナの一覧を見てみましょう。-aオプションを付けると、起動していないコンテナも含めてすべてを表示します。-aを付けないデフォルトの場合は、実行中のコンテナーのみが表示されます。hello-worldコンテナは説明を出力すると終了してしまうので（ExitedというSTATUSはコンテナが実行され、終了した状態を指します）-aオプションを付けないと表示されません。
+ 
+`docker ps -a`{{execute}}
+
+```text
+CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                     PORTS     NAMES
+655c23e742bf   hello-world   "/hello"   8 minutes ago   Exited (0) 8 minutes ago             elegant_yonath
+ ```
+ 
+
 
 
 `docker pull centos:latest`{{execute}}
