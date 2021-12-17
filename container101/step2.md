@@ -101,7 +101,7 @@ smartentry/centos                 centos with smartentry                        
 `docker run -it --name mycentos1 centos /bin/bash`{{execute}}
 
 ```text
-`[root@0893cd3e1c07 /]#  ` 
+[root@0893cd3e1c07 /]#
 ```
 
 プロンプトが表示され、bashの利用が可能になっています。コンテナを起動する際に`-h（or --hostname）オプション`を付けるとコンテナのホスト名を指定することができますが、今回は指定していないので、コンテナIDが利用されます。プロンプトのroot@の後ろの文字列はコンテナホスト名＝コンテナIDなので、実行した環境によって異なります。いくつかのファイルの内容の確認やコマンドの実行を行ってみます。
@@ -159,9 +159,6 @@ CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS                  
 runで起動したコンテナのターミナルをexitで抜けると、コンテナが停止します。再度、コンテナを起動します。起動するコンテンを指定する方法にはコンテナ名またはコンテナIDを指定します。先程、mycentos1というコンテナ名を付けておいたので、それを指定します。
 
 `docker start mycentos1`{{execute}}
-```text
-mycentos1
-```
 
 コンテナの起動状況を確認します。STATUSはUpになっていることがわかります。
 
@@ -221,10 +218,6 @@ CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS          PORT
 コンテナのターミナルから`exit`で抜けます。先程のrunの場合と異なりコンテナは停止せず、起動したままです。今度はdockerコマンドで明示的にコンテナを停止します。
 
 `docker stop mycentos1`{{execute}}
-```text
-mycentos1
-```
-
 `docker ps -a`{{execute}}
 ```text
 CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS                     PORTS     NAMES
