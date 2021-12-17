@@ -86,20 +86,30 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ```
  | 項目 | 意味 | 
 |:-----------|:------------|
-| REPOSITORY | レポジトリ | 
-| TAG | イメージのタグ、バージョン情報など | 
+| REPOSITORY | リポジトリ、名前は同じでタグが異なるDockerイメージの集まり | 
+| TAG | イメージに付けられているタグ、リポジトリやバージョン情報 | 
 | IMAGE ID | イメージID | 
-| CREATED | イメージが作成されたタイミング（ 自ホストに持ってきた日ではありません） |
+| CREATED | イメージが作成された時刻（ 自ホストに持ってきた日ではありません） |
 | SIZE | イメージのサイズ |
 
- ここで、コンテナの一覧を見てみましょう。-aオプションを付けると、起動していないコンテナも含めてすべてを表示します。-aを付けないデフォルトの場合は、実行中のコンテナーのみが表示されます。hello-worldコンテナは説明を出力すると終了してしまうので（ExitedというSTATUSはコンテナが実行され、終了した状態を指します）-aオプションを付けないと表示されません。
+ ここで、コンテナの一覧を見てみましょう。-aオプションを付けると、起動していないコンテナも含めてすべてを表示します。-aを付けないデフォルトの場合は、実行中のコンテナーのみが表示されます。hello-worldコンテナは説明を出力すると終了してしまうので-aオプションを付けないと表示されません。ExitedというSTATUSはコンテナが実行され、終了した状態を指しています。
  
-`docker ps -a`{{execute}}
+`docker ps -a `{{execute}}
 
 ```text
 CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                     PORTS     NAMES
 655c23e742bf   hello-world   "/hello"   8 minutes ago   Exited (0) 8 minutes ago             elegant_yonath
  ```
+ 
+  | 項目 | 意味 | 
+|:-----------|:------------|
+| CONTAINER ID | コンテナのIDでユニークな値が付けられる | 
+| IMAGE | イメージに付けられているタグ、リポジトリやバージョン情報 | 
+| COMMAND | コンテナで実行されたコマンド | 
+| CREATED | コンテナが生成された時刻 |
+| STATUS | コンテナの状態、右のいずれか（created、restarting、running、removing、paused、exited、dead） |
+| PORTS | プロトコルによる公開ポート |
+| NAMES | イメージのサイズ |
  
 
 
