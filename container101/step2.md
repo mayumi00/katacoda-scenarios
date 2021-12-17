@@ -11,7 +11,22 @@
 
  `docker images`{{execute}}
  
- とりあえずCentOSの最新版のコンテナをコンテナレジストリからダウンロードします。pullする際にlatestのタグを指定します。
+```text
+REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
+redis              latest    b8477f2e393b   2 months ago   113MB
+mongo              latest    c1a14d3979c5   2 months ago   691MB
+mariadb            10        b7220a722ce2   2 months ago   409MB
+mariadb            latest    b7220a722ce2   2 months ago   409MB
+ubuntu             latest    597ce1600cf4   2 months ago   72.8MB
+postgres           12        fe603fe275ba   2 months ago   371MB
+postgres           latest    6ce504119cc8   2 months ago   374MB
+mysql              8         2fe463762680   2 months ago   514MB
+mysql              latest    2fe463762680   2 months ago   514MB
+alpine             latest    14119a10abf4   3 months ago   5.59MB
+weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
+```
+
+とりあえずCentOSの最新版のコンテナをコンテナレジストリからダウンロードします。pullする際にlatestのタグを指定します。
  
 利用方法  `docker pull [オプション] NAME[:TAG|@DIGEST] `
  
@@ -86,7 +101,7 @@ smartentry/centos                 centos with smartentry                        
 `docker run -it --name mycentos1 centos /bin/bash`{{execute}}
 
 ```text
-`[root@187c07b01562 /]# ` 
+`[root@0893cd3e1c07 /]#  ` 
 ```
 
 プロンプトが表示され、bashの利用が可能になっています。コンテナを起動する際に`-h（or --hostname）オプション`を付けるとコンテナのホスト名を指定することができますが、今回は指定していないので、コンテナIDが利用されます。プロンプトのroot@の後ろの文字列はコンテナホスト名＝コンテナIDなので、実行した環境によって異なります。いくつかのファイルの内容の確認やコマンドの実行を行ってみます。
@@ -99,8 +114,20 @@ smartentry/centos                 centos with smartentry                        
 `cat /etc/os-release`{{execute}}
 
 ```text
-[root@187c07b01562 /]# cat /etc/os-release 
-CentOS Linux release 8.4.2105
+[root@0893cd3e1c07 /]# cat /etc/os-release
+NAME="CentOS Linux"
+VERSION="8"
+ID="centos"
+ID_LIKE="rhel fedora"
+VERSION_ID="8"
+PLATFORM_ID="platform:el8"
+PRETTY_NAME="CentOS Linux 8"
+ANSI_COLOR="0;31"
+CPE_NAME="cpe:/o:centos:centos:8"
+HOME_URL="https://centos.org/"
+BUG_REPORT_URL="https://bugs.centos.org/"
+CENTOS_MANTISBT_PROJECT="CentOS-8"
+CENTOS_MANTISBT_PROJECT_VERSION="8"
 ```
 
 `uname -a`{{execute}}
@@ -113,19 +140,20 @@ Linux 187c07b01562 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 
 `cat /etc/hostname`{{execute}}
 
 ```text
-[root@187c07b01562 /]# cat /etc/hostname 
-187c07b01562
+[root@0893cd3e1c07 /]# cat /etc/hostname
+0893cd3e1c07
 ```
 `exit`{{execute}}
 
 ```text
-[root@187c07b01562 /]# exit
+[root@0893cd3e1c07 /]# exit
+exit
 ```
 
 `docker ps -a`{{execute}}
 ```text
-CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS                      PORTS     NAMES
-187c07b01562   centos    "/bin/bash"   5 minutes ago   Exited (0) 12 seconds ago             mycentos1
+CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS                     PORTS     NAMES
+0893cd3e1c07   centos    "/bin/bash"   49 seconds ago   Exited (0) 4 seconds ago             mycentos1
 ```
 
 runで起動したコンテナのターミナルをexitで抜けると、コンテナが停止します。再度、コンテナを起動します。起動するコンテンを指定する方法にはコンテナ名またはコンテナIDを指定します。先程、mycentos1というコンテナ名を付けておいたので、それを指定します。
@@ -139,8 +167,8 @@ mycentos1
 
 `docker ps -a`{{execute}}
 ```text
-CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     NAMES
-187c07b01562   centos    "/bin/bash"   9 minutes ago   Up 5 seconds             mycentos1
+CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS         PORTS     NAMES
+0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Up 7 seconds             mycentos1
 ```
 
 起動したけど、標準入力を受け付けるオプションを指定しなかったので操作できない状態。そこで、実行中のコンテナー内において新たなコマンドを実行するexecコマンドを利用してbashの利用を可能にします。
@@ -149,44 +177,45 @@ CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     
 
 `docker exec -it mycentos1 /bin/bash`{{execute}}
 ```text
-[root@187c07b01562 /]#
+[root@0893cd3e1c07 /]# 
 ```
 
 bashが利用できる状態になったので、いくつかのコマンドを実行してみましょう。
 
 - 現在存在するファイル/ディレクトリの表示
-- 空のファイルを作成
+- テキストファイルを作成
 - ファイルが作られたことを確認
 
 `ls`{{execute}}
 ```text
-[root@187c07b01562 /]#
+[root@0893cd3e1c07 /]# ls
+bin  dev  etc  home  lib  lib64  lost+found  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+
 ```
 
 `echo ContainerExercise > testfile.txt`{{execute}}
-```text
-[root@187c07b01562 /]#
-```
+
 
 `ls`{{execute}}
 ```text
-[root@187c07b01562 /]#
+[root@0893cd3e1c07 /]# ls
+bin  etc   lib    lost+found  mnt  proc  run   srv  testfile.txt  usr
+dev  home  lib64  media       opt  root  sbin  sys  tmp           var
 ```
 
 `cat testfile.txt`{{execute}}
 ```text
-[root@187c07b01562 /]#
+[root@0893cd3e1c07 /]# cat testfile.txt
+ContainerExercise
 ```
 
 `exit`{{execute}}
-```text
-exit
-```
+
 
 `docker ps -a`{{execute}}
 ```text
-CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS              PORTS     NAMES
-187c07b01562   centos    "/bin/bash"   8 minutes ago   Up About a minute             mycentos1
+CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS          PORTS     NAMES
+0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Up 37 seconds             mycentos1
 ```
 
 コンテナのターミナルから`exit`で抜けます。先程のrunの場合と異なりコンテナは停止せず、起動したままです。今度はdockerコマンドで明示的にコンテナを停止します。
@@ -198,37 +227,38 @@ mycentos1
 
 `docker ps -a`{{execute}}
 ```text
-CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS                      PORTS     NAMES
-187c07b01562   centos    "/bin/bash"   9 minutes ago   Exited (0) 19 seconds ago             mycentos1
+CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS                     PORTS     NAMES
+0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Exited (0) 3 seconds ago             mycentos1
 ```
 
-コンテナをまた起動します。
+コンテナをまた起動して、状態を確認します。
 
 `docker start mycentos1`{{execute}}
+`docker ps -a`{{execute}}
+
 ```text
 CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     NAMES
-187c07b01562   centos    "/bin/bash"   9 minutes ago   Up 5 seconds             mycentos1
+0893cd3e1c07   centos    "/bin/bash"   2 minutes ago   Up 4 seconds             mycentos1
 ```
 
-`docker ps -a`{{execute}}
-```text
-mycentos1
-```
 execコマンドを利用してbashの利用を可能にします。
 
 `docker exec -it mycentos1 /bin/bash`{{execute}}
 ```text
-[root@187c07b01562 /]#
+[root@0893cd3e1c07 /]# 
 ```
 ここで、先程作成したファイル`testfile.txt`が、コンテナ停止の影響を受けてるか確認します。
 
 `ls`{{execute}}
 ```text
-[root@187c07b01562 /]#
+[root@0893cd3e1c07 /]# ls
+bin  etc   lib    lost+found  mnt  proc  run   srv  testfile.txt  usr
+dev  home  lib64  media       opt  root  sbin  sys  tmp           var
 ```
 `cat testfile.txt`{{execute}}
 ```text
-[root@187c07b01562 /]#
+[root@0893cd3e1c07 /]# cat testfile.txt
+ContainerExercise
 ```
 
 先程作ったファイルはそのまま存在してます。コンテナの停止によって影響は受けないことはわかりました。
@@ -237,3 +267,5 @@ execコマンドを利用してbashの利用を可能にします。
 ```text
 exit
 ```
+
+コンテナの起動や停止・開始の一連の操作でコンテナの状態がどのように推移するかなんとなく理解できたかと思います。とはいえ、まだCentOSコンテナの操作をちょっと行ってみただけなので、次のステップではCentOSコンテナにアプリケーションをインストールして、アプリの動作を確認してみましょう。
