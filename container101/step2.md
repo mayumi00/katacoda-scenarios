@@ -45,9 +45,10 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ```
 centosの最新版が自ホストのイメージ格納領域にダウンロードされたことがわかります。
 
-```text
 > Note: 特定の文字列を含むイメージを検索することができます。この例ではcentosという文字列を含むコンテナイメージを検索しています。
+
 `docker search centos`{{execute}}
+```text
 NAME                              DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
 centos                            The official build of CentOS.                   6928      [OK]       
 ansible/centos7-ansible           Ansible on Centos7                              135                  [OK]
@@ -83,6 +84,436 @@ smartentry/centos                 centos with smartentry                        
 `docker run [オプション] IMAGE [COMMAND] [ARG...]`
 
 `docker run -it --name mycentos1 centos /bin/bash`{{execute}}
+
+`[root@187c07b01562 /]# ` プロンプトが表示され、bashの利用が可能になっています。このコンテナはCentOSなので、いくつか試しに確認してみます。
+
+`cat /etc/redhat-release`{{execute}}
+
+```text
+[root@187c07b01562 /]# cat /etc/redhat-release 
+CentOS Linux release 8.4.2105
+```
+
+`uname -a`{{execute}}
+
+```text
+[root@187c07b01562 /]# uname -a
+Linux 187c07b01562 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+```
+
+`cat /etc/hostname`{{execute}}
+
+```text
+[root@187c07b01562 /]# cat /etc/hostname 
+187c07b01562
+```
+`exit`{{execute}}
+
+```text
+[root@187c07b01562 /]# exit
+```
+
+`docker ps -a`{{execute}}
+```text
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS                      PORTS     NAMES
+187c07b01562   centos    "/bin/bash"   5 minutes ago   Exited (0) 12 seconds ago             mycentos1
+```
+
+exitで抜けると、コンテナが停止してしまいました。再度、コンテナを起動します。起動するコンテンを指定する方法にはコンテナ名またはコンテナIDを指定します。先程、mycentos1というコンテナ名を付けておいたので、それを指定します。
+
+`docker start mycentos1`{{execute}}
+```text
+mycentos1
+```
+
+`docker ps -a`{{execute}}
+```text
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     NAMES
+187c07b01562   centos    "/bin/bash"   9 minutes ago   Up 5 seconds             mycentos1
+```
+
+起動したけど、標準入力を受け付ける設定をしなかったので操作できない状態。そこで、実行中のコンテナー内において新たなコマンドを実行するexecコマンドを利用してbashの利用を可能にします。
+
+`docker exec -it mycentos1 /bin/bash`{{execute}}
+```text
+[root@187c07b01562 /]#
+```
+
+`ls`{{execute}}
+```text
+[root@187c07b01562 /]#
+```
+
+`touch testfile`{{execute}}
+```text
+[root@187c07b01562 /]#
+```
+
+`ls`{{execute}}
+```text
+[root@187c07b01562 /]#
+```
+
+`exit`{{execute}}
+```text
+exit
+```
+
+`docker ps -a`{{execute}}
+```text
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS              PORTS     NAMES
+187c07b01562   centos    "/bin/bash"   8 minutes ago   Up About a minute             mycentos1
+```
+
+`docker stop mycentos1`{{execute}}
+```text
+mycentos1
+```
+
+`docker ps -a`{{execute}}
+```text
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS                      PORTS     NAMES
+187c07b01562   centos    "/bin/bash"   9 minutes ago   Exited (0) 19 seconds ago             mycentos1
+```
+
+`docker start mycentos1`{{execute}}
+```text
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     NAMES
+187c07b01562   centos    "/bin/bash"   9 minutes ago   Up 5 seconds             mycentos1
+```
+
+`docker ps -a`{{execute}}
+```text
+mycentos1
+```
+
+`docker exec -it mycentos1 /bin/bash`{{execute}}
+```text
+[root@187c07b01562 /]#
+```
+
+`ls`{{execute}}
+```text
+[root@187c07b01562 /]#
+```
+
+`exit`{{execute}}
+```text
+exit
+```
+
+
+$ docker start mycentos1
+mycentos1
+$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     NAMES
+187c07b01562   centos    "/bin/bash"   9 minutes ago   Up 5 seconds             mycentos1
+
+
+$ docker exec -it mycentos1 /bin/bash
+
+
+
+
+$ docker start mycentos1
+mycentos1
+
+
+
+
+
+
+
+
+
+
+Your Interactive Bash Terminal.
+
+$ docker images
+REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
+redis              latest    b8477f2e393b   2 months ago   113MB
+mongo              latest    c1a14d3979c5   2 months ago   691MB
+mariadb            10        b7220a722ce2   2 months ago   409MB
+mariadb            latest    b7220a722ce2   2 months ago   409MB
+ubuntu             latest    597ce1600cf4   2 months ago   72.8MB
+postgres           12        fe603fe275ba   2 months ago   371MB
+postgres           latest    6ce504119cc8   2 months ago   374MB
+mysql              8         2fe463762680   2 months ago   514MB
+mysql              latest    2fe463762680   2 months ago   514MB
+alpine             latest    14119a10abf4   3 months ago   5.59MB
+weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
+$ docker pull centos:latest
+latest: Pulling from library/centos
+a1d0c7532777: Pull complete 
+Digest: sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
+Status: Downloaded newer image for centos:latest
+docker.io/library/centos:latest
+$ docker images
+REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
+redis              latest    b8477f2e393b   2 months ago   113MB
+mongo              latest    c1a14d3979c5   2 months ago   691MB
+mariadb            10        b7220a722ce2   2 months ago   409MB
+mariadb            latest    b7220a722ce2   2 months ago   409MB
+ubuntu             latest    597ce1600cf4   2 months ago   72.8MB
+postgres           12        fe603fe275ba   2 months ago   371MB
+postgres           latest    6ce504119cc8   2 months ago   374MB
+mysql              8         2fe463762680   2 months ago   514MB
+mysql              latest    2fe463762680   2 months ago   514MB
+centos             latest    5d0da3dc9764   3 months ago   231MB
+alpine             latest    14119a10abf4   3 months ago   5.59MB
+weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
+$ docker run -it --name mycentos1 centos /bin/bash
+[root@187c07b01562 /]# cat /etc/redhat-release 
+CentOS Linux release 8.4.2105
+[root@187c07b01562 /]# cat /etc/hostname 
+187c07b01562
+[root@187c07b01562 /]# ps -a
+    PID TTY          TIME CMD
+     18 pts/0    00:00:00 ps
+[root@187c07b01562 /]# df -k
+Filesystem               1K-blocks    Used Available Use% Mounted on
+overlay                   48626364 9079436  37047140  20% /
+tmpfs                        65536       0     65536   0% /dev
+tmpfs                       759508       0    759508   0% /sys/fs/cgroup
+shm                          65536       0     65536   0% /dev/shm
+/dev/mapper/primary-root  48626364 9079436  37047140  20% /etc/hosts
+tmpfs                       759508       0    759508   0% /proc/acpi
+tmpfs                       759508       0    759508   0% /proc/scsi
+tmpfs                       759508       0    759508   0% /sys/firmware
+[root@187c07b01562 /]# ls -a
+.   .dockerenv  dev  home  lib64       media  opt   root  sbin  sys  usr
+..  bin         etc  lib   lost+found  mnt    proc  run   srv   tmp  var
+[root@187c07b01562 /]# ls -lsa
+total 56
+4 drwxr-xr-x   1 root root 4096 Dec 17 05:35 .
+4 drwxr-xr-x   1 root root 4096 Dec 17 05:35 ..
+0 -rwxr-xr-x   1 root root    0 Dec 17 05:35 .dockerenv
+0 lrwxrwxrwx   1 root root    7 Nov  3  2020 bin -> usr/bin
+0 drwxr-xr-x   5 root root  360 Dec 17 05:35 dev
+4 drwxr-xr-x   1 root root 4096 Dec 17 05:35 etc
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 home
+0 lrwxrwxrwx   1 root root    7 Nov  3  2020 lib -> usr/lib
+0 lrwxrwxrwx   1 root root    9 Nov  3  2020 lib64 -> usr/lib64
+4 drwx------   2 root root 4096 Sep 15 14:17 lost+found
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 media
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 mnt
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 opt
+0 dr-xr-xr-x 166 root root    0 Dec 17 05:35 proc
+4 dr-xr-x---   2 root root 4096 Sep 15 14:17 root
+4 drwxr-xr-x  11 root root 4096 Sep 15 14:17 run
+0 lrwxrwxrwx   1 root root    8 Nov  3  2020 sbin -> usr/sbin
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 srv
+0 dr-xr-xr-x  13 root root    0 Dec 17 05:35 sys
+4 drwxrwxrwt   7 root root 4096 Sep 15 14:17 tmp
+4 drwxr-xr-x  12 root root 4096 Sep 15 14:17 usr
+4 drwxr-xr-x  20 root root 4096 Sep 15 14:17 var
+[root@187c07b01562 /]# pwd
+/
+[root@187c07b01562 /]# touch testfile
+[root@187c07b01562 /]# ls 
+bin  etc   lib    lost+found  mnt  proc  run   srv  testfile  usr
+dev  home  lib64  media       opt  root  sbin  sys  tmp       var
+[root@187c07b01562 /]# ls -lsa
+total 56
+4 drwxr-xr-x   1 root root 4096 Dec 17 05:39 .
+4 drwxr-xr-x   1 root root 4096 Dec 17 05:39 ..
+0 -rwxr-xr-x   1 root root    0 Dec 17 05:35 .dockerenv
+0 lrwxrwxrwx   1 root root    7 Nov  3  2020 bin -> usr/bin
+0 drwxr-xr-x   5 root root  360 Dec 17 05:35 dev
+4 drwxr-xr-x   1 root root 4096 Dec 17 05:35 etc
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 home
+0 lrwxrwxrwx   1 root root    7 Nov  3  2020 lib -> usr/lib
+0 lrwxrwxrwx   1 root root    9 Nov  3  2020 lib64 -> usr/lib64
+4 drwx------   2 root root 4096 Sep 15 14:17 lost+found
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 media
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 mnt
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 opt
+0 dr-xr-xr-x 170 root root    0 Dec 17 05:35 proc
+4 dr-xr-x---   2 root root 4096 Sep 15 14:17 root
+4 drwxr-xr-x  11 root root 4096 Sep 15 14:17 run
+0 lrwxrwxrwx   1 root root    8 Nov  3  2020 sbin -> usr/sbin
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 srv
+0 dr-xr-xr-x  13 root root    0 Dec 17 05:35 sys
+0 -rw-r--r--   1 root root    0 Dec 17 05:39 testfile
+4 drwxrwxrwt   7 root root 4096 Sep 15 14:17 tmp
+4 drwxr-xr-x  12 root root 4096 Sep 15 14:17 usr
+4 drwxr-xr-x  20 root root 4096 Sep 15 14:17 var
+[root@187c07b01562 /]# exit
+exit
+$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS                      PORTS     NAMES
+187c07b01562   centos    "/bin/bash"   5 minutes ago   Exited (0) 12 seconds ago             mycentos1
+$ docker exec -it mycentos1 /bin/bash
+Error response from daemon: Container 187c07b015628c553fc06e3a7b5e377b8b3a78fc9fc7d4d2c67860b082658036 is not running
+$ docker start 187c07b01562
+187c07b01562
+$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS          PORTS     NAMES
+187c07b01562   centos    "/bin/bash"   7 minutes ago   Up 10 seconds             mycentos1
+$ docker exec -it mycentos1 /bin/bash
+[root@187c07b01562 /]# ls -lsa
+total 56
+4 drwxr-xr-x   1 root root 4096 Dec 17 05:39 .
+4 drwxr-xr-x   1 root root 4096 Dec 17 05:39 ..
+0 -rwxr-xr-x   1 root root    0 Dec 17 05:35 .dockerenv
+0 lrwxrwxrwx   1 root root    7 Nov  3  2020 bin -> usr/bin
+0 drwxr-xr-x   5 root root  360 Dec 17 05:42 dev
+4 drwxr-xr-x   1 root root 4096 Dec 17 05:35 etc
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 home
+0 lrwxrwxrwx   1 root root    7 Nov  3  2020 lib -> usr/lib
+0 lrwxrwxrwx   1 root root    9 Nov  3  2020 lib64 -> usr/lib64
+4 drwx------   2 root root 4096 Sep 15 14:17 lost+found
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 media
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 mnt
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 opt
+0 dr-xr-xr-x 169 root root    0 Dec 17 05:42 proc
+4 dr-xr-x---   1 root root 4096 Dec 17 05:41 root
+4 drwxr-xr-x  11 root root 4096 Sep 15 14:17 run
+0 lrwxrwxrwx   1 root root    8 Nov  3  2020 sbin -> usr/sbin
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 srv
+0 dr-xr-xr-x  13 root root    0 Dec 17 05:42 sys
+0 -rw-r--r--   1 root root    0 Dec 17 05:39 testfile
+4 drwxrwxrwt   7 root root 4096 Sep 15 14:17 tmp
+4 drwxr-xr-x  12 root root 4096 Sep 15 14:17 usr
+4 drwxr-xr-x  20 root root 4096 Sep 15 14:17 var
+[root@187c07b01562 /]# exit
+exit
+$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS              PORTS     NAMES
+187c07b01562   centos    "/bin/bash"   8 minutes ago   Up About a minute             mycentos1
+$ docker stop mycentos1
+mycentos1
+$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS                      PORTS     NAMES
+187c07b01562   centos    "/bin/bash"   9 minutes ago   Exited (0) 19 seconds ago             mycentos1
+$ docker start mycentos1
+mycentos1
+$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     NAMES
+187c07b01562   centos    "/bin/bash"   9 minutes ago   Up 5 seconds             mycentos1
+
+
+[root@187c07b01562 /]# uname -a
+Linux 187c07b01562 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+
+
+[root@187c07b01562 /]# cat /etc/redhat-release 
+CentOS Linux release 8.4.2105
+[root@187c07b01562 /]# cat /etc/hostname 
+187c07b01562
+[root@187c07b01562 /]# 
+
+Your Interactive Bash Terminal.
+
+$ docker images
+REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
+redis              latest    b8477f2e393b   2 months ago   113MB
+mongo              latest    c1a14d3979c5   2 months ago   691MB
+mariadb            10        b7220a722ce2   2 months ago   409MB
+mariadb            latest    b7220a722ce2   2 months ago   409MB
+ubuntu             latest    597ce1600cf4   2 months ago   72.8MB
+postgres           12        fe603fe275ba   2 months ago   371MB
+postgres           latest    6ce504119cc8   2 months ago   374MB
+mysql              8         2fe463762680   2 months ago   514MB
+mysql              latest    2fe463762680   2 months ago   514MB
+alpine             latest    14119a10abf4   3 months ago   5.59MB
+weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
+$ docker pull centos:latest
+latest: Pulling from library/centos
+a1d0c7532777: Pull complete 
+Digest: sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
+Status: Downloaded newer image for centos:latest
+docker.io/library/centos:latest
+$ docker images
+REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
+redis              latest    b8477f2e393b   2 months ago   113MB
+mongo              latest    c1a14d3979c5   2 months ago   691MB
+mariadb            10        b7220a722ce2   2 months ago   409MB
+mariadb            latest    b7220a722ce2   2 months ago   409MB
+ubuntu             latest    597ce1600cf4   2 months ago   72.8MB
+postgres           12        fe603fe275ba   2 months ago   371MB
+postgres           latest    6ce504119cc8   2 months ago   374MB
+mysql              8         2fe463762680   2 months ago   514MB
+mysql              latest    2fe463762680   2 months ago   514MB
+centos             latest    5d0da3dc9764   3 months ago   231MB
+alpine             latest    14119a10abf4   3 months ago   5.59MB
+weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
+$ docker run -it --name mycentos1 centos /bin/bash
+[root@187c07b01562 /]# cat /etc/redhat-release 
+CentOS Linux release 8.4.2105
+[root@187c07b01562 /]# cat /etc/hostname 
+187c07b01562
+[root@187c07b01562 /]# ps -a
+    PID TTY          TIME CMD
+     18 pts/0    00:00:00 ps
+[root@187c07b01562 /]# df -k
+Filesystem               1K-blocks    Used Available Use% Mounted on
+overlay                   48626364 9079436  37047140  20% /
+tmpfs                        65536       0     65536   0% /dev
+tmpfs                       759508       0    759508   0% /sys/fs/cgroup
+shm                          65536       0     65536   0% /dev/shm
+/dev/mapper/primary-root  48626364 9079436  37047140  20% /etc/hosts
+tmpfs                       759508       0    759508   0% /proc/acpi
+tmpfs                       759508       0    759508   0% /proc/scsi
+tmpfs                       759508       0    759508   0% /sys/firmware
+[root@187c07b01562 /]# ls -a
+.   .dockerenv  dev  home  lib64       media  opt   root  sbin  sys  usr
+..  bin         etc  lib   lost+found  mnt    proc  run   srv   tmp  var
+[root@187c07b01562 /]# ls -lsa
+total 56
+4 drwxr-xr-x   1 root root 4096 Dec 17 05:35 .
+4 drwxr-xr-x   1 root root 4096 Dec 17 05:35 ..
+0 -rwxr-xr-x   1 root root    0 Dec 17 05:35 .dockerenv
+0 lrwxrwxrwx   1 root root    7 Nov  3  2020 bin -> usr/bin
+0 drwxr-xr-x   5 root root  360 Dec 17 05:35 dev
+4 drwxr-xr-x   1 root root 4096 Dec 17 05:35 etc
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 home
+0 lrwxrwxrwx   1 root root    7 Nov  3  2020 lib -> usr/lib
+0 lrwxrwxrwx   1 root root    9 Nov  3  2020 lib64 -> usr/lib64
+4 drwx------   2 root root 4096 Sep 15 14:17 lost+found
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 media
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 mnt
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 opt
+0 dr-xr-xr-x 166 root root    0 Dec 17 05:35 proc
+4 dr-xr-x---   2 root root 4096 Sep 15 14:17 root
+4 drwxr-xr-x  11 root root 4096 Sep 15 14:17 run
+0 lrwxrwxrwx   1 root root    8 Nov  3  2020 sbin -> usr/sbin
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 srv
+0 dr-xr-xr-x  13 root root    0 Dec 17 05:35 sys
+4 drwxrwxrwt   7 root root 4096 Sep 15 14:17 tmp
+4 drwxr-xr-x  12 root root 4096 Sep 15 14:17 usr
+4 drwxr-xr-x  20 root root 4096 Sep 15 14:17 var
+[root@187c07b01562 /]# pwd
+/
+[root@187c07b01562 /]# touch testfile
+[root@187c07b01562 /]# ls 
+bin  etc   lib    lost+found  mnt  proc  run   srv  testfile  usr
+dev  home  lib64  media       opt  root  sbin  sys  tmp       var
+[root@187c07b01562 /]# ls -lsa
+total 56
+4 drwxr-xr-x   1 root root 4096 Dec 17 05:39 .
+4 drwxr-xr-x   1 root root 4096 Dec 17 05:39 ..
+0 -rwxr-xr-x   1 root root    0 Dec 17 05:35 .dockerenv
+0 lrwxrwxrwx   1 root root    7 Nov  3  2020 bin -> usr/bin
+0 drwxr-xr-x   5 root root  360 Dec 17 05:35 dev
+4 drwxr-xr-x   1 root root 4096 Dec 17 05:35 etc
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 home
+0 lrwxrwxrwx   1 root root    7 Nov  3  2020 lib -> usr/lib
+0 lrwxrwxrwx   1 root root    9 Nov  3  2020 lib64 -> usr/lib64
+4 drwx------   2 root root 4096 Sep 15 14:17 lost+found
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 media
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 mnt
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 opt
+0 dr-xr-xr-x 170 root root    0 Dec 17 05:35 proc
+4 dr-xr-x---   2 root root 4096 Sep 15 14:17 root
+4 drwxr-xr-x  11 root root 4096 Sep 15 14:17 run
+0 lrwxrwxrwx   1 root root    8 Nov  3  2020 sbin -> usr/sbin
+4 drwxr-xr-x   2 root root 4096 Nov  3  2020 srv
+0 dr-xr-xr-x  13 root root    0 Dec 17 05:35 sys
+0 -rw-r--r--   1 root root    0 Dec 17 05:39 testfile
+4 drwxrwxrwt   7 root root 4096 Sep 15 14:17 tmp
+4 drwxr-xr-x  12 root root 4096 Sep 15 14:17 usr
+4 drwxr-xr-x  20 root root 4096 Sep 15 14:17 var
 
 
 
