@@ -43,7 +43,7 @@ For more examples and ideas, visit:
 
 このコマンドで実施されたことは以下の２つの操作です。
 
-自ホスト上では「hello-world」というイメージが見つけられなかったので、コンテナレジストリから、最新の「hello-world」イメージを持ってくる処理をします（docker pull）。図の左にある既存のコンテナレジストリ（代表的なものはDocker Hubです）からpullして、自ホストのイメージ格納領域に保存します。
+- 自ホスト上では「hello-world」というイメージが見つけられなかったので、コンテナレジストリから、最新の「hello-world」イメージを持ってくる処理をします（docker pull）。図の左にある既存のコンテナレジストリ（代表的なものはDocker Hubです）からpullして、自ホストのイメージ格納領域に保存します。
 
 ```text
 Unable to find image 'hello-world:latest' locally
@@ -52,8 +52,8 @@ latest: Pulling from library/hello-world
 Digest: sha256:cc15c5b292d8525effc0f89cb299f1804f3a725c8d05e158653a563f15e4f685
 Status: Downloaded newer image for hello-world:latest
 ```
-
-自ホストに格納されたイメージからコンテナを起動します（docker run）
+- 格納されたイメージからコンテナを生成します
+- 生成したコンテナをスタートします
 
 ```text
 Hello from Docker!
@@ -108,7 +108,7 @@ CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                  
 | COMMAND | コンテナで実行されたコマンド | 
 | CREATED | コンテナが生成された時刻 |
 | STATUS | コンテナの状態、右のいずれか（created、restarting、running、removing、paused、exited、dead） |
-| PORTS | プロトコルによる公開ポート |
+| PORTS | 公開ポート、プロトコル |
 | NAMES | イメージのサイズ |
  
 
