@@ -218,6 +218,7 @@ CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS          PORT
 コンテナのターミナルから`exit`で抜けます。先程のrunの場合と異なりコンテナは停止せず、起動したままです。今度はdockerコマンドで明示的にコンテナを停止します。
 
 `docker stop mycentos1`{{execute}}
+
 `docker ps -a`{{execute}}
 ```text
 CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS                     PORTS     NAMES
@@ -227,6 +228,7 @@ CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS              
 コンテナをまた起動して、状態を確認します。
 
 `docker start mycentos1`{{execute}}
+
 `docker ps -a`{{execute}}
 
 ```text
