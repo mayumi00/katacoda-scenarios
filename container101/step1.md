@@ -1,8 +1,5 @@
-# コンテナとは
-
 # コンテナの起動
 
-> Note: 本演習では、 `{{execute}}` とついている部分が、演習で実行するコマンドになります。この部分をクリックすることでコマンドが実行されます。 `{{execute}}` 自身は入力する必要はありません。
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)　
 
@@ -56,7 +53,7 @@ Status: Downloaded newer image for hello-world:latest
 ```
 - 格納されたイメージからコンテナを生成します（途中経過は表示されません）
 - 生成したコンテナをスタートします
-- このコンテナは、Dockerについての説明を表示するものなので、表示が終わると停止します
+- このコンテナは、Dockerについての説明を表示するものなので、説明の表示が終わると停止します
 
 ```text
 Hello from Docker!
@@ -66,7 +63,7 @@ For more examples and ideas, visit:
  https://docs.docker.com/get-started/
  ```
  
-  自ホストにhello-worldのイメージを持ってくる処理をしましたが、イメージが格納されているか確認してみましょう。実は、この環境では既にいくつかのコンテナイメージが準備されているのでhello-world以外も表示されます。
+  自ホストにhello-worldのイメージをダンロードされたので、イメージが格納されているか確認してみましょう。この環境では既にいくつかのコンテナイメージが準備されているのでhello-world以外も表示されます。
   
 
  `docker images`{{execute}}
@@ -91,10 +88,10 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 | REPOSITORY | リポジトリ、名前は同じでタグが異なるDockerイメージの集まり | 
 | TAG | イメージに付けられているタグ、リポジトリやバージョン情報 | 
 | IMAGE ID | イメージID | 
-| CREATED | イメージが作成された時刻（ 自ホストに持ってきた日ではありません） |
+| CREATED | イメージが作成された時刻（ 自ホストにダウンロードされた時刻ではありません） |
 | SIZE | イメージのサイズ |
 
- ここで、コンテナの一覧を見てみましょう。-aオプションを付けると、起動していないコンテナも含めてすべてを表示します。-aを付けないデフォルトの場合は、実行中のコンテナーのみが表示されます。hello-worldコンテナは説明を出力すると終了してしまうので-aオプションを付けないと表示されません。ExitedというSTATUSはコンテナが実行され、終了した状態を指しています。
+ ここで、コンテナの一覧を見てみましょう。`-a（or --all）オプション`を付けると、起動していないコンテナも含めてすべてを表示します。`-a（or --all）オプション`を付けない場合は、実行中のコンテナのみが表示されます。hello-worldコンテナは説明を出力すると終了してしまうので`-a（or --all）オプション`を付けないと表示されません。ExitedというSTATUSはコンテナが実行され、終了した状態を指しています。
  
 `docker ps -a `{{execute}}
 
@@ -111,6 +108,8 @@ CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                  
 | CREATED | コンテナが生成された時刻 |
 | STATUS | コンテナの状態、右のいずれか（created、restarting、running、removing、paused、exited、dead） |
 | PORTS | 公開ポート、プロトコル |
-| NAMES | コンテナの名前（ コンテナを生成する際に --nameオプションで指定して名前を付けることが可能）|
+| NAMES | コンテナの名前（ コンテナを生成する際に `--nameオプション`で指定して名前を付けることが可能）|
+
+コンテナが簡単に起動できることを確認したところで、次のステップに進みます。
 
  
