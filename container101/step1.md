@@ -112,4 +112,8 @@ CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                  
 
 コンテナが簡単に起動できることを確認したところで、次のステップに進みます。
 
+##  このステップで利用したdockerコマンド
+- docker run [オプション] IMAGE [COMMAND] [ARG...]
+- docker images [オプション] [REPOSITORY[:TAG]]
+- docker ps [オプション]
  
