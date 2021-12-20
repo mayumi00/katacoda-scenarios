@@ -1,5 +1,5 @@
 
-# コンテナの起動とコンテナでのプロセス
+# コンテナの操作とコンテナ内の操作
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image02.png)　
 
@@ -26,8 +26,7 @@ alpine             latest    14119a10abf4   3 months ago   5.59MB
 weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ```
 
-特定の文字列を含むイメージを検索することができます。この例ではcentosという文字列を含むコンテナイメージを検索しています。`centos                            The official build of CentOS. `これが公式のコンテナのようなので、このイメージを使うことにします。
-
+特定の文字列を含むイメージを検索することができます。この例ではcentosという文字列を含むコンテナイメージを検索しています。
 `docker search centos`{{execute}}
 ```text
 NAME                              DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
@@ -58,10 +57,8 @@ starlabio/centos-native-build     Our CentOS image for native builds            
 smartentry/centos                 centos with smartentry                          0                    [OK]
 ```
 
-
-とりあえずCentOSの最新版のコンテナをコンテナレジストリからダウンロードします。pullする際にlatestのタグを指定します。タグを指定しない場合はデフォルトで:latestというタグを用います。例えば、最新版ではなくバージョンを指定してpullしたい場合など、タグを利用します。
+`centos  The official build of CentOS. `これが公式のコンテナのようなので、このイメージを使うことにして、CentOSの最新版のコンテナをコンテナレジストリからダウンロードします。pullする際にlatestのタグを指定してみました。実際にはｍタグを指定しない場合はデフォルトで:latestというタグを用いますので、latestを取得する場合はタグは不要です。どのような場合にタグを利用するのかと言えば、例えば、最新版ではなくバージョンを指定してpullしたい場合などです。
  
-
 `docker pull centos:latest`{{execute}}
 
 ```text

@@ -110,7 +110,28 @@ CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                  
 | PORTS | 公開ポート、プロトコル |
 | NAMES | コンテナの名前（ コンテナを生成する際に `--nameオプション`で指定して名前を付けることが可能）|
 
+
+`docker ps -a `{{execute}}
+
+コンテナが不要になった場合は削除することが可能です。削除のオプションには実行中のコンテナを強制的に削除したり、コンテナに紐付いたボリュームを削除するものがあります。コンテナを削除しても、コンテナイメージは削除されませんので、必要に応じて起動すれば、同じコンテナを生成することが可能です。
+
+`docker rm  655c23e742bf `{{execute}}
+
+```text
+$ docker rm 9e2667865bd6
+9e2667865bd6
+ ```
+ 
+`docker ps -a `{{execute}}
+
+```text
+CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                     PORTS     NAMES
+655c23e742bf   hello-world   "/hello"   8 minutes ago   Exited (0) 8 minutes ago             elegant_yonath
+ ```
+ 
 コンテナが簡単に起動できることを確認したところで、次のステップに進みます。
+
+
 
 ##  このステップで利用したdockerコマンド
 - docker run [オプション] IMAGE [COMMAND] [ARG...]
@@ -119,6 +140,9 @@ CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                  
   - コンテナイメージ一覧を表示する
 - docker ps [オプション]
   - コンテナ一覧を表示する
+- docker rm [オプション] CONTAINER [CONTAINER...]
+  - ひとつまたは複数のコンテナを削除する
+
 
 
  
