@@ -1,7 +1,7 @@
 
 # コンテナの起動とコンテナでのプロセス
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)　
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image02.png)　
 
 特定の処理をして停止するコンテナを動かしてみましたが、停止してしまっているので今ひとつピンと来ない点もあるかと思います。そこで、普段利用している仮想マシンのような感覚で触れるコンテナを利用してみましょう。
 
@@ -26,43 +26,7 @@ alpine             latest    14119a10abf4   3 months ago   5.59MB
 weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ```
 
-とりあえずCentOSの最新版のコンテナをコンテナレジストリからダウンロードします。pullする際にlatestのタグを指定します。
- 
-利用方法  `docker pull [オプション] NAME[:TAG|@DIGEST] `
- 
-`docker pull centos:latest`{{execute}}
-
-```text
-latest: Pulling from library/centos
-a1d0c7532777: Pull complete 
-Digest: sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
-Status: Downloaded newer image for centos:latest
-docker.io/library/centos:latest
-```
-
-再度、コンテナイメージを確認します。
-
-`docker images`{{execute}}
-
-```text
-REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
-redis              latest    b8477f2e393b   2 months ago   113MB
-mongo              latest    c1a14d3979c5   2 months ago   691MB
-mariadb            10        b7220a722ce2   2 months ago   409MB
-mariadb            latest    b7220a722ce2   2 months ago   409MB
-ubuntu             latest    597ce1600cf4   2 months ago   72.8MB
-postgres           12        fe603fe275ba   2 months ago   371MB
-postgres           latest    6ce504119cc8   2 months ago   374MB
-mysql              8         2fe463762680   2 months ago   514MB
-mysql              latest    2fe463762680   2 months ago   514MB
-hello-world        latest    feb5d9fea6a5   2 months ago   13.3kB
-centos             latest    5d0da3dc9764   3 months ago   231MB
-alpine             latest    14119a10abf4   3 months ago   5.59MB
-weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
-```
-centosの最新版が自ホストのイメージ格納領域にダウンロードされたことがわかります。
-
-> Note: 特定の文字列を含むイメージを検索することができます。この例ではcentosという文字列を含むコンテナイメージを検索しています。
+特定の文字列を含むイメージを検索することができます。この例ではcentosという文字列を含むコンテナイメージを検索しています。`centos                            The official build of CentOS. `これが公式のコンテナのようなので、このイメージを使うことにします。
 
 `docker search centos`{{execute}}
 ```text
@@ -94,9 +58,42 @@ starlabio/centos-native-build     Our CentOS image for native builds            
 smartentry/centos                 centos with smartentry                          0                    [OK]
 ```
 
-それでは、このCentOSのコンテナイメージを起動します。先程の章で、コンテナを起動する際に`--nameオプション`を付けるとコンテナの名前をつけることができると説明しました。今回はコンテナにmycentos1という名前を付けることにします。また、`-i（or --interactive）オプション`は標準入力を受け付けるもので　`-t（or --tty）オプション`は疑似TTYの割当を行うものです。これらを組み合わせてbashをインタラクティブモードで起動し、コンテナ内での操作を可能にします。コンテナ起動直後に実施するコマンドとして/bin/bashを指定します。
 
-利用方法 `docker run [オプション] IMAGE [COMMAND] [ARG...]`
+とりあえずCentOSの最新版のコンテナをコンテナレジストリからダウンロードします。pullする際にlatestのタグを指定します。タグを指定しない場合はデフォルトで:latestというタグを用います。例えば、最新版ではなくバージョンを指定してpullしたい場合など、タグを利用します。
+ 
+
+`docker pull centos:latest`{{execute}}
+
+```text
+latest: Pulling from library/centos
+a1d0c7532777: Pull complete 
+Digest: sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
+Status: Downloaded newer image for centos:latest
+docker.io/library/centos:latest
+```
+
+再度、コンテナイメージを確認すると、centosの最新版が自ホストのイメージ格納領域にダウンロードされたことがわかります。
+
+`docker images`{{execute}}
+
+```text
+REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
+redis              latest    b8477f2e393b   2 months ago   113MB
+mongo              latest    c1a14d3979c5   2 months ago   691MB
+mariadb            10        b7220a722ce2   2 months ago   409MB
+mariadb            latest    b7220a722ce2   2 months ago   409MB
+ubuntu             latest    597ce1600cf4   2 months ago   72.8MB
+postgres           12        fe603fe275ba   2 months ago   371MB
+postgres           latest    6ce504119cc8   2 months ago   374MB
+mysql              8         2fe463762680   2 months ago   514MB
+mysql              latest    2fe463762680   2 months ago   514MB
+hello-world        latest    feb5d9fea6a5   2 months ago   13.3kB
+centos             latest    5d0da3dc9764   3 months ago   231MB
+alpine             latest    14119a10abf4   3 months ago   5.59MB
+weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
+```
+
+それでは、このCentOSのコンテナイメージを起動します。先程の章で、コンテナを起動する際に`--nameオプション`を付けるとコンテナの名前をつけることができると説明しました。今回はコンテナにmycentos1という名前を付けることにします。また、標準入力を受け付ける`-i（or --interactive）オプション`と疑似TTYの割当を行う`-t（or --tty）オプション`を組み合わせてbashをインタラクティブモードで起動し、コンテナ内での操作を可能にします。コンテナ起動直後に実施するコマンドとして/bin/bashを指定します。
 
 `docker run -it --name mycentos1 centos /bin/bash`{{execute}}
 
@@ -104,7 +101,7 @@ smartentry/centos                 centos with smartentry                        
 [root@0893cd3e1c07 /]#
 ```
 
-プロンプトが表示され、bashの利用が可能になっています。コンテナを起動する際に`-h（or --hostname）オプション`を付けるとコンテナのホスト名を指定することができますが、今回は指定していないので、コンテナIDが利用されます。プロンプトのroot@の後ろの文字列はコンテナホスト名＝コンテナIDなので、実行した環境によって異なります。いくつかのファイルの内容の確認やコマンドの実行を行ってみます。
+プロンプトが表示され、bashの利用が可能になっていることがわかります。コンテナを起動する際に`-h（or --hostname）オプション`を付けるとコンテナのホスト名を指定することができますが、今回は指定していないので、コンテナIDが利用されます。プロンプトのroot@の後ろの文字列はコンテナホスト名＝コンテナIDなので、実行した環境によって異なります。いくつかのファイルの内容の確認やコマンドの実行を行ってみます。
 
 実施項目
 - /etc/os-releaseの確認
@@ -169,8 +166,6 @@ CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS         PORTS
 ```
 
 起動したけど、標準入力を受け付けるオプションを指定しなかったので操作できない状態。そこで、実行中のコンテナー内において新たなコマンドを実行するexecコマンドを利用してbashの利用を可能にします。
-
-利用方法 `docker exec [オプション] CONTAINER COMMAND [ARG...]`
 
 `docker exec -it mycentos1 /bin/bash`{{execute}}
 ```text
@@ -264,3 +259,15 @@ exit
 ```
 
 コンテナの起動や停止・開始の一連の操作でコンテナの状態がどのように推移するかなんとなく理解できたかと思います。とはいえ、まだCentOSコンテナの操作をちょっと行ってみただけなので、次のステップではCentOSコンテナにアプリケーションをインストールして、アプリの動作を確認してみましょう。
+
+##  このステップで利用したdockerコマンド
+- docker pull [オプション] NAME[:TAG|@DIGEST] 
+   - レジストリからイメージまたはリポジトリを取得する
+- docker search [オプション] TERM
+   - Docker Hub上のイメージを検索する
+- docker exec [オプション] CONTAINER COMMAND [ARG...]
+   - 実行中のコンテナ内において新たなコマンドを実行する
+- docker start [オプション] CONTAINER [CONTAINER...]
+   - 停止しているコンテナを起動する
+- docker stop [オプション] CONTAINER [CONTAINER...]
+   - 実行中のコンテナを停止する
