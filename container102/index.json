@@ -22,6 +22,7 @@
   "environment": {
     "uilayout": "editor-terminal",
     "uieditorpath": "./",
+ "exclusionPatterns": [" .bashrc", ".cache", ".hushlogin", ".profile", ".ssh", "vimrc"],
     "hideintro": false,
     "hidefinish": false
   },
