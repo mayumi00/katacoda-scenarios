@@ -50,7 +50,7 @@ httpd.confの中でServerNameのコメントをはずしlocalhostに書き換え
 
 `echo "<head><title>Apache on Docker Container</title></head><body><H1>Container 101 - Web</H1>Apache on Docker Container</body>"  > /var/www/html/index.html `{{execute}}
 
-httpdを起動します。ここで「systemctl start httpdを使わないのか？」とツッコまれそうですが、訳あって使いません。その説明は別途します。
+httpdを起動します。ここで「systemctlを使わないのか？」とツッコまれそうですが、訳あって使いません。その説明は別途します。
 
 `/usr/sbin/httpd`{{execute}}
 
@@ -59,15 +59,15 @@ httpdを起動します。ここで「systemctl start httpdを使わないのか
  `ps f -e`{{execute}}
  
  ```text
-[root@5f04e1706a34 /]# ps f -e
-UID          PID    PPID  C STIME TTY          TIME CMD
-root           1       0  0 01:04 pts/0    00:00:00 /bin/bash
-root          85       1  0 01:08 ?        00:00:00 /usr/sbin/httpd
-apache        86      85  0 01:08 ?        00:00:00 /usr/sbin/httpd
-apache        87      85  0 01:08 ?        00:00:00 /usr/sbin/httpd
-apache        88      85  0 01:08 ?        00:00:00 /usr/sbin/httpd
-apache       113      85  0 01:08 ?        00:00:00 /usr/sbin/httpd
-root         303       1  0 01:08 pts/0    00:00:00 ps -ef
+[root@f29637beaac6 /]# ps f -e
+    PID TTY      STAT   TIME COMMAND
+      1 pts/0    Ss     0:00 /bin/bash
+     86 ?        Ss     0:00 /usr/sbin/httpd
+     87 ?        S      0:00  \_ /usr/sbin/httpd
+     88 ?        Sl     0:00  \_ /usr/sbin/httpd
+     89 ?        Sl     0:00  \_ /usr/sbin/httpd
+     90 ?        Sl     0:00  \_ /usr/sbin/httpd
+    305 pts/0    R+     0:00 ps f -e
  ```
  
  curlコマンドで先程作成したindex.htmlが表示されるか確認します。
@@ -83,17 +83,19 @@ CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                  
 
  `exit`{{execute}}
 
-runで実行したコンテナからexitするとコンテナが停止してしまいます。なので、コンテナをスタートして、execコマンドでbashを実行しコンテナ内を確認します。
+runで実行したコンテナからexitするとコンテナが停止してしまいます。なので、コンテナを開始して、execコマンドでbashを実行しコンテナ内を確認します。
 
+`docker ps -a`{{execute}}
+`docker start mycentos2`{{execute}}
 `docker exec -it mycentos2 /bin/bash`{{execute}}
 `ps f -e`{{execute}}
  
 ```text
-[root@5f04e1706a34 /]# ps -ef
-UID          PID    PPID  C STIME TTY          TIME CMD
-root           1       0  0 01:12 pts/0    00:00:00 /bin/bash
-root          17       0  0 01:12 pts/1    00:00:00 /bin/bash
-root          32      17  0 01:12 pts/1    00:00:00 ps -ef
+[root@f29637beaac6 /]# ps f -e
+    PID TTY      STAT   TIME COMMAND
+     15 pts/1    Ss     0:00 /bin/bash
+     30 pts/1    R+     0:00  \_ ps f -e
+      1 pts/0    Ss+    0:00 /bin/bash
  ```
 
  httpdは、コンテナ停止とともに停止してしまったので、プロセスはありません。
@@ -111,37 +113,57 @@ httpdを起動します。
 `ps f -e`{{execute}}
  
 ```text
-[root@5f04e1706a34 /]# ps f -e
-UID          PID    PPID  C STIME TTY          TIME CMD
-root           1       0  0 01:12 pts/0    00:00:00 /bin/bash
-root          17       0  0 01:12 pts/1    00:00:00 /bin/bash
-root          32      17  0 01:12 pts/1    00:00:00 ps -ef
+[root@7ec897a6ca6c /]# /usr/sbin/httpd
+[root@7ec897a6ca6c /]# ps f -e
+    PID TTY      STAT   TIME COMMAND
+     16 pts/1    Ss     0:00 /bin/bash
+    250 pts/1    R+     0:00  \_ ps f -e
+      1 pts/0    Ss+    0:00 /bin/bash
+     34 ?        Ss     0:00 /usr/sbin/httpd
+     35 ?        S      0:00  \_ /usr/sbin/httpd
+     36 ?        Sl     0:00  \_ /usr/sbin/httpd
+     37 ?        Sl     0:00  \_ /usr/sbin/httpd
+     38 ?        Sl     0:00  \_ /usr/sbin/httpd
 ```
   
 コンテナから抜けます。
 
 `exit`{{execute}}
 
-コンテナの起動状態確認
+コンテナの起動状態確認を確認します。
+
 `docker ps -a`{{execute}}
 
-```text
-CONTAINER ID   IMAGE         COMMAND       CREATED          STATUS                      PORTS                               NAMES
-5f04e1706a34   centos        "/bin/bash"   11 minutes ago   Up 3 minutes                0.0.0.0:80->80/tcp, :::80->80/tcp   mycentos2
-879a5fb64810   centos        "/bin/bash"   25 minutes ago   Up 24 minutes                                                   mycentos1
-10387c60ceb4   hello-world   "/hello"      27 minutes ago   Exited (0) 27 minutes ago                                       crazy_nobel
-```
-mycentos2コンテナが稼働しており、80番で待ち受けしてます。
+execからexitしたので、mycentos2コンテナは停止せず80番で待ち受けしており、自ホストの8080にアクセスすれば接続できるはずです。
 
+```text
+$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS          PORTS                                   NAMES
+7ec897a6ca6c   centos    "/bin/bash"   2 minutes ago   Up 38 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   mycentos2
+```
+
+先程はコンテナ内でcurlで確認します、今度は自ホストでcurlで確認します。ポート番号は8080です。
 `curl http://localhost:8080/index.html`{{execute}}
 
+curlだけでなく、このkatacodaの仕組みを使ってブラウザで表示することも可能です。
+
 https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
+
+おまけ：自ホストから見たときのプロセスの起動状態
 
 `ps f -e`{{execute}}
 
 ```text
-CONTAINER ID   IMAGE         COMMAND       CREATED          STATUS                      PORTS                               NAMES
-5f04e1706a34   centos        "/bin/bash"   11 minutes ago   Up 3 minutes                0.0.0.0:80->80/tcp, :::80->80/tcp   mycentos2
-879a5fb64810   centos        "/bin/bash"   25 minutes ago   Up 24 minutes                                                   mycentos1
-10387c60ceb4   hello-world   "/hello"      27 minutes ago   Exited (0) 27 minutes ago                                       crazy_nobel
+    683 ?        Ssl    0:06 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+   1458 ?        Sl     0:00  \_ /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port 8080 -container-ip 172.18.0
+   1464 ?        Sl     0:00  \_ /usr/bin/docker-proxy -proto tcp -host-ip :: -host-port 8080 -container-ip 172.18.0.2 -c
+    874 ?        Ss     0:00 /lib/systemd/systemd --user
+    875 ?        S      0:00  \_ (sd-pam)
+   1481 ?        Sl     0:00 /usr/bin/containerd-shim-runc-v2 -namespace moby -id 7ec897a6ca6c1067348cd0d2913cb8adfed98fc
+   1501 pts/0    Ss+    0:00  \_ /bin/bash
+   1600 ?        Ss     0:00      \_ /usr/sbin/httpd
+   1601 ?        S      0:00          \_ /usr/sbin/httpd
+   1602 ?        Sl     0:00          \_ /usr/sbin/httpd
+   1603 ?        Sl     0:00          \_ /usr/sbin/httpd
+   1604 ?        Sl     0:00          \_ /usr/sbin/httpd
 ```
