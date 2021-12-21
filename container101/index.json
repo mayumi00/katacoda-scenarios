@@ -21,7 +21,6 @@
   },
   "environment": {
     "uilayout": "terminal",
-    "showide": false,
     "hideintro": false,
     "hidefinish": false
   },
