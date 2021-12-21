@@ -10,7 +10,13 @@
 
 ベースとなるCentOSはステップ２と同じイメージを利用し、ステップ２で生成したコンテナとは異なるコンテナを生成します。ここではコンテナ名として`mycentos2`としています。アプリをインストールしたいので、bashを利用してコンテナの操作を行えるようにします。
 
-`docker run -it --name mycentos2 centos /bin/bash`{{execute}}
+`docker run -d  -p 80:80 --name mycentos2 centos`{{execute}}
+
+```text
+[root@0893cd3e1c07 /]#
+```
+
+`docker exec  -it  mycentos2  /bin/bash`{{execute}}
 
 ```text
 [root@0893cd3e1c07 /]#
@@ -132,7 +138,7 @@ $ docker rm 9e2667865bd6
  ```
  
 ドキュメントルートにコンテンツを配置する
-`echo "<head><title>Apache on Docker Container</title></head><body>Apache on Docker Container"</body> >> /var/www/html/index.html `{{execute}}
+`echo "<head><title>Apache on Docker Container</title></head><body>Apache on Docker Container</body>" >> /var/www/html/index.html `{{execute}}
 
 ```text
 $ docker rm 9e2667865bd6
@@ -164,4 +170,4 @@ CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                  
 
 [[HOST_IP]]
 
-https://[[HOST_SUBDOMAIN]]-[[KATACODA_HOST]].environments.katacoda.com/
+https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/
