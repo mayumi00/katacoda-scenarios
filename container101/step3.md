@@ -81,15 +81,58 @@ CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                  
 
 ここで一旦コンテナから抜けます。
 
- ` exit`{{execute}}
+ `exit`{{execute}}
 
 runで実行したコンテナからexitするとコンテナが停止してしまいます。なので、コンテナをスタートして、execコマンドでbashを実行しコンテナ内を確認します。
 
+`docker exec -it mycentos2 /bin/bash`{{execute}}
+`ps f -e`{{execute}}
+ 
 ```text
-CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                     PORTS     NAMES
-655c23e742bf   hello-world   "/hello"   8 minutes ago   Exited (0) 8 minutes ago             elegant_yonath
+[root@5f04e1706a34 /]# ps -ef
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 01:12 pts/0    00:00:00 /bin/bash
+root          17       0  0 01:12 pts/1    00:00:00 /bin/bash
+root          32      17  0 01:12 pts/1    00:00:00 ps -ef
  ```
 
-[[HOST_IP]]
+ httpdは、コンテナ停止とともに停止してしまったので、プロセスはありません。
+ 
+ 先程作ったindex.htmlを確認します。
+ 
+ `cat /var/www/html/index.html `{{execute}}
+ 
+ ```text
+<head><title>Apache on Docker Container</title></head><body>Apache on Docker Container</body>
+ ```
+httpdを起動します。
 
-https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/
+`/usr/sbin/httpd`{{execute}}
+`ps f -e`{{execute}}
+ 
+```text
+[root@5f04e1706a34 /]# ps f -e
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 01:12 pts/0    00:00:00 /bin/bash
+root          17       0  0 01:12 pts/1    00:00:00 /bin/bash
+root          32      17  0 01:12 pts/1    00:00:00 ps -ef
+```
+  
+コンテナから抜けます。
+
+`exit`{{execute}}
+
+コンテナの起動状態確認
+`docker ps -a`{{execute}}
+
+```text
+CONTAINER ID   IMAGE         COMMAND       CREATED          STATUS                      PORTS                               NAMES
+5f04e1706a34   centos        "/bin/bash"   11 minutes ago   Up 3 minutes                0.0.0.0:80->80/tcp, :::80->80/tcp   mycentos2
+879a5fb64810   centos        "/bin/bash"   25 minutes ago   Up 24 minutes                                                   mycentos1
+10387c60ceb4   hello-world   "/hello"      27 minutes ago   Exited (0) 27 minutes ago                                       crazy_nobel
+```
+mycentos2コンテナが稼働しており、80番で待ち受けしてます。
+
+`curl http://localhost:8080/index.html`{{execute}}
+
+https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
