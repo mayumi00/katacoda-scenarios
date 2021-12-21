@@ -136,3 +136,12 @@ mycentos2コンテナが稼働しており、80番で待ち受けしてます。
 `curl http://localhost:8080/index.html`{{execute}}
 
 https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
+
+`ps f -e`{{execute}}
+
+```text
+CONTAINER ID   IMAGE         COMMAND       CREATED          STATUS                      PORTS                               NAMES
+5f04e1706a34   centos        "/bin/bash"   11 minutes ago   Up 3 minutes                0.0.0.0:80->80/tcp, :::80->80/tcp   mycentos2
+879a5fb64810   centos        "/bin/bash"   25 minutes ago   Up 24 minutes                                                   mycentos1
+10387c60ceb4   hello-world   "/hello"      27 minutes ago   Exited (0) 27 minutes ago                                       crazy_nobel
+```
