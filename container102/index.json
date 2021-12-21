@@ -21,6 +21,10 @@
   },
   "environment": {
     "uilayout": "editor-terminal",
+    "files": [
+    "Dockerfile", "index.html"
+]
+    "uieditorpath": "./"
     "hideintro": false,
     "hidefinish": false
   },
