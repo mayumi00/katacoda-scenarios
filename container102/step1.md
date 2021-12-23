@@ -11,25 +11,11 @@
 
 続いてDockerfileに必要事項を記載します。
 
-<pre class="file" data-filename="Dockerfile" data-target="append">
-FROM centos
-</pre>
-
-<pre class="file" data-filename="Dockerfile" data-target="append">
-RUN dnf install -y httpd
-</pre>
-
-<pre class="file" data-filename="Dockerfile" data-target="append">
-RUN sed -i -e "s/#ServerName www.example.com/ServerName localhost/" /etc/httpd/conf/httpd.conf
-</pre>
-
-<pre class="file" data-filename="Dockerfile" data-target="append">
-COPY index.html /var/www/html/index.html
-</pre>
-
-<pre class="file" data-filename="Dockerfile" data-target="append">
-CMD ["/usr/sbin/httpd","-DFOREGROUND"]
-</pre>
+<pre class="file" data-filename="Dockerfile" data-target="append">FROM centos</pre>
+<pre class="file" data-filename="Dockerfile" data-target="append">RUN dnf install -y httpd</pre>
+<pre class="file" data-filename="Dockerfile" data-target="append">RUN sed -i -e "s/#ServerName www.example.com/ServerName localhost/" /etc/httpd/conf/httpd.conf</pre>
+<pre class="file" data-filename="Dockerfile" data-target="append">COPY index.html /var/www/html/index.html</pre>
+<pre class="file" data-filename="Dockerfile" data-target="append">CMD ["/usr/sbin/httpd","-DFOREGROUND"]</pre>
 
 
 `docker build -t apacheweb-dockerfile .`{{execute}}

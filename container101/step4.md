@@ -23,7 +23,7 @@ sha256:8f6df70219036bb1341eb156ccbc43f96ad1a533f5ca60a4ab530544f15bebc4
 
 イメージができたか確認しましょう
 
-`docker images --no-trunc`{{execute}}
+`docker images`{{execute}}
 
 ```text
 [root@ik1-314-17333 ~]# docker images
