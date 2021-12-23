@@ -5,8 +5,9 @@
 
 この画面の右側の分割画面は、上部がエディターで下部がターミナルです。「Copy to Editor」部分をクリックすると、そのテキストが右上部のエディターに記述されます。Dockerfileはこのエディターで編集します。
 
-その前に、まずはWebのindex.htmlを作成しておきます。
-`echo "<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>"  > /var/www/html/index.html `{{execute}}
+その前に、まずはWebのindex.htmlを作成しておきます。Container 101の演習では、コンテナ内でindex.htmlを作成しましたが、この演習では自ホストに置かれたindex.htmlをコンテナにコピーして使う方法を取ります。
+
+`echo "<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>"  > index.html `{{execute}}
 
 続いてDockerfileに必要事項を記載します。
 
