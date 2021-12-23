@@ -3,70 +3,33 @@
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)　
 
-上の図における右側の「コンテナを稼働させるホスト（自ホスト）」が、このコースの左側に表示されているterminalに対応しています。この環境は既にDockerが利用できる状態になっていますので、Dockerを利用してコンテナを起動して、動作を確認してみましょう。
+<pre class="file" data-filename="index.html" data-target="append">
+<head><title>Apache on Docker Container</title></head>
+<body><H1>Container 101 - Web</H1>Apache on Docker Container</body>
+</pre>
 
-「hello-world」というDockerについての簡単な説明を出力するコンテナを起動してみます。
+<pre class="file" data-filename="Dockerfile" data-target="append">
+FROM centos
+</pre>
 
-`docker run hello-world`{{execute}}
+<pre class="file" data-filename="Dockerfile" data-target="append">
+RUN dnf install -y httpd
+</pre>
 
-以下のように出力されます。
+<pre class="file" data-filename="Dockerfile" data-target="append">
+RUN sed -i -e "s/#ServerName www.example.com/ServerName localhost/" /etc/httpd/conf/httpd.conf
+</pre>
 
-```text
-Unable to find image 'hello-world:latest' locally
-latest: Pulling from library/hello-world
-2db29710123e: Pull complete 
-Digest: sha256:cc15c5b292d8525effc0f89cb299f1804f3a725c8d05e158653a563f15e4f685
-Status: Downloaded newer image for hello-world:latest
+<pre class="file" data-filename="Dockerfile" data-target="append">
+COPY index.html /var/www/html/index.html
+</pre>
 
-Hello from Docker!
-This message shows that your installation appears to be working correctly.
+<pre class="file" data-filename="Dockerfile" data-target="append">
+CMD ["/usr/sbin/httpsd","-DFOREGROUND"]
+</pre>
 
-To generate this message, Docker took the following steps:
- 1. The Docker client contacted the Docker daemon.
- 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
-    (amd64)
- 3. The Docker daemon created a new container from that image which runs the
-    executable that produces the output you are currently reading.
- 4. The Docker daemon streamed that output to the Docker client, which sent it
-    to your terminal.
 
-To try something more ambitious, you can run an Ubuntu container with:
- $ docker run -it ubuntu bash
-
-Share images, automate workflows, and more with a free Docker ID:
- https://hub.docker.com/
-
-For more examples and ideas, visit:
- https://docs.docker.com/get-started/
- ```
-
-このコマンドでは以下のような処理が実施されています。
-
-- 自ホスト上ではhello-worldというイメージが見つけられなかったので、コンテナレジストリから、最新のhello-worldイメージをダウンロードします（docker pull）。図の左にある既存のコンテナレジストリ（代表的なものはDocker Hubです）からpullして、自ホストのイメージ格納領域に保存します。
-
-```text
-Unable to find image 'hello-world:latest' locally
-latest: Pulling from library/hello-world
-2db29710123e: Pull complete 
-Digest: sha256:cc15c5b292d8525effc0f89cb299f1804f3a725c8d05e158653a563f15e4f685
-Status: Downloaded newer image for hello-world:latest
-```
-- 格納されたイメージからコンテナを生成します（途中経過は表示されません）
-- 生成したコンテナをスタートします
-- このコンテナは、Dockerについての説明を表示するものなので、説明の表示が終わると停止します
-
-```text
-Hello from Docker!
-This message shows that your installation appears to be working correctly.
-（略）
-For more examples and ideas, visit:
- https://docs.docker.com/get-started/
- ```
- 
-  自ホストにhello-worldのイメージをダンロードされたので、イメージが格納されているか確認してみましょう。この環境では既にいくつかのコンテナイメージが準備されているのでhello-world以外も表示されます。
-  
-
- `docker images`{{execute}}
+`docker build -t apacheweb-dockerfile .`{{execute}}
  
 ```text
 REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
