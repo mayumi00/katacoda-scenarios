@@ -22,7 +22,7 @@ COPY index.html /var/www/html/index.html
 </pre>
 
 <pre class="file" data-filename="Dockerfile" data-target="append">
-CMD ["/usr/sbin/httpsd","-DFOREGROUND"]
+CMD ["/usr/sbin/httpd","-DFOREGROUND"]
 </pre>
 
 
@@ -30,19 +30,11 @@ CMD ["/usr/sbin/httpsd","-DFOREGROUND"]
  
 ```text
 REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
-redis              latest    b8477f2e393b   2 months ago   113MB
-mongo              latest    c1a14d3979c5   2 months ago   691MB
-mariadb            10        b7220a722ce2   2 months ago   409MB
-mariadb            latest    b7220a722ce2   2 months ago   409MB
-ubuntu             latest    597ce1600cf4   2 months ago   72.8MB
-postgres           12        fe603fe275ba   2 months ago   371MB
-postgres           latest    6ce504119cc8   2 months ago   374MB
-mysql              8         2fe463762680   2 months ago   514MB
-mysql              latest    2fe463762680   2 months ago   514MB
-hello-world        latest    feb5d9fea6a5   2 months ago   13.3kB
-alpine             latest    14119a10abf4   3 months ago   5.59MB
-weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
+
 ```
+
+docker run -d -p 8080:80 --name testweb01  apacheweb-dockerfile:latest
+
  | 項目 | 意味 | 
 |:-----------|:------------|
 | REPOSITORY | リポジトリ、名前は同じでタグが異なるDockerイメージの集まり | 
