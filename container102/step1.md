@@ -3,7 +3,10 @@
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)　
 
-<pre class="file" data-filename="index.html" data-target="append"><head><title>Apache on Docker Container</title></head><body><H1>Container 101 - Web</H1>Apache on Docker Container</body></pre>
+<pre class="file" data-filename="index.html" data-target="append">
+`<head>``<title>`Apache on Docker Container`</title>``</head>`
+`<body>``<H1>`Container 101 - Web`</H1>`Apache on Docker Container`</body>``
+</pre>
 
 <pre class="file" data-filename="Dockerfile" data-target="append">
 FROM centos
