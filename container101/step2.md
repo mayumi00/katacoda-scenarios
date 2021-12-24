@@ -260,8 +260,7 @@ exit
 ##  このステップで利用したdockerコマンド
 - docker pull [オプション] NAME[:TAG|@DIGEST] 
    - レジストリからイメージまたはリポジトリを取得する
-- docker search [オプション] TERM
-   - Docker Hub上のイメージを検索する
+
 - docker exec [オプション] CONTAINER COMMAND [ARG...]
    - 実行中のコンテナ内において新たなコマンドを実行する
 - docker start [オプション] CONTAINER [CONTAINER...]
