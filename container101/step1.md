@@ -44,7 +44,8 @@ For more examples and ideas, visit:
 - 自ホスト上ではhello-worldというイメージが見つけられなかったので、コンテナレジストリから、最新のhello-worldイメージをダウンロードします（docker pull）。図の左にある既存のコンテナレジストリ（代表的なものはDocker Hubです）からpullして、自ホストのイメージ格納領域に保存します。
 - 格納されたイメージからコンテナを生成します。作成の途中経過は表示されません。
 - 生成したコンテナをスタートします。
-- このコンテナは、Dockerについての簡単な説明を出力するものなので、説明の表示が終わると停止します。
+- Dockerについての簡単な説明を出力します。
+- 説明の表示が終わるとコンテナは停止します。
 
 
 自ホストにhello-worldのイメージをダンロードされたので、イメージが格納されているか確認してみましょう。
@@ -94,7 +95,7 @@ CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                  
 | PORTS | 公開ポート、プロトコル |
 | NAMES | コンテナの名前（ コンテナを生成する際に `--nameオプション`で指定して名前を付けることが可能）|
 
-特定の処理をして停止するコンテナを動かしてみましたが、停止してしまっているので今ひとつピンと来ないかもしれません。続いて、稼働していることがわかるコンテナを利用してみます。静的コンテンツのWebsiteを提供するコンテナを起動してみます。Websiteなのでhttpdという文字列でコンテナレジストリを検索します。
+特定の処理をして停止するコンテナを動かしてみましたが、停止してしまっているので今ひとつピンと来ないかもしれませんので、続いて、稼働していることがわかるコンテナを利用してみます。静的コンテンツを表示するWebsiteを提供するコンテナを起動してみます。コンテナイメージ名称がわからないので、httpdという文字列でコンテナレジストリを検索します。
 
 `docker search httpd`{{execute}}
 ```text
@@ -103,15 +104,10 @@ NAME                                    DESCRIPTION                             
 httpd                                   The Apache HTTP Server Project                  3806      [OK]
 centos/httpd-24-centos7                 Platform for running Apache httpd 2.4 or bui…   40
 centos/httpd                                                                            34                   [OK]
-arm32v7/httpd                           The Apache HTTP Server Project                  10
-hypoport/httpd-cgi                      httpd-cgi                                       2                    [OK]
-solsson/httpd-openidc                   mod_auth_openidc on official httpd image, ve…   2                    [OK]
-dariko/httpd-rproxy-ldap                Apache httpd reverse proxy with LDAP authent…   1                    [OK]
-publici/httpd                           httpd:latest                                    1                    [OK]
 （以下、略）
 ```
 
-いろいろ表示されますがDESCRIPTIONを見ると`httpd / The Apache HTTP Server Project`がApache Projectのhttpdイメージのようです。それではhttpdコンテナを起動してみましょう。一番最初の`docker run`に比べると、いくつかのオプションが追加されてますが、それは次のステップで説明しますので「httpdコンテナを起動したんだな」くらいに思ってください。
+いろいろ表示されますがDESCRIPTIONを見ると`httpd / The Apache HTTP Server Project`がApache Projectのhttpdイメージのようです。それではhttpdコンテナを起動してみましょう。hello-worldを起動した場合に比べると`docker run`にいくつかのオプションが追加されてますが、それは次のステップで説明しますのでとりあえずは「httpdコンテナを起動したんだな」くらいに思ってください。
 
 `docker run -d --name httpd -p 80:80 httpd:latest `{{execute}}
 
@@ -129,7 +125,7 @@ Status: Downloaded newer image for httpd:latest
 8d6cda605ee754f70f89d0fffb5048faafa10bddbc3137d18206793f037a6649
  ```
  
-hello-world同様に、自ホストにはhttpdイメージがなかったので、レジストラからダウンロードしていることがわかります。httpdなので80番ポートで待ち受けしているはずなので、80番にアクセスすると「It works!」と表示するhtmlを呼び出していることがわかります。
+hello-world同様に、自ホストにはhttpdイメージがなかったので、レジストラからダウンロードしていることがわかります。-p 80:80の意味するところは、ローカルホスト（自ホスト）の80番ポートとコンテナ内の80番ポートをバインドすることで、80番にアクセスすると「It works!」と表示するhtmlを呼び出していることがわかります。
 
  `curl http://localhost:80/ `{{execute}}
  
@@ -143,7 +139,7 @@ hello-world同様に、自ホストにはhttpdイメージがなかったので�
  
  ` docker ps -a `{{execute}}
 
-コンテナ一覧を取得すると、httpdコンテナが80番で待ち受けしながら稼働していることがわかります。
+再度、コンテナ一覧を取得すると、停止したhello-worldとは異なり、STATUSがUpと表示され、httpdコンテナが80番で待ち受けしながら稼働していることがわかります。
 
 ```text
 [root@ik1-314-17333 ~]# docker ps -a

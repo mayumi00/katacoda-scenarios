@@ -4,13 +4,14 @@
 
 - 101
   - コンテナの起動
-  - コンテナの操作
-  - コンテナでのアプリケーションの
+  - コンテナの操作とコンテナ内の操作
+  - コンテナへのアプリケーションの導入
+  -  コンテナイメージの作成
   
 
 - 102
  - Dockerfileの利用
  
-この演習で利用してるDockerコマンドの紹介は、Docker Docsのリファレンスを参照しています。
+この演習で利用してるDockerコマンドの紹介は、DockerDocsのリファレンスを参照しています。
 
 https://matsuand.github.io/docs.docker.jp.onthefly/reference/
