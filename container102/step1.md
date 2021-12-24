@@ -17,6 +17,7 @@
 <pre class="file" data-filename="Dockerfile" data-target="append">COPY index.html /var/www/html/index.html</pre>
 <pre class="file" data-filename="Dockerfile" data-target="append">CMD ["/usr/sbin/httpd","-DFOREGROUND"]</pre>
 
+> Note: 上記の「Copy to Editor」が終わった後はエディターの7行目がハイライトされているはずです。エディター部分は触らずその状態にしておいてください。ハイライトの位置が代わると、後のbuild→runが正常に動作しない可能性があります。
 
 `docker build -t apacheweb-dockerfile .`{{execute}}
  

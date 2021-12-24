@@ -23,6 +23,7 @@
     "uilayout": "editor-terminal",
     "uieditorpath": "./",
  "exclusionPatterns": [" .bashrc", ".cache", ".hushlogin", ".profile", ".ssh", "vimrc"],
+ "uisettings"": true,
      "hideHiddenFiles": true,
     "hideintro": false,
     "hidefinish": false
