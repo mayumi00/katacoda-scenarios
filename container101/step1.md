@@ -2,7 +2,9 @@
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)　
 
-上の図における右側の「コンテナを稼働させるホスト（自ホスト）」が、このコースの左側に表示されているterminalに対応しています。この環境は既にDockerが利用できる状態になっていますので、Dockerを利用してコンテナを起動して、動作を確認してみましょう。
+上の図における右側の「コンテナを稼働させるホスト（自ホスト）」が、このコースの左側に表示されているTerminalに対応しています。
+
+この環境は既にDockerが利用できる状態になっていますので、Dockerを利用してコンテナを起動して、動作を確認してみましょう。`docker version`{{execute}}←このように表示されている部分をクリックすると右のTerminalでコマンドが実行されます。
 
 「hello-world」というDockerについての簡単な説明を出力するコンテナを起動してみます。
 
@@ -41,14 +43,14 @@ For more examples and ideas, visit:
 
 このコマンドでは次の処理が実施されています。
 
-- 自ホスト上ではhello-worldというイメージが見つけられなかったので、コンテナレジストリから、最新のhello-worldイメージをダウンロードします。図の左にある既存のコンテナレジストリからpullして、自ホストのイメージ格納領域に保存します。
-- 格納されたイメージからコンテナを生成します。
-- 生成したコンテナを起動します。
-- Dockerについての簡単な説明を出力します。
-- 説明の表示が終わるとコンテナは停止します。
+1. 自ホスト上ではhello-worldというイメージが見つけられなかったので、図の左にある既存のコンテナレジストリから最新のhello-worldイメージをダウンロードして、自ホストのイメージ格納領域に保存します
+1. 格納されたイメージからコンテナを生成します
+1. 生成したコンテナを起動します
+1. Dockerについての簡単な説明を出力します
+1. 説明の表示が終わるとコンテナは停止します
 
 
-自ホストにhello-worldのイメージをダンロードされたので、イメージが格納されているか確認してみましょう。
+自ホストにhello-worldのイメージをダンロードされたので、イメージが格納されているか確認してみましょう。hello-worldというイメージがあることがわかります。
 > Note: この環境では既にいくつかのコンテナイメージが準備されているのでhello-world以外も表示されます。
 
  `docker images`{{execute}}
@@ -68,6 +70,7 @@ hello-world        latest    feb5d9fea6a5   2 months ago   13.3kB
 alpine             latest    14119a10abf4   3 months ago   5.59MB
 weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ```
+ `docker images`コマンドで表示される項目には以下があります。
  | 項目 | 意味 | 
 |:-----------|:------------|
 | REPOSITORY | リポジトリ、名前は同じでタグが異なるDockerイメージの集まり | 
@@ -76,15 +79,16 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 | CREATED | イメージが作成された時刻（ 自ホストにダウンロードされた時刻ではありません） |
 | SIZE | イメージのサイズ |
 
-コンテナの一覧を見てみましょう。`-a（or --all）オプション`を付けると、起動していないコンテナも含めてすべてを表示します。`-a（or --all）オプション`を付けない場合は、実行中のコンテナのみが表示されます。hello-worldコンテナは説明を出力すると終了してしまうので`-a（or --all）オプション`を付けないと表示されません。ExitedというSTATUSはコンテナが実行され、終了した状態を指しています。コンテナの各ステータスと遷移については別途説明いたします。
- 
+次にイメージから生成されたコンテナの一覧を見てみましょう。`-a（or --all）オプション`を付けると、起動していないコンテナも含めてすべてを表示します。`-a（or --all）オプション`を付けない場合は、実行中のコンテナのみが表示されます。hello-worldコンテナは説明を出力すると終了してしまうので`-a（or --all）オプション`を付けないと表示されません。 
+
 `docker ps -a `{{execute}}
 
 ```text
 CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                     PORTS     NAMES
 655c23e742bf   hello-world   "/hello"   8 minutes ago   Exited (0) 8 minutes ago             elegant_yonath
  ```
- 
+  `docker ps`コマンドで表示される項目は以下になります。ExitedというSTATUSはコンテナが実行され、終了した状態を指しています。コンテナの各ステータスと遷移については別途説明いたします。
+
   | 項目 | 意味 | 
 |:-----------|:------------|
 | CONTAINER ID | コンテナのIDでユニークな値が付けられる | 
@@ -95,7 +99,7 @@ CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                  
 | PORTS | 公開ポート、プロトコル |
 | NAMES | コンテナの名前（ コンテナを生成する際に `--nameオプション`で指定して名前を付けることが可能）|
 
-特定の処理をして停止するコンテナを動かしてみましたが、停止してしまっているので今ひとつピンと来ないかもしれませんので、続いて、稼働していることがわかるコンテナを利用してみます。静的コンテンツを表示するWebsiteを提供するコンテナを起動してみます。コンテナイメージ名称がわからないので、httpdという文字列でコンテナレジストリを検索します。
+特定の処理をして停止するコンテナを動かしてみましたが、停止してしまっているので今ひとつピンと来ないかもしれませんので、続いて、稼働していることがわかるコンテナを利用してみます。静的コンテンツを表示するWebサーバのコンテナを起動してみます。コンテナイメージ名称がわからないので、httpdという文字列でコンテナレジストリを検索します。
 
 `docker search httpd`{{execute}}
 ```text
@@ -127,7 +131,7 @@ Status: Downloaded newer image for httpd:latest
  
 hello-world同様に、自ホストにはhttpdイメージがなかったので、コンテナレジストリからダウンロードしていることがわかります。-p 80:80の意味するところは、ローカルホスト（自ホスト）の80番ポートとコンテナ内の80番ポートをバインドすることで、80番にアクセスすると「It works!」と表示するhtmlを呼び出していることがわかります。
 
- `curl http://localhost:80/ `{{execute}}
+ `curl  http://localhost:80/ `{{execute}}
  
  ```text
 [root@ik1-314-17333 ~]# curl http://localhost:80/
@@ -136,6 +140,8 @@ hello-world同様に、自ホストにはhttpdイメージがなかったので�
  
  ブラウザで確認する場合は以下をクリックしてください。
  https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/
+ 
+ ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image02.png)　
  
  ` docker ps -a `{{execute}}
 
