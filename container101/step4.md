@@ -1,4 +1,4 @@
-# コンテナイメージの作成
+## コンテナイメージの作成
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)　
 
