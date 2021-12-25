@@ -1,6 +1,6 @@
 # コンテナの起動
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)　
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image00.png)　
 
 上の図における右側の「コンテナを稼働させるホスト（自ホスト）」が、このコースの左側に表示されているTerminalに対応しています。
 
@@ -50,6 +50,8 @@ For more examples and ideas, visit:
 1. 説明の表示が終わるとコンテナは停止します
 
 
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)
+
 自ホストにhello-worldのイメージをダンロードされたので、イメージが格納されているか確認してみましょう。hello-worldというイメージがあることがわかります。
 > Note: この環境では既にいくつかのコンテナイメージが準備されているのでhello-world以外も表示されます。
 
@@ -71,6 +73,7 @@ alpine             latest    14119a10abf4   3 months ago   5.59MB
 weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ```
  `docker images`コマンドで表示される項目には以下があります。
+ 
  | 項目 | 意味 | 
 |:-----------|:------------|
 | REPOSITORY | リポジトリ、名前は同じでタグが異なるDockerイメージの集まり | 
@@ -79,7 +82,7 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 | CREATED | イメージが作成された時刻（ 自ホストにダウンロードされた時刻ではありません） |
 | SIZE | イメージのサイズ |
 
-次にイメージから生成されたコンテナの一覧を見てみましょう。`-a（or --all）オプション`を付けると、起動していないコンテナも含めてすべてを表示します。`-a（or --all）オプション`を付けない場合は、実行中のコンテナのみが表示されます。hello-worldコンテナは説明を出力すると終了してしまうので`-a（or --all）オプション`を付けないと表示されません。 
+次にイメージから生成されたコンテナの一覧を見てみましょう。デフォルトでは実行中のコンテナのみが表示されます。`-a（or --all）オプション`を付けると、起動していないコンテナも含めてすべてを表示します。hello-worldコンテナは説明を出力すると終了してしまうので`-a（or --all）オプション`を付けないと表示されません。 
 
 `docker ps -a `{{execute}}
 
@@ -129,7 +132,7 @@ Status: Downloaded newer image for httpd:latest
 8d6cda605ee754f70f89d0fffb5048faafa10bddbc3137d18206793f037a6649
  ```
  
-hello-world同様に、自ホストにはhttpdイメージがなかったので、コンテナレジストリからダウンロードしていることがわかります。-p 80:80の意味するところは、ローカルホスト（自ホスト）の80番ポートとコンテナ内の80番ポートをバインドすることで、80番にアクセスすると「It works!」と表示するhtmlを呼び出していることがわかります。
+hello-world同様に、自ホストにはhttpdイメージがなかったので、コンテナレジストリからダウンロードしていることがわかります。-p 80:80の意味するところは、ローカルホスト（自ホスト）の80番ポートとコンテナ内の80番ポートをバインドすることです。curl でローカルホストの80番にアクセスすると「It works!」と表示され、httpdが稼働していることがわかります。
 
  `curl  http://localhost:80/ `{{execute}}
  
@@ -145,7 +148,7 @@ hello-world同様に、自ホストにはhttpdイメージがなかったので�
  
  ` docker ps -a `{{execute}}
 
-再度、コンテナ一覧を取得すると、停止したhello-worldとは異なり、STATUSがUpと表示され、httpdコンテナが80番で待ち受けしながら稼働していることがわかります。
+再度コンテナ一覧を取得すると、停止したhello-worldとは異なり、STATUSがUpと表示され、httpdコンテナが80番で待ち受けしながら稼働していることがわかります。
 
 ```text
 [root@ik1-314-17333 ~]# docker ps -a
