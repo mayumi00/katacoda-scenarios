@@ -160,7 +160,7 @@ CONTAINER ID   IMAGE                         COMMAND                  CREATED   
 
 
 
-##  このステップで利用したdockerコマンド
+###  このステップで利用したdockerコマンド
 - docker search [オプション] TERM
    - Docker Hub上のイメージを検索する
 - docker run [オプション] IMAGE [COMMAND] [ARG...]

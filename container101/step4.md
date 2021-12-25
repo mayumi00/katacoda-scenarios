@@ -1,8 +1,8 @@
 ## コンテナイメージの作成
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)　
 
-ステップ３でhttpd（Apache HTTP Server）がインストールされたコンテナを作成しました。同じようなコンテナを生成する際に、同じようなステップを踏むのは手間になるので、このhttpdインストール済のコンテナを元にコンテナイメージを作成してみましょう。コンテナイメージは稼働中または停止中のコンテナいずれからも作成できます。
+
+step3でhttpd（Apache HTTP Server）がインストールされたコンテナを作成しました。同じようなコンテナを生成する際に、同じようなステップを踏むのは手間になるので、このhttpdインストール済のコンテナを元にコンテナイメージを作成してみましょう。コンテナイメージは稼働中または停止中のコンテナいずれからも作成できます。
 
 コンテナの起動状態確認を確認します。
 
@@ -39,6 +39,8 @@ hello-world   latest    feb5d9fea6a5   2 months ago     13.3kB
 centos        latest    5d0da3dc9764   3 months ago     231MB
 ```
 
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image06.png)　
+
 作成したapachewebイメージを元にコンテナを起動します。作成したapachewebイメージにはタグを付けていたので、タグ（:v1.0）も指定します。タグを指定しないとデフォルトでlatestを探そうとするのでイメージを見つけられずに「docker: Error response from daemon」のようなエラーが返ってきます。`-d（or --detach）オプション` はコンテナをバックグラウンドで実行し、コンテナIDを出力するものです。前のステップでローカルホストの8080は既に割当済で使用中なので、8081番にバインドしてます。
 
 `docker run -d -p 8081:80 -it --name testweb2 apacheweb:v1.0 /bin/bash`{{execute}}
@@ -49,6 +51,9 @@ centos        latest    5d0da3dc9764   3 months ago     231MB
 [root@ik1-314-17333 ~]# docker run -d -p 8081:80 -it --name testweb2 apacheweb:v1.0 /bin/bash
 2bb6bc5699d6017a07302a1068c7f9f87c18c1c9d02d9f435083286e49e50401
 ```
+
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image07.png)
+
 execコマンドを利用してbashの利用を可能にします。
 
 `docker exec -it testweb2 /bin/bash`{{execute}}
@@ -111,9 +116,9 @@ f29637beaac6   centos           "/bin/bash"   39 minutes ago   Up 36 minutes   0
 [root@ik1-314-17333 ~]# curl http://localhost:8081/
 <head><title>Apache on Docker Container</title></head><body><H1>Container 101 - Web</H1>Apache on Docker Container</body>
 ```
-
 https://[[HOST_SUBDOMAIN]]-8081-[[KATACODA_HOST]].environments.katacoda.com/
 
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image08.png)
 
 なんとなくコンテナの起動やコンテナ内の操作がわかってきたと思いますが、手作業で行っている事が多い印象です。
 

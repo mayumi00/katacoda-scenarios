@@ -1,16 +1,19 @@
 ## コンテナへのアプリケーションの導入
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)　
+
 
 コンテナにアプリケーションをインストールして、アプリの動作確認を行います。
 
-実施すること
+このステップでは以下を実施します。
+
 - CentOSコンテナを80番ポート接続可能な状態で起動する
 - CentOSコンテナにhttpd（Apache HTTP Server）をインストールする
 - テスト用のhtmlをhttpdのドキュメントルート配下に配置する
 - ローカルホストにアクセスしてhttpdの動作を確認する
 
-ベースとなるCentOSはステップ２と同じイメージを利用し、ステップ２で生成したコンテナとは異なるコンテナを生成します。ここではコンテナ名として`mycentos2`としています。アプリケーションをインストールしたいので、bashを利用してコンテナの操作を行えるようにします。また「CentOSコンテナを80番ポート接続可能な状態」にするために`-p（or --publish）オプション`を利用します。コンテナ内でhttpdはTCP80で起動するので、ローカルホスト（自ホスト）の8080番ポートとコンテナ内の80番ポートをバインドします。
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image04.png)　
+
+ベースとなるCentOSコンテナイメージはstep2と同じイメージを利用し、step2で生成したコンテナとは異なるコンテナを生成します。ここではコンテナ名として`mycentos2`としています。アプリケーションをインストールしたいので、bashを利用してコンテナの操作を行えるようにします。また「CentOSコンテナを80番ポート接続可能な状態」にするために`-p（or --publish）オプション`を利用します。コンテナ内でhttpdはTCP80で起動するので、ローカルホスト（自ホスト）の8080番ポートとコンテナ内の80番ポートをバインドします。
 
 `docker run -p 8080:80 -it --name mycentos2 centos /bin/bash`{{execute}}
 
@@ -159,6 +162,8 @@ execからexitしたので、mycentos2コンテナは停止せず80番で待ち�
 curlだけでなく、このkatacodaの仕組みを使ってブラウザで表示することも可能です。
 
 https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
+
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image05.png)
 
 以上がCentOSのイメージをベースにアプリケーション（Apache HTTP Server）をインストールする流れとなります。
 
