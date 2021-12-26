@@ -1,169 +1,145 @@
-### Dockerfileの利用その２
+### Dockerfileの変更とコンテナイメージの変更
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)　
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image204.png)
 
-実施すること
-- CentOSコンテナを80番ポート接続可能な状態で起動する
-- CentOSコンテナにhttpdをdnf installする
-- テスト用のhtmlをhttpdのドキュメントルート配下に配置する
-- ローカルホストにアクセスしてhttpdの動作を確認する
-- ブラウザでの接続を確認する
+コンテナイメージをビルドしましたが、これに変更を加えたいと思います。ビルドされたイメージから起動しているコンテナに変更を加えて、それを`docker commit`でイメージ化することも可能ですが、変更の履歴の管理も考慮して、Dockerfileを変更して、そこからタグの異なるコンテナイメージを作成します。Dockerfileのバージョン管理を行えばスマートですが、今回は更新したDockerfile2を使ってビルドします。
 
-ベースとなるCentOSはステップ２と同じイメージを利用し、ステップ２で生成したコンテナとは異なるコンテナを生成します。ここではコンテナ名として`mycentos2`としています。アプリをインストールしたいので、bashを利用してコンテナの操作を行えるようにします。また「CentOSコンテナを80番ポート接続可能な状態」にするために`-p（or --publish）オプション`を利用します。コンテナ内ではhttpdはTCP80で起動するので、コンテナ内の80番ポートとローカルホスト（自ホスト）の8080番ポートをバインドします。
+Step1ではコンテナ内にコピーするhtmlファイルとしてindex.htmlを指定しましたが、新しく作成したindex2.htmlをコンテナ内のindex.htmlにコピーします。
 
-`docker run -p 8080:80 -it --name mycentos2 centos /bin/bash`{{execute}}
 
+`echo "<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Chage HTML Web</H1>Apache on Docker Container using Dockerfile</body>"  > index2.html `{{execute}}
+
+<pre class="file" data-filename="Dockerfile2" data-target="append">FROM centos</pre>
+
+`FROM`でベースとなるコンテナイメージを指定します。これはStep1と同じcentosを指定します。
+
+<pre class="file" data-filename="Dockerfile2" data-target="append">RUN dnf install -y httpd</pre>
+<pre class="file" data-filename="Dockerfile" data-target="append">RUN sed -i -e "s/#ServerName www.example.com/ServerName localhost/" /etc/httpd/conf/httpd.conf</pre>
+
+`RUN`によるhttpdのインストールとhttpd.confの設定はStep1と同様です。
+
+<pre class="file" data-filename="Dockerfile2" data-target="append">COPY index2.html /var/www/html/index.html</pre>
+
+`COPY`は、Step1とは異なり、自ホストの現在のディレクトリにあるindex2.htmlをファイルをコンテナイメージ内の/var/www/html/index.htmlにコピーしています。
+
+<pre class="file" data-filename="Dockerfile2" data-target="append">CMD ["/usr/sbin/httpd","-DFOREGROUND"]</pre>
+
+`CMD`は先程と同様/usr/sbin/httpdコマンドにパラメータ -DFOREGROUNDを指定してフォアグラウンドで実行します
+
+> Note: 上記の「Copy to Editor」が終わった後はエディターの7行目がハイライトされているはずです。エディター部分は触らずその状態にしておいてください。ハイライトの位置が代わると、後のbuild→runが正常に動作しない可能性があります。
+
+DockerfileとDockerfile2の違いは1箇所です。
+
+`diff -C0 Dockerfile  Dockerfile2 `{{execute}}
+ 
+新しく作成したDockerfile2を使ってコンテナイメージをビルドします。`-t（or --tag）オプション` で名前およびタグを指定します。この例ではapacheweb-dockerfile:2.0という名前のイメージをビルドします。
+
+`docker build -t apacheweb-dockerfile:2.0 -f Dockerfile2 .`{{execute}}
+ 
 ```text
-[root@0893cd3e1c07 /]#
-```
-
-`dnf install -y httpd`{{execute}}
-
-```text
-[root@5f04e1706a34 /]# dnf install -y httpd
-Failed to set locale, defaulting to C.UTF-8
-CentOS Linux 8 - AppStream                                                                17 MB/s | 8.2 MB     00:00    
-CentOS Linux 8 - BaseOS                                                                  6.6 MB/s | 3.5 MB     00:00    
-CentOS Linux 8 - Extras                                                                  100 kB/s |  10 kB     00:00    
-Dependencies resolved.
-（略）
-Installed:
-  apr-1.6.3-12.el8.x86_64                                                                                                
-  apr-util-1.6.1-6.el8.x86_64                                                                                            
-  apr-util-bdb-1.6.1-6.el8.x86_64                                                                                        
-  apr-util-openssl-1.6.1-6.el8.x86_64                                                                                    
-  brotli-1.0.6-3.el8.x86_64                                                                                              
-  centos-logos-httpd-85.8-2.el8.noarch                                                                                   
-  httpd-2.4.37-43.module_el8.5.0+1022+b541f3b1.x86_64                                                                    
-  httpd-filesystem-2.4.37-43.module_el8.5.0+1022+b541f3b1.noarch                                                         
-  httpd-tools-2.4.37-43.module_el8.5.0+1022+b541f3b1.x86_64                                                              
-  mailcap-2.1.48-3.el8.noarch                                                                                            
-  mod_http2-1.15.7-3.module_el8.4.0+778+c970deab.x86_64                                                                  
+$ docker build -t apacheweb-dockerfile:2.0 -f Dockerfile2 .
+Sending build context to Docker daemon    1.6MB
+Step 1/5 : FROM centos
+latest: Pulling from library/centos
+a1d0c7532777: Downloading [==================================================>]  83.52MB/83.52MB
+latest: Pulling from library/centos
+a1d0c7532777: Pull complete 
+Digest: sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
+Status: Downloaded newer image for centos:latest
+ ---> 5d0da3dc9764
+Step 2/5 : RUN dnf install -y httpd
+ ---> Running in 1842c4faeb7c
+CentOS Linux 8 - AppStream                       37 MB/s | 8.4 MB     00:00    
+（略）                     
+  mod_http2-1.15.7-3.module_el8.4.0+778+c970deab.x86_64                         
 
 Complete!
+Removing intermediate container 1842c4faeb7c
+ ---> 8a6a9a3055d2
+Step 3/5 : RUN sed -i -e "s/#ServerName www.example.com/ServerName localhost/" /etc/httpd/conf/httpd.conf
+ ---> Running in 43d2beb5233d
+Removing intermediate container 43d2beb5233d
+ ---> 1fe64e5c12ff
+Step 4/5 : COPY index.html /var/www/html/index.html
+ ---> b7b75e1539d6
+Step 5/5 : CMD ["/usr/sbin/httpd","-DFOREGROUND"]
+ ---> Running in 3004b5e6f50e
+Removing intermediate container 3004b5e6f50e
+ ---> 0c8e45773b1e
+Successfully built 0c8e45773b1e
+Successfully tagged apacheweb-dockerfile:latest
 ```
 
-httpd.confの中でServerNameのコメントをはずしlocalhostに書き換えます。
-`sed -i -e "s/#ServerName www.example.com/ServerName localhost/" /etc/httpd/conf/httpd.conf`{{execute}}
- 
-ドキュメントルートにコンテンツを配置します。今回は、コンテナ内で完結するために、echoコマンドでファイルを生成しています。
+イメージ一覧を確認します。
 
-`echo "<head><title>Apache on Docker Container</title></head><body><H1>Container 101 - Web</H1>Apache on Docker Container</body>"  > /var/www/html/index.html `{{execute}}
+`docker images`{{execute}}
 
-httpdを起動します。ここで「systemctlを使わないのか？」とツッコまれそうですが、訳あって使いません。その説明は別途します。
-
-`/usr/sbin/httpd`{{execute}}
-
-コンテナ内でhttpdが起動しているか確認します。
-
- `ps f -e`{{execute}}
- 
- ```text
-[root@f29637beaac6 /]# ps f -e
-    PID TTY      STAT   TIME COMMAND
-      1 pts/0    Ss     0:00 /bin/bash
-     86 ?        Ss     0:00 /usr/sbin/httpd
-     87 ?        S      0:00  \_ /usr/sbin/httpd
-     88 ?        Sl     0:00  \_ /usr/sbin/httpd
-     89 ?        Sl     0:00  \_ /usr/sbin/httpd
-     90 ?        Sl     0:00  \_ /usr/sbin/httpd
-    305 pts/0    R+     0:00 ps f -e
- ```
- 
- curlコマンドで先程作成したindex.htmlが表示されるか確認します。
- 
- `curl http://localhost/index.html`{{execute}}
-
+大元のcentosイメージと、Step1でビルドされたapacheweb-dockerfile:1.0、新しくビルドされたapacheweb-dockerfile:2.0があります。
 ```text
-CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                     PORTS     NAMES
-655c23e742bf   hello-world   "/hello"   8 minutes ago   Exited (0) 8 minutes ago             elegant_yonath
- ```
-
-ここで一旦コンテナから抜けます。
-
- `exit`{{execute}}
-
-runで実行したコンテナからexitするとコンテナが停止してしまいます。なので、コンテナを開始して、execコマンドでbashを実行しコンテナ内を確認します。
-
-`docker ps -a`{{execute}}
-`docker start mycentos2`{{execute}}
-`docker exec -it mycentos2 /bin/bash`{{execute}}
-`ps f -e`{{execute}}
- 
-```text
-[root@f29637beaac6 /]# ps f -e
-    PID TTY      STAT   TIME COMMAND
-     15 pts/1    Ss     0:00 /bin/bash
-     30 pts/1    R+     0:00  \_ ps f -e
-      1 pts/0    Ss+    0:00 /bin/bash
- ```
-
- httpdは、コンテナ停止とともに停止してしまったので、プロセスはありません。
- 
- 先程作ったindex.htmlを確認します。
- 
- `cat /var/www/html/index.html `{{execute}}
- 
- ```text
-<head><title>Apache on Docker Container</title></head><body>Apache on Docker Container</body>
- ```
-httpdを起動します。
-
-`/usr/sbin/httpd`{{execute}}
-`ps f -e`{{execute}}
- 
-```text
-[root@7ec897a6ca6c /]# /usr/sbin/httpd
-[root@7ec897a6ca6c /]# ps f -e
-    PID TTY      STAT   TIME COMMAND
-     16 pts/1    Ss     0:00 /bin/bash
-    250 pts/1    R+     0:00  \_ ps f -e
-      1 pts/0    Ss+    0:00 /bin/bash
-     34 ?        Ss     0:00 /usr/sbin/httpd
-     35 ?        S      0:00  \_ /usr/sbin/httpd
-     36 ?        Sl     0:00  \_ /usr/sbin/httpd
-     37 ?        Sl     0:00  \_ /usr/sbin/httpd
-     38 ?        Sl     0:00  \_ /usr/sbin/httpd
+$ docker images 
+REPOSITORY             TAG       IMAGE ID       CREATED          SIZE
+apacheweb-dockerfile   2.0       42b46d5d8af1   16 seconds ago   278MB
+apacheweb-dockerfile   latest    5c695c4ca4a3   3 days ago       278MB
+apacheweb              v1.0      8f6df7021903   5 days ago       277MB
+httpd                  latest    dabbfbe0c57b   5 days ago       144MB
+hello-world            latest    feb5d9fea6a5   3 months ago     13.3kB
+centos                 latest    5d0da3dc9764   3 months ago     231MB
 ```
-  
-コンテナから抜けます。
 
-`exit`{{execute}}
+作成されたapacheweb-dockerfile:2.0イメージからtesteweb20をバックグラウンドで起動します。httpdにアクセスするため、自ホストの8000番とコンテナの80番をバインドしています。
 
-コンテナの起動状態確認を確認します。
+`docker run -d -p 8000:80 --name testeweb00  apacheweb-dockerfile:2.0`{{execute}}
+
+```text
+$ docker run -d -p 8080:80 --name testeweb00  apacheweb-dockerfile:2.0
+0249c56bd7156724e4693e3124358271c547bc5bab3ebd6632d60e7d116db697
+```
+
+コンテナ一覧を表示します。
 
 `docker ps -a`{{execute}}
 
-execからexitしたので、mycentos2コンテナは停止せず80番で待ち受けしており、自ホストの8080にアクセスすれば接続できるはずです。
+testeweb20というコンテナが起動していることがわかります。
 
 ```text
 $ docker ps -a
-CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS          PORTS                                   NAMES
-7ec897a6ca6c   centos    "/bin/bash"   2 minutes ago   Up 38 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   mycentos2
+CONTAINER ID   IMAGE                  COMMAND                  CREATED          STATUS          PORTS                                   NAMES
+0249c56bd715   apacheweb-dockerfile   "/usr/sbin/httpd -DF…"   17 minutes ago   Up 17 minutes   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testeweb00
 ```
 
-先程はコンテナ内でcurlで確認します、今度は自ホストでcurlで確認します。ポート番号は8080です。
-`curl http://localhost:8080/index.html`{{execute}}
+httpdにアクセスすると、自ホストで作成したindex.htmlがコンテナ内に存在し、表示されることが確認できます。
 
-curlだけでなく、このkatacodaの仕組みを使ってブラウザで表示することも可能です。
-
-https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
-
-おまけ：自ホストから見たときのプロセスの起動状態
-
-`ps f -e`{{execute}}
+`curl http://localhost:8000/`{{execute}}
 
 ```text
-    683 ?        Ssl    0:06 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
-   1458 ?        Sl     0:00  \_ /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port 8080 -container-ip 172.18.0
-   1464 ?        Sl     0:00  \_ /usr/bin/docker-proxy -proto tcp -host-ip :: -host-port 8080 -container-ip 172.18.0.2 -c
-    874 ?        Ss     0:00 /lib/systemd/systemd --user
-    875 ?        S      0:00  \_ (sd-pam)
-   1481 ?        Sl     0:00 /usr/bin/containerd-shim-runc-v2 -namespace moby -id 7ec897a6ca6c1067348cd0d2913cb8adfed98fc
-   1501 pts/0    Ss+    0:00  \_ /bin/bash
-   1600 ?        Ss     0:00      \_ /usr/sbin/httpd
-   1601 ?        S      0:00          \_ /usr/sbin/httpd
-   1602 ?        Sl     0:00          \_ /usr/sbin/httpd
-   1603 ?        Sl     0:00          \_ /usr/sbin/httpd
-   1604 ?        Sl     0:00          \_ /usr/sbin/httpd
+$ curl http://localhost:8000/
+<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>
 ```
+ブラウザでの確認
+https://[[HOST_SUBDOMAIN]]-8000-[[KATACODA_HOST]].environments.katacoda.com/
+
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image202.png)
+
+実行中のtesteweb20でbashを実行し、操作可能にします。
+
+`docker exec -it testeweb20 /bin/bash`{{execute}}
+
+`[root@0249c56bd715 /]# ps f -e`{{execute}}
+
+コンテナ内のプロセスを見ると、httpdがフォアグラウンド（-DFOREGROUND）で起動していることがわかります。
+```text
+[root@0249c56bd715 /]# ps f -e
+    PID TTY      STAT   TIME COMMAND
+    223 pts/0    Ss     0:00 /bin/bash
+    238 pts/0    R+     0:00  \_ ps f -e
+      1 ?        Ss     0:00 /usr/sbin/httpd -DFOREGROUND
+      8 ?        S      0:00 /usr/sbin/httpd -DFOREGROUND
+      9 ?        Sl     0:00 /usr/sbin/httpd -DFOREGROUND
+     10 ?        Sl     0:00 /usr/sbin/httpd -DFOREGROUND
+     11 ?        Sl     0:00 /usr/sbin/httpd -DFOREGROUND
+```
+
+`exit`{{execute}}
+
+Dockerfileを利用すると、Container 101の演習で手作業で行ったインストールや設定作業を自動的に行えることがわかります。
+

@@ -27,7 +27,7 @@
 
 <pre class="file" data-filename="Dockerfile" data-target="append">COPY index.html /var/www/html/index.html</pre>
 
-`COPY`は、sourceからファイルやディレクトリをコピーして、コンテナ内のファイルシステムのパス destinationに追加します。この例では、自ホストの現在のディレクトリにあるinde.htmlをファイルをコンテナイメージ内の/var/www/html/index.htmlにコピーしています。
+`COPY`は、sourceからファイルやディレクトリをコピーして、コンテナ内のファイルシステムのパス destinationに追加します。この例では、自ホストの現在のディレクトリにあるindex.htmlをファイルをコンテナイメージ内の/var/www/html/index.htmlにコピーしています。
 
 <pre class="file" data-filename="Dockerfile" data-target="append">CMD ["/usr/sbin/httpd","-DFOREGROUND"]</pre>
 
@@ -39,12 +39,12 @@ Dockerfileの記載方法はDockerfile リファレンスを参照してくだ�
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image201.png)
 
-Dockerfileが作成できたので、これを利用してコンテナイメージをビルドします。`-t（or --tag）オプション` で名前およびタグを指定します。Dockerfileを指定してないように見えますが、デフォルトでは、指定したPATHにあるDockerfileを使うので、PATH「.」（現在のディレクトリ）にあるDockerfileを使用しています。もし、他のファイルを利用する場合は`-f（or --file）オプション` で明示的に指定することができます。この例ではapacheweb-dockerfileという名前のイメージをビルドします。タグを指定していないのでデフォルトでlatestになります。
+Dockerfileが作成できたので、これを利用してコンテナイメージをビルドします。`-t（or --tag）オプション` で名前およびタグを指定します。Dockerfileを指定してないように見えますが、デフォルトでは、指定したPATHにあるDockerfileを使うので、PATH「.」（現在のディレクトリ）にあるDockerfileを使用しています。もし、他のファイルを利用する場合は`-f（or --file）オプション` で明示的に指定することができます。この例ではapacheweb-dockerfile:1.0という名前:タグでイメージをビルドします。
 
-`docker build -t apacheweb-dockerfile .`{{execute}}
+`docker build -t apacheweb-dockerfile:1.0 .`{{execute}}
  
 ```text
-$ docker build -t apacheweb-dockerfile .
+$ docker build -t apacheweb-dockerfile:1.0 .
 Sending build context to Docker daemon    1.6MB
 Step 1/5 : FROM centos
 latest: Pulling from library/centos
@@ -81,7 +81,7 @@ Successfully tagged apacheweb-dockerfile:latest
 
 `docker images`{{execute}}
 
-大元のcentosイメージと、ビルドされたapacheweb-dockerfile（latest）があります。
+大元のcentosイメージと、ビルドされたapacheweb-dockerfile:1.0があります。
 ```text
 $ docker images 
 REPOSITORY             TAG       IMAGE ID       CREATED          SIZE
@@ -100,12 +100,12 @@ alpine                 latest    14119a10abf4   4 months ago     5.59MB
 weaveworks/scope       1.11.4    a082d48f0b39   2 years ago      78.5MB
 ```
 
-作成されたapacheweb-dockerfileイメージからtesteweb00をバックグラウンドで起動します。httpdにアクセスするため、自ホストの8080番とコンテナの80番をバインドしています。
+作成されたapacheweb-dockerfile:1.0イメージからtesteweb00をバックグラウンドで起動します。httpdにアクセスするため、自ホストの8080番とコンテナの80番をバインドしています。
 
-`docker run -d -p 8080:80 --name testeweb00  apacheweb-dockerfile`{{execute}}
+`docker run -d -p 8080:80 --name testeweb00  apacheweb-dockerfile:1.0`{{execute}}
 
 ```text
-$ docker run -d -p 8080:80 --name testeweb00  apacheweb-dockerfile
+$ docker run -d -p 8080:80 --name testeweb00  apacheweb-dockerfile:1.0
 0249c56bd7156724e4693e3124358271c547bc5bab3ebd6632d60e7d116db697
 ```
 
