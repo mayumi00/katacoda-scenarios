@@ -163,7 +163,7 @@ CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS         PORTS
 0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Up 7 seconds             mycentos1
 ```
 
-起動はしましたが、標準入力を受け付けるオプションを指定しなかったので操作できない状態になってしまいました。そこで、実行中のコンテナ内において新たなコマンドを実行する`docker exec`execコマンドを利用してbashの利用を可能にします。
+起動はしましたが、標準入力を受け付けるオプションを指定しなかったので操作できない状態になってしまいました。そこで、実行中のコンテナ内において新たなコマンドを実行する`docker exec`コマンドを利用してbashの利用を可能にします。
 
 `docker exec -it mycentos1 /bin/bash`{{execute}}
 ```text
