@@ -19,6 +19,7 @@
 `FROM`は、ベースとなるコンテナイメージを指定します。コンテナイメージが自ホストにない場合は自動的にコンテナレジストリからダウンロードします。Dockerfileは基本的にFROMから始める必要があります。
 
 `echo "RUN dnf install -y httpd"  >> Dockerfile `{{execute}}
+
 `echo "RUN sed -i -e "s/#ServerName www.example.com/ServerName localhost/" /etc/httpd/conf/httpd.conf"  >> Dockerfile `{{execute}}
 
 `RUN`は`FROM`で指定したコンテナイイメージに対してコマンドを実行します。`RUN`は複数使用可能です。`RUN`にはshell形式とexec形式があり、この例ではshell形式で記述しています。httpdのインストールとhttpd.confの設定を行っています。
@@ -33,7 +34,7 @@
 
 Dockerfileの内容を確認します。
 
-`car Dockerfile `{{execute}}
+`cat Dockerfile `{{execute}}
 
 Dockerfileの記載方法はDockerfile リファレンスを参照してください。https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/builder/
 
