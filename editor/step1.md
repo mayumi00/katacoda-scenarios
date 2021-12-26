@@ -4,6 +4,8 @@
 
 続いてDockerfileに必要事項を記載してゆきます。
 
+`Dockerfile`{{open}}
+
 <pre class="file" data-filename="Dockerfile" data-target="append">FROM centos</pre>
 
 <pre class="file" data-filename="Dockerfile" data-target="append">RUN dnf install -y httpd</pre>
@@ -19,6 +21,8 @@
 
 
 `echo "<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Chage HTML Web</H1>Apache on Docker Container using Dockerfile</body>"  > index2.html `{{execute}}
+
+`Dockerfile2`{{open}}
 
 <pre class="file" data-filename="Dockerfile2" data-target="replace">FROM centos
 </pre>
