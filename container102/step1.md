@@ -29,7 +29,7 @@
 
 `COPY`は、sourceからファイルやディレクトリをコピーして、コンテナ内のファイルシステムのパス destinationに追加します。この例では、自ホストの現在のディレクトリにあるindex.htmlをファイルをコンテナイメージ内の/var/www/html/index.htmlにコピーしています。
 
-`echo "CMD ["/usr/sbin/httpd","-DFOREGROUND"]"  >> Dockerfile `{{execute}}
+`echo "CMD [ \"/usr/sbin/httpd \", \"-DFOREGROUND \"]"  >> Dockerfile `{{execute}}
 
 `CMD`はコンテナが起動する際に実行するコマンドを指定します。記述方法はexec形式、shell形式、ENTRYPOINTのデフォルトパラメーターの３種類があります。Dockerfileでは`CMD`は１つしか記述できません。もし複数の`CMD`があった場合は、最後の`CMD`しか処理されません。記述方式はexec形式が推奨されており、[]内に、["コマンド","パラメータ1","パラメータ2"]のように記載します。この例では、/usr/sbin/httpdコマンドにパラメータ -DFOREGROUNDを指定してフォアグラウンドで実行します。
 
@@ -43,7 +43,7 @@ FROM centos
 RUN dnf install -y httpd
 RUN sed -i -e "s/#ServerName www.example.com/ServerName localhost/" /etc/httpd/conf/httpd.conf
 COPY index.html /var/www/html/index.html
-CMD [/usr/sbin/httpd,-DFOREGROUND]
+CMD ["/usr/sbin/httpd","-DFOREGROUND"]
 ```
 
 Dockerfileの記載方法はDockerfile リファレンスを参照してください。https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/builder/
