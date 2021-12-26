@@ -43,7 +43,7 @@ For more examples and ideas, visit:
 
 このコマンドでは次の処理が実施されています。
 
-1. 自ホスト上ではhello-worldというイメージが見つけられなかったので、図の左にある既存のコンテナレジストリから最新のhello-worldイメージをダウンロードして、自ホストのイメージ格納領域に保存します
+1. 自ホスト上ではhello-worldというイメージが見つけられなかったので、図の左にあるコンテナレジストリから最新版のhello-worldイメージをダウンロードして、自ホストのイメージ格納領域に保存します
 1. 格納されたイメージからコンテナを生成します
 1. 生成したコンテナを起動します
 1. Dockerについての簡単な説明を出力します
@@ -52,7 +52,7 @@ For more examples and ideas, visit:
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)
 
-自ホストにhello-worldのイメージをダンロードされたので、イメージが格納されているか確認してみましょう。hello-worldというイメージがあることがわかります。
+自ホストにhello-worldのイメージをダンロードされたので、イメージが格納されているか確認してみましょう。下から3行目にhello-worldというイメージがあることがわかります。
 > Note: この環境では既にいくつかのコンテナイメージが準備されているのでhello-world以外も表示されます。
 
  `docker images`{{execute}}
@@ -98,7 +98,7 @@ CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                  
 | IMAGE | イメージに付けられているタグ、リポジトリやバージョン情報 | 
 | COMMAND | コンテナで実行されたコマンド | 
 | CREATED | コンテナが生成された時刻 |
-| STATUS | コンテナの状態、右のいずれか（created、restarting、running、removing、paused、exited、dead） |
+| STATUS | コンテナの状態、起動中の場合は「Up」停止してる場合は「Exited」となる |
 | PORTS | 公開ポート、プロトコル |
 | NAMES | コンテナの名前（ コンテナを生成する際に `--nameオプション`で指定して名前を付けることが可能）|
 
@@ -148,7 +148,7 @@ hello-world同様に、自ホストにはhttpdイメージがなかったので�
  
  ` docker ps -a `{{execute}}
 
-再度コンテナ一覧を取得すると、停止したhello-worldとは異なり、STATUSがUpと表示され、httpdコンテナが80番で待ち受けしながら稼働していることがわかります。
+再度コンテナ一覧を取得すると、停止したhello-worldとは異なり、STATUSがUpと表示され、httpdコンテナが80番で待ち受けしながら稼働していることが確認できます。
 
 ```text
 [root@ik1-314-17333 ~]# docker ps -a

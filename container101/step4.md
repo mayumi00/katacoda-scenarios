@@ -132,6 +132,7 @@ https://[[HOST_SUBDOMAIN]]-8081-[[KATACODA_HOST]].environments.katacoda.com/
 - コンテナに特定のポートを割り当てて、かつ、バックグラウンドで起動する
 
 ##  このステップで利用したdockerコマンド
+
 - docker commit [オプション] CONTAINER [REPOSITORY[:TAG]]
   - コンテナをからイメージを作成する
  - docker run -dオプション
