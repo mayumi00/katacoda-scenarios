@@ -9,25 +9,35 @@ Step1ではコンテナ内にコピーするhtmlファイルとしてindex.html�
 
 `echo "<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Chage HTML Web</H1>Apache on Docker Container using Dockerfile</body>"  > index2.html `{{execute}}
 
-<pre class="file" data-filename="Dockerfile2" data-target="append">FROM centos</pre>
+`echo "FROM centos"  > Dockerfile `{{execute}}
 
 `FROM`でベースとなるコンテナイメージを指定します。これはStep1と同じcentosを指定します。
 
-<pre class="file" data-filename="Dockerfile2" data-target="append">RUN dnf install -y httpd</pre>
-<pre class="file" data-filename="Dockerfile" data-target="append">RUN sed -i -e "s/#ServerName www.example.com/ServerName localhost/" /etc/httpd/conf/httpd.conf</pre>
+`echo "RUN dnf install -y httpd"  >> Dockerfile `{{execute}}
+
+`echo "RUN sed -i -e \"s/#ServerName www.example.com/ServerName localhost/\" /etc/httpd/conf/httpd.conf"  >> Dockerfile `{{execute}}
 
 `RUN`によるhttpdのインストールとhttpd.confの設定はStep1と同様です。
 
-<pre class="file" data-filename="Dockerfile2" data-target="append">COPY index2.html /var/www/html/index.html</pre>
+`echo "COPY index2.html /var/www/html/index.html"  >> Dockerfile `{{execute}}
 
 `COPY`は、Step1とは異なり、自ホストの現在のディレクトリにあるindex2.htmlをファイルをコンテナイメージ内の/var/www/html/index.htmlにコピーしています。
 
-<pre class="file" data-filename="Dockerfile2" data-target="append">CMD ["/usr/sbin/httpd","-DFOREGROUND"]</pre>
+`echo "CMD [\"/usr/sbin/httpd\",\"-DFOREGROUND\"]" >> Dockerfile `{{execute}}
 
 `CMD`は先程と同様/usr/sbin/httpdコマンドにパラメータ -DFOREGROUNDを指定してフォアグラウンドで実行します
 
-> Note: 上記の「Copy to Editor」が終わった後はエディターの7行目がハイライトされているはずです。エディター部分は触らずその状態にしておいてください。ハイライトの位置が代わると、後のbuild→runが正常に動作しない可能性があります。
+`cat Dockerfile2 `{{execute}}
 
+以下の内容になっていればOKです。
+
+```text
+FROM centos
+RUN dnf install -y httpd
+RUN sed -i -e "s/#ServerName www.example.com/ServerName localhost/" /etc/httpd/conf/httpd.conf
+COPY index2.html /var/www/html/index.html
+CMD ["/usr/sbin/httpd","-DFOREGROUND"]
+```
 DockerfileとDockerfile2の違いは1箇所です。
 
 `diff -C0 Dockerfile  Dockerfile2 `{{execute}}
