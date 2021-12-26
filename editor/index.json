@@ -25,10 +25,7 @@
     "exclusionPatterns": [" .bashrc", ".cache", ".hushlogin", ".profile", ".ssh", "vimrc"],
      "hideHiddenFiles": true,
     "hideintro": false,
-    "hidefinish": false,
-         "files": [
-        "Dockerfile", "Dockerfile2"
-    ],
+    "hidefinish": false
   },
   "backend": {
     "imageid": "ubuntu:2004"
