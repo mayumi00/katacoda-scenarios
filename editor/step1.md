@@ -4,28 +4,23 @@
 
 続いてDockerfileに必要事項を記載してゆきます。
 
-<pre class="file" data-filename="Dockerfile" data-target="append">FROM centos
-</pre>
+<pre class="file" data-filename="Dockerfile" data-target="append">FROM centos</pre>
 
-<pre class="file" data-filename="Dockerfile" data-target="append">RUN dnf install -y httpd
-</pre>
+<pre class="file" data-filename="Dockerfile" data-target="append">RUN dnf install -y httpd</pre>
 
-<pre class="file" data-filename="Dockerfile" data-target="append">RUN sed -i -e "s/#ServerName www.example.com/ServerName localhost/" /etc/httpd/conf/httpd.conf
-</pre>
+<pre class="file" data-filename="Dockerfile" data-target="append">RUN sed -i -e "s/#ServerName www.example.com/ServerName localhost/" /etc/httpd/conf/httpd.conf</pre>
 
-<pre class="file" data-filename="Dockerfile" data-target="append">COPY index.html /var/www/html/index.html
-</pre>
+<pre class="file" data-filename="Dockerfile" data-target="append">COPY index.html /var/www/html/index.html</pre>
 
 
-<pre class="file" data-filename="Dockerfile" data-target="append">CMD ["/usr/sbin/httpd","-DFOREGROUND"]
-</pre>
+<pre class="file" data-filename="Dockerfile" data-target="append">CMD ["/usr/sbin/httpd","-DFOREGROUND"]</pre>
 
 `docker build -t apacheweb-dockerfile:1.0 .`{{execute}}
 
 
 `echo "<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Chage HTML Web</H1>Apache on Docker Container using Dockerfile</body>"  > index2.html `{{execute}}
 
-<pre class="file" data-filename="Dockerfile2" data-target="append">FROM centos
+<pre class="file" data-filename="Dockerfile2" data-target="replace">FROM centos
 </pre>
 
 `FROM`でベースとなるコンテナイメージを指定します。これはStep1と同じcentosを指定します。
