@@ -138,7 +138,7 @@ https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
 
 `docker exec -it testeweb00 /bin/bash`{{execute}}
 
-`[root@0249c56bd715 /]# ps f -e`{{execute}}
+`ps f -e`{{execute}}
 
 コンテナ内のプロセスを見ると、httpdがフォアグラウンド（-DFOREGROUND）で起動していることがわかります。
 ```text
