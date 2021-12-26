@@ -1,7 +1,7 @@
 ### Dockerfileの利用
 
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image201.png)　
+　
 
 > Note: この画面の右側の分割画面は、上部がエディターで下部がTerminalです。「Copy to Editor」部分をクリックすると、そのテキストが右上部のエディターに記述されます。Dockerfileはこのエディターで編集します。
 
@@ -41,6 +41,10 @@
 
 Dockerfileの記載方法はDockerfile リファレンスを参照してください。https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/builder/
 
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image201.png)
+
+Dockerfileが作成できたので、これを利用してコンテナイメージをビルドします。`-t（or --tag）オプション` で名前およびタグを指定します。Dockerfileを指定してないように見えますが、デフォルトでは、指定したPATHにあるDockerfileを使うので、PATH「.」（現在のディレクトリ）にあるDockerfileを使用しています。もし、他のファイルを利用する場合は`-f（or --file）オプション` で明示的に指定することができます。
+
 `docker build -t apacheweb-dockerfile .`{{execute}}
  
 ```text
@@ -49,7 +53,7 @@ REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
 ```
 - コンテナに特定のポートを割り当てて、かつ、バックグラウンドで起動する
 
-`docker run -d -p 8080:80 --name testweb01  apacheweb-dockerfile:latest`{{execute}}
+`docker run -d -p 8080:80 --name testweb01  apacheweb-dockerfile`{{execute}}
 
 `curl http://localhost:8080/`{{execute}}
 
