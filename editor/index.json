@@ -22,7 +22,7 @@
   "environment": {
     "uilayout": "editor-terminal",
     "uieditorpath": "./",
-     "uisettings": "Dockerfile",
+     "uisettings": "text",
     "exclusionPatterns": [" .bashrc", ".cache", ".hushlogin", ".profile", ".ssh", "vimrc"],
      "hideHiddenFiles": true,
     "hideintro": false,
