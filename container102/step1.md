@@ -100,12 +100,12 @@ alpine                 latest    14119a10abf4   4 months ago     5.59MB
 weaveworks/scope       1.11.4    a082d48f0b39   2 years ago      78.5MB
 ```
 
-作成されたapacheweb-dockerfileイメージからtestweb01をバックグラウンドで起動します。httpdにアクセスするため、自ホストの8080番とコンテナの80番をバインドしています。
+作成されたapacheweb-dockerfileイメージからtesteweb00をバックグラウンドで起動します。httpdにアクセスするため、自ホストの8080番とコンテナの80番をバインドしています。
 
-`docker run -d -p 8080:80 --name testweb01  apacheweb-dockerfile`{{execute}}
+`docker run -d -p 8080:80 --name testeweb00  apacheweb-dockerfile`{{execute}}
 
 ```text
-$ docker run -d -p 8080:80 --name testweb01  apacheweb-dockerfile
+$ docker run -d -p 8080:80 --name testeweb00  apacheweb-dockerfile
 0249c56bd7156724e4693e3124358271c547bc5bab3ebd6632d60e7d116db697
 ```
 
@@ -113,12 +113,12 @@ $ docker run -d -p 8080:80 --name testweb01  apacheweb-dockerfile
 
 `docker ps -a`{{execute}}
 
-testweb01というコンテナが起動していることがわかります。
+testeweb00というコンテナが起動していることがわかります。
 
 ```text
 $ docker ps -a
 CONTAINER ID   IMAGE                  COMMAND                  CREATED          STATUS          PORTS                                   NAMES
-0249c56bd715   apacheweb-dockerfile   "/usr/sbin/httpd -DF…"   17 minutes ago   Up 17 minutes   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testweb01
+0249c56bd715   apacheweb-dockerfile   "/usr/sbin/httpd -DF…"   17 minutes ago   Up 17 minutes   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testeweb00
 ```
 
 httpdにアクセスすると、自ホストで作成したindex.htmlがコンテナ内に存在し、表示されることが確認できます。
@@ -134,9 +134,9 @@ https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image202.png)
 
-実行中のtestweb01でbashを実行し、操作可能にします。
+実行中のtesteweb00でbashを実行し、操作可能にします。
 
-`docker exec -it testweb01 /bin/bash`{{execute}}
+`docker exec -it testeweb00 /bin/bash`{{execute}}
 
 `[root@0249c56bd715 /]# ps f -e`{{execute}}
 

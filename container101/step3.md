@@ -1,7 +1,5 @@
 ## コンテナへのアプリケーションの導入
 
-
-
 コンテナにアプリケーションをインストールして、アプリの動作確認を行います。
 
 このステップでは以下を実施します。
@@ -13,9 +11,9 @@
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image04.png)　
 
-ベースとなるCentOSコンテナイメージはstep2と同じイメージを利用し、step2で生成したコンテナとは異なるコンテナを生成します。ここではコンテナ名として`mycentos2`としています。アプリケーションをインストールしたいので、bashを利用してコンテナの操作を行えるようにします。また「CentOSコンテナを80番ポート接続可能な状態」にするために`-p（or --publish）オプション`を利用します。コンテナ内でhttpdはTCP80で起動するので、ローカルホスト（自ホスト）の8080番ポートとコンテナ内の80番ポートをバインドします。
+ベースとなるCentOSコンテナイメージはstep2と同じイメージを利用し、step2で生成したコンテナとは異なるコンテナを生成します。ここではコンテナ名として`mycentos02`としています。アプリケーションをインストールしたいので、bashを利用してコンテナの操作を行えるようにします。また「CentOSコンテナを80番ポート接続可能な状態」にするために`-p（or --publish）オプション`を利用します。コンテナ内でhttpdはTCP80で起動するので、ローカルホスト（自ホスト）の8080番ポートとコンテナ内の80番ポートをバインドします。
 
-`docker run -p 8080:80 -it --name mycentos2 centos /bin/bash`{{execute}}
+`docker run -p 8080:80 -it --name mycentos02 centos /bin/bash`{{execute}}
 
 ```text
 [root@0893cd3e1c07 /]#
@@ -98,8 +96,8 @@ CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                  
 ```
 コンテナを開始して、execコマンドでbashを実行しコンテナ内を確認します。
 
-`docker start mycentos2`{{execute}}
-`docker exec -it mycentos2 /bin/bash`{{execute}}
+`docker start mycentos02`{{execute}}
+`docker exec -it mycentos02 /bin/bash`{{execute}}
 
 コンテナ内のプロセスを確認します。
 
@@ -153,9 +151,9 @@ httpdが起動したか確認します。
 ```text
 $ docker ps -a
 CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS          PORTS                                   NAMES
-7ec897a6ca6c   centos    "/bin/bash"   2 minutes ago   Up 38 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   mycentos2
+7ec897a6ca6c   centos    "/bin/bash"   2 minutes ago   Up 38 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   mycentos02
 ```
-execからexitしたので、mycentos2コンテナは停止せず80番で待ち受けしており、自ホストの8080にアクセスすれば接続できるはずです。先程はコンテナ内でcurlで確認しましたが、今度は自ホストでcurlで確認します。ローカルホスト（自ホスト）の8080番ポートとコンテナ内の80番ポートをバインドしてあるので、8080番ポートへアクセスします。
+execからexitしたので、mycentos02コンテナは停止せず80番で待ち受けしており、自ホストの8080番にアクセスすれば接続できるはずです。先程はコンテナ内でcurlで確認しましたが、今度は自ホストでcurlで確認します。ローカルホスト（自ホスト）の8080番ポートとコンテナ内の80番ポートをバインドしてあるので、8080番ポートへアクセスします。
 
 `curl http://localhost:8080/index.html`{{execute}}
 

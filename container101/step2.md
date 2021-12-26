@@ -41,9 +41,9 @@ centos/systemd                    systemd enabled base container.               
 （略）
 ```
 
-`centos / The official build of CentOS. `これが公式のコンテナイメージのようなので、このイメージを使うことにして、CentOSの最新版のコンテナイメージをコンテナレジストリからダウンロードします。pullする際にlatestのタグを指定してみました。タグを指定しない場合はデフォルトで:latestというタグを用いますので、latestを取得する場合はタグは不要です。どのような場合にタグを利用するのかと言えば、例えば、最新版ではなくバージョンを指定してpullしたい場合などです。
+`centos / The official build of CentOS. `これが公式のコンテナイメージのようなので、このイメージを使うことにして、CentOSの最新版のコンテナイメージをコンテナレジストリからダウンロードします。特にタグを指定しない場合はデフォルトで最新を意味するlatestというタグがついたイメージを取得します。最新版ではなくバージョンを指定してpullしたい場合などは明示的にタグを指定します。
  
-`docker pull centos:latest`{{execute}}
+`docker pull centos`{{execute}}
 
 ```text
 latest: Pulling from library/centos
@@ -74,9 +74,9 @@ alpine             latest    14119a10abf4   3 months ago   5.59MB
 weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ```
 
-それでは、このCentOSコンテナイメージからコンテナを起動します。コンテナを起動する際に`--nameオプション`を付けるとコンテナに任意の名前をつけることができます。今回はmycentos1という名前を付けることにします。また、標準入力を受け付ける`-i（or --interactive）オプション`と疑似TTYの割当を行う`-t（or --tty）オプション`を組み合わせてbashをインタラクティブモードで起動すると、コンテナ内での操作が可能になります。
+それでは、このCentOSコンテナイメージからコンテナを起動します。コンテナを起動する際に`--nameオプション`を付けるとコンテナに任意の名前をつけることができます。今回はmycentos01という名前を付けることにします。また、標準入力を受け付ける`-i（or --interactive）オプション`と疑似TTYの割当を行う`-t（or --tty）オプション`を組み合わせてbashをインタラクティブモードで起動すると、コンテナ内での操作が可能になります。
 
-`docker run -it --name mycentos1 centos /bin/bash`{{execute}}
+`docker run -it --name mycentos01 centos /bin/bash`{{execute}}
 
 ```text
 [root@0893cd3e1c07 /]#
@@ -148,24 +148,24 @@ exit
 `docker ps -a`{{execute}}
 ```text
 CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS                     PORTS     NAMES
-0893cd3e1c07   centos    "/bin/bash"   49 seconds ago   Exited (0) 4 seconds ago             mycentos1
+0893cd3e1c07   centos    "/bin/bash"   49 seconds ago   Exited (0) 4 seconds ago             mycentos01
 ```
 
-`docker run`で起動したコンテナのターミナルをexitで抜けると、コンテナが停止します。再度、コンテナを起動します。起動するコンテナを指定する方法にはコンテナ名またはコンテナIDが利用できます。先程、mycentos1というコンテナ名を付けておいたので、それを指定してコンテナを起動します。
+`docker run`で起動したコンテナのターミナルをexitで抜けると、コンテナが停止します。再度、コンテナを起動します。起動するコンテナを指定する方法にはコンテナ名またはコンテナIDが利用できます。先程、mycentos01というコンテナ名を付けておいたので、それを指定してコンテナを起動します。
 
-`docker start mycentos1`{{execute}}
+`docker start mycentos01`{{execute}}
 
-起動後に、コンテナの起動状況を確認するとmycentos1のSTATUSはUpになっていることがわかります。
+起動後に、コンテナの起動状況を確認するとmycentos01のSTATUSはUpになっていることがわかります。
 
 `docker ps -a`{{execute}}
 ```text
 CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS         PORTS     NAMES
-0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Up 7 seconds             mycentos1
+0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Up 7 seconds             mycentos01
 ```
 
 起動はしましたが、標準入力を受け付けるオプションを指定しなかったので操作できない状態になってしまいました。そこで、実行中のコンテナ内において新たなコマンドを実行する`docker exec`コマンドを利用してbashの利用を可能にします。
 
-`docker exec -it mycentos1 /bin/bash`{{execute}}
+`docker exec -it mycentos01 /bin/bash`{{execute}}
 ```text
 [root@0893cd3e1c07 /]# 
 ```
@@ -216,12 +216,12 @@ ContainerExercise
 `docker ps -a`{{execute}}
 ```text
 CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS          PORTS     NAMES
-0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Up 37 seconds             mycentos1
+0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Up 37 seconds             mycentos01
 ```
 
 コンテナ一覧を確認すると、先程の`docker run`の場合と異なりコンテナは停止せず、起動したままです。今度はdockerコマンドで明示的にコンテナを停止します。
 
-`docker stop mycentos1`{{execute}}
+`docker stop mycentos01`{{execute}}
 
 `docker ps -a`{{execute}}
 
@@ -229,22 +229,22 @@ CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS          PORT
 
 ```text
 CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS                     PORTS     NAMES
-0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Exited (0) 3 seconds ago             mycentos1
+0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Exited (0) 3 seconds ago             mycentos01
 ```
 コンテナをまた起動して、状態を確認します。
 
-`docker start mycentos1`{{execute}}
+`docker start mycentos01`{{execute}}
 
 `docker ps -a`{{execute}}
 
 ```text
 CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     NAMES
-0893cd3e1c07   centos    "/bin/bash"   2 minutes ago   Up 4 seconds             mycentos1
+0893cd3e1c07   centos    "/bin/bash"   2 minutes ago   Up 4 seconds             mycentos01
 ```
 
 execコマンドを利用してbashの利用を可能にします。
 
-`docker exec -it mycentos1 /bin/bash`{{execute}}
+`docker exec -it mycentos01 /bin/bash`{{execute}}
 ```text
 [root@0893cd3e1c07 /]# 
 ```

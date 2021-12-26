@@ -1,270 +1,164 @@
+### Dockerfileの利用その２
 
-# コンテナの操作とコンテナ内の操作
+　
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image02.png)　
-
-特定の処理をして停止するコンテナを動かしてみましたが、停止してしまっているので今ひとつピンと来ない点もあるかと思います。そこで、普段利用している仮想マシンのような感覚で触れるコンテナを利用してみましょう。
-
-> Note: 出力例に表示されているコンテナIDやイメージID、起動時間などは使用している環境と状態によって異なります。このテキストとまったく同じにはならないのでご注意ください。
-
-今回はいきなりrunするのではなく、dockerイメージをpullするところから始めます。馴染みの深いCentOSを利用します。再度、現在自ホストにあるコンテナイメージを確認します。centosという文字は見当たりません。
+Step1でDockerfileを利用することで、インストールや設定作業が自動化できることを体験できたと思います。
 
  `docker images`{{execute}}
  
 ```text
-REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
-redis              latest    b8477f2e393b   2 months ago   113MB
-mongo              latest    c1a14d3979c5   2 months ago   691MB
-mariadb            10        b7220a722ce2   2 months ago   409MB
-mariadb            latest    b7220a722ce2   2 months ago   409MB
-ubuntu             latest    597ce1600cf4   2 months ago   72.8MB
-postgres           12        fe603fe275ba   2 months ago   371MB
-postgres           latest    6ce504119cc8   2 months ago   374MB
-mysql              8         2fe463762680   2 months ago   514MB
-mysql              latest    2fe463762680   2 months ago   514MB
-alpine             latest    14119a10abf4   3 months ago   5.59MB
-weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
+$ docker images 
+REPOSITORY             TAG       IMAGE ID       CREATED          SIZE
+apacheweb-dockerfile   latest    0c8e45773b1e   11 minutes ago   278MB
+redis                  latest    b8477f2e393b   2 months ago     113MB
+mongo                  latest    c1a14d3979c5   2 months ago     691MB
+mariadb                10        b7220a722ce2   2 months ago     409MB
+mariadb                latest    b7220a722ce2   2 months ago     409MB
+ubuntu                 latest    597ce1600cf4   2 months ago     72.8MB
+postgres               12        fe603fe275ba   2 months ago     371MB
+postgres               latest    6ce504119cc8   2 months ago     374MB
+mysql                  8         2fe463762680   2 months ago     514MB
+mysql                  latest    2fe463762680   2 months ago     514MB
+centos                 latest    5d0da3dc9764   3 months ago     231MB
+alpine                 latest    14119a10abf4   4 months ago     5.59MB
+weaveworks/scope       1.11.4    a082d48f0b39   2 years ago      78.5MB
 ```
 
-特定の文字列を含むイメージを検索することができます。この例ではcentosという文字列を含むコンテナイメージを検索しています。
-`docker search centos`{{execute}}
-```text
-NAME                              DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
-centos                            The official build of CentOS.                   6928      [OK]       
-ansible/centos7-ansible           Ansible on Centos7                              135                  [OK]
-consol/centos-xfce-vnc            Centos container with "headless" VNC session…   132                  [OK]
-jdeathe/centos-ssh                OpenSSH / Supervisor / EPEL/IUS/SCL Repos - …   121                  [OK]
-centos/systemd                    systemd enabled base container.                 105                  [OK]
-centos/mysql-57-centos7           MySQL 5.7 SQL database server                   92                   
-imagine10255/centos6-lnmp-php56   centos6-lnmp-php56                              58                   [OK]
-tutum/centos                      Simple CentOS docker image with SSH access      48                   
-centos/postgresql-96-centos7      PostgreSQL is an advanced Object-Relational …   45                   
-kinogmt/centos-ssh                CentOS with SSH                                 29                   [OK]
-centos/mariadb                                                                    22                   [OK]
-guyton/centos6                    From official centos6 container with full up…   10                   [OK]
-nathonfowlie/centos-jre           Latest CentOS image with the JRE pre-install…   8                    [OK]
-centos/tools                      Docker image that has systems administration…   7                    [OK]
-drecom/centos-ruby                centos ruby                                     6                    [OK]
-centos/redis                      Redis built for CentOS                          6                    [OK]
-mamohr/centos-java                Oracle Java 8 Docker image based on Centos 7    3                    [OK]
-darksheer/centos                  Base Centos Image -- Updated hourly             3                    [OK]
-miko2u/centos6                    CentOS6 日本語環境                                   2                    [OK]
-amd64/centos                      The official build of CentOS.                   2                    
-dokken/centos-7                   CentOS 7 image for kitchen-dokken               2                    
-blacklabelops/centos              CentOS Base Image! Built and Updates Daily!     1                    [OK]
-mcnaughton/centos-base            centos base image                               1                    [OK]
-starlabio/centos-native-build     Our CentOS image for native builds              0                    [OK]
-smartentry/centos                 centos with smartentry                          0                    [OK]
-```
+同じ設定を持つコンテナを複数個起動したい場合などはDockerfileを使って作成したコンテナイメージからコンテンを起動すれば良いわけです。以下の例は、apacheweb-dockerfileから9個のコンテナを起動しています。
 
-`centos  The official build of CentOS. `これが公式のコンテナのようなので、このイメージを使うことにして、CentOSの最新版のコンテナをコンテナレジストリからダウンロードします。pullする際にlatestのタグを指定してみました。実際にはｍタグを指定しない場合はデフォルトで:latestというタグを用いますので、latestを取得する場合はタグは不要です。どのような場合にタグを利用するのかと言えば、例えば、最新版ではなくバージョンを指定してpullしたい場合などです。
- 
-`docker pull centos:latest`{{execute}}
+` for i in {1..9} ; do  echo testweb0${i} ; docker run -d -p 808${i}:80 --name testweb0${i} apacheweb-dockerfile ; done `{{execute}}
 
 ```text
-latest: Pulling from library/centos
-a1d0c7532777: Pull complete 
-Digest: sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
-Status: Downloaded newer image for centos:latest
-docker.io/library/centos:latest
+$ for i in {1..9} ; do  echo testweb0${i} ; docker run -d -p 808${i}:80 --name testweb0${i} apacheweb-dockerfile ; done
+testweb01
+docker: Error response from daemon: Conflict. The container name "/testweb01" is already in use by container "0249c56bd7156724e4693e3124358271c547bc5bab3ebd6632d60e7d116db697". You have to remove (or rename) that container to be able to reuse that name.
+See 'docker run --help'.
+testweb02
+87f98b5d837465449112f5a47b5da4b0c1e14098aa4c3154833e3f540d0334a1
+testweb03
+73b92a0f3588c71345788f38a2386c2d98abe3177e372f045f0b5d880ed01bd7
+testweb04
+1d40fff204027b2dc3b5084a7acc39b06e5ddf66c1a77e523a4aeb6e427ff72d
+testweb05
+3c97f0ee23a05b659933db0aa3e8bb2fd4b2347a3831dbff08285ea1b1230e10
+testweb06
+41ab1c192f743f99742558a4d0423a23ffc79665f7fc88139f92ab849b93c01d
+testweb07
+1f04291534d4395871a3bb558aab666c52a50bfa00d27c1d73399174ba999014
+testweb08
+3c03da4b31b5f6fc031e4c75a50b9eebfd8a54ac0ef47879a061c1816be7b1a9
+testweb09
+38bb1c9120b41a5380d6e3f4be9a199ee1c32b0dfa7fdda8d2fa45141c5af6bb
+$
 ```
 
-再度、コンテナイメージを確認すると、centosの最新版が自ホストのイメージ格納領域にダウンロードされたことがわかります。
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image203.png)
 
-`docker images`{{execute}}
+
+`for i in {1..9} ; do echo testweb0${i} ; curl http://localhost:808${i} ; done`{{execute}}
 
 ```text
-REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
-redis              latest    b8477f2e393b   2 months ago   113MB
-mongo              latest    c1a14d3979c5   2 months ago   691MB
-mariadb            10        b7220a722ce2   2 months ago   409MB
-mariadb            latest    b7220a722ce2   2 months ago   409MB
-ubuntu             latest    597ce1600cf4   2 months ago   72.8MB
-postgres           12        fe603fe275ba   2 months ago   371MB
-postgres           latest    6ce504119cc8   2 months ago   374MB
-mysql              8         2fe463762680   2 months ago   514MB
-mysql              latest    2fe463762680   2 months ago   514MB
-hello-world        latest    feb5d9fea6a5   2 months ago   13.3kB
-centos             latest    5d0da3dc9764   3 months ago   231MB
-alpine             latest    14119a10abf4   3 months ago   5.59MB
-weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
+<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>
+<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>
+<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>
+<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>
+<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>
+<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>
+<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>
+<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>
 ```
-
-それでは、このCentOSのコンテナイメージを起動します。先程の章で、コンテナを起動する際に`--nameオプション`を付けるとコンテナの名前をつけることができると説明しました。今回はコンテナにmycentos1という名前を付けることにします。また、標準入力を受け付ける`-i（or --interactive）オプション`と疑似TTYの割当を行う`-t（or --tty）オプション`を組み合わせてbashをインタラクティブモードで起動し、コンテナ内での操作を可能にします。コンテナ起動直後に実施するコマンドとして/bin/bashを指定します。
-
-`docker run -it --name mycentos1 centos /bin/bash`{{execute}}
-
-```text
-[root@0893cd3e1c07 /]#
-```
-
-プロンプトが表示され、bashの利用が可能になっていることがわかります。コンテナを起動する際に`-h（or --hostname）オプション`を付けるとコンテナのホスト名を指定することができますが、今回は指定していないので、コンテナIDが利用されます。プロンプトのroot@の後ろの文字列はコンテナホスト名＝コンテナIDなので、実行した環境によって異なります。いくつかのファイルの内容の確認やコマンドの実行を行ってみます。
-
-実施項目
-- /etc/os-releaseの確認
-- unameコマンド
-- /etc/hostnameの確認
-
-`cat /etc/os-release`{{execute}}
-
-```text
-[root@0893cd3e1c07 /]# cat /etc/os-release
-NAME="CentOS Linux"
-VERSION="8"
-ID="centos"
-ID_LIKE="rhel fedora"
-VERSION_ID="8"
-PLATFORM_ID="platform:el8"
-PRETTY_NAME="CentOS Linux 8"
-ANSI_COLOR="0;31"
-CPE_NAME="cpe:/o:centos:centos:8"
-HOME_URL="https://centos.org/"
-BUG_REPORT_URL="https://bugs.centos.org/"
-CENTOS_MANTISBT_PROJECT="CentOS-8"
-CENTOS_MANTISBT_PROJECT_VERSION="8"
-```
-
-`uname -a`{{execute}}
-
-```text
-[root@187c07b01562 /]# uname -a
-Linux 187c07b01562 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
-```
-
-`cat /etc/hostname`{{execute}}
-
-```text
-[root@0893cd3e1c07 /]# cat /etc/hostname
-0893cd3e1c07
-```
-`exit`{{execute}}
-
-```text
-[root@0893cd3e1c07 /]# exit
-exit
-```
-
-`docker ps -a`{{execute}}
-```text
-CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS                     PORTS     NAMES
-0893cd3e1c07   centos    "/bin/bash"   49 seconds ago   Exited (0) 4 seconds ago             mycentos1
-```
-
-runで起動したコンテナのターミナルをexitで抜けると、コンテナが停止します。再度、コンテナを起動します。起動するコンテンを指定する方法にはコンテナ名またはコンテナIDを指定します。先程、mycentos1というコンテナ名を付けておいたので、それを指定します。
-
-`docker start mycentos1`{{execute}}
-
-コンテナの起動状況を確認します。STATUSはUpになっていることがわかります。
-
-`docker ps -a`{{execute}}
-```text
-CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS         PORTS     NAMES
-0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Up 7 seconds             mycentos1
-```
-
-起動したけど、標準入力を受け付けるオプションを指定しなかったので操作できない状態。そこで、実行中のコンテナー内において新たなコマンドを実行するexecコマンドを利用してbashの利用を可能にします。
-
-`docker exec -it mycentos1 /bin/bash`{{execute}}
-```text
-[root@0893cd3e1c07 /]# 
-```
-
-bashが利用できる状態になったので、いくつかのコマンドを実行してみましょう。
-
-- 現在存在するファイル/ディレクトリの表示
-- テキストファイルを作成
-- ファイルが作られたことを確認
-
-`ls`{{execute}}
-```text
-[root@0893cd3e1c07 /]# ls
-bin  dev  etc  home  lib  lib64  lost+found  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
-
-```
-
-`echo ContainerExercise > testfile.txt`{{execute}}
-
-
-`ls`{{execute}}
-```text
-[root@0893cd3e1c07 /]# ls
-bin  etc   lib    lost+found  mnt  proc  run   srv  testfile.txt  usr
-dev  home  lib64  media       opt  root  sbin  sys  tmp           var
-```
-
-`cat testfile.txt`{{execute}}
-```text
-[root@0893cd3e1c07 /]# cat testfile.txt
-ContainerExercise
-```
-
-`exit`{{execute}}
-
-
-`docker ps -a`{{execute}}
-```text
-CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS          PORTS     NAMES
-0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Up 37 seconds             mycentos1
-```
-
-コンテナのターミナルから`exit`で抜けます。先程のrunの場合と異なりコンテナは停止せず、起動したままです。今度はdockerコマンドで明示的にコンテナを停止します。
-
-`docker stop mycentos1`{{execute}}
-
-`docker ps -a`{{execute}}
-```text
-CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS                     PORTS     NAMES
-0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Exited (0) 3 seconds ago             mycentos1
-```
-
-コンテナをまた起動して、状態を確認します。
-
-`docker start mycentos1`{{execute}}
 
 `docker ps -a`{{execute}}
 
 ```text
-CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     NAMES
-0893cd3e1c07   centos    "/bin/bash"   2 minutes ago   Up 4 seconds             mycentos1
+$ docker ps -a
+CONTAINER ID   IMAGE                  COMMAND                  CREATED             STATUS             PORTS                                   NAMES
+38bb1c9120b4   apacheweb-dockerfile   "/usr/sbin/httpd -DF…"   6 minutes ago       Up 6 minutes       0.0.0.0:8089->80/tcp, :::8089->80/tcp   testweb09
+3c03da4b31b5   apacheweb-dockerfile   "/usr/sbin/httpd -DF…"   6 minutes ago       Up 6 minutes       0.0.0.0:8088->80/tcp, :::8088->80/tcp   testweb08
+1f04291534d4   apacheweb-dockerfile   "/usr/sbin/httpd -DF…"   6 minutes ago       Up 6 minutes       0.0.0.0:8087->80/tcp, :::8087->80/tcp   testweb07
+41ab1c192f74   apacheweb-dockerfile   "/usr/sbin/httpd -DF…"   6 minutes ago       Up 6 minutes       0.0.0.0:8086->80/tcp, :::8086->80/tcp   testweb06
+3c97f0ee23a0   apacheweb-dockerfile   "/usr/sbin/httpd -DF…"   6 minutes ago       Up 6 minutes       0.0.0.0:8085->80/tcp, :::8085->80/tcp   testweb05
+1d40fff20402   apacheweb-dockerfile   "/usr/sbin/httpd -DF…"   6 minutes ago       Up 6 minutes       0.0.0.0:8084->80/tcp, :::8084->80/tcp   testweb04
+73b92a0f3588   apacheweb-dockerfile   "/usr/sbin/httpd -DF…"   6 minutes ago       Up 6 minutes       0.0.0.0:8083->80/tcp, :::8083->80/tcp   testweb03
+87f98b5d8374   apacheweb-dockerfile   "/usr/sbin/httpd -DF…"   6 minutes ago       Up 6 minutes       0.0.0.0:8082->80/tcp, :::8082->80/tcp   testweb02
+0249c56bd715   apacheweb-dockerfile   "/usr/sbin/httpd -DF…"   About an hour ago   Up About an hour   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testweb01
 ```
 
-execコマンドを利用してbashの利用を可能にします。
+次のステップに進む前に、不要なコンテナを削除します。停止→削除という流れになります。
 
-`docker exec -it mycentos1 /bin/bash`{{execute}}
+> Note: コンテナイメージは削除しません。
+
+testweb01からtestweb09を停止します。
+
+` for i in {1..9} ; do docker stop testweb0${i} ; done`{{execute}}
+
 ```text
-[root@0893cd3e1c07 /]# 
+[root@ik1-314-17333 ~]#  for i in {1..9} ; do docker stop testweb0${i} ; done
+testweb01
+testweb02
+testweb03
+testweb04
+testweb05
+testweb06
+testweb07
+testweb08
+testweb09
 ```
-ここで、先程作成したファイル`testfile.txt`が、コンテナ停止の影響を受けてるか確認します。
 
-`ls`{{execute}}
+停止したことを確認します。
+
+`docker ps -a`{{execute}}
+
 ```text
-[root@0893cd3e1c07 /]# ls
-bin  etc   lib    lost+found  mnt  proc  run   srv  testfile.txt  usr
-dev  home  lib64  media       opt  root  sbin  sys  tmp           var
+[root@ik1-314-17333 ~]# docker ps -a
+CONTAINER ID   IMAGE                         COMMAND                  CREATED        STATUS                      PORTS                  NAMES
+2cd97d3f908b   apacheweb:v1.0                "/bin/bash"              47 hours ago   Exited (0) 47 hours ago                            testweb10
+8d6cda605ee7   httpd:latest                  "httpd-foreground"       2 days ago     Up 2 days                   0.0.0.0:80->80/tcp     httpd
+41fa697c9b50   hello-world                   "/hello"                 2 days ago     Exited (0) 2 days ago                              stoic_goldwasser
+d7ec0a8b9812   apacheweb-dockerfile:latest   "/usr/sbin/httpd -DF…"   2 days ago     Exited (0) 11 seconds ago                          testweb09
+25edfe178f68   apacheweb-dockerfile:latest   "/usr/sbin/httpd -DF…"   2 days ago     Exited (0) 11 seconds ago                          testweb08
+70a73dbea6d4   apacheweb-dockerfile:latest   "/usr/sbin/httpd -DF…"   2 days ago     Exited (0) 12 seconds ago                          testweb07
+51af578d9295   apacheweb-dockerfile:latest   "/usr/sbin/httpd -DF…"   2 days ago     Exited (0) 12 seconds ago                          testweb06
+fa6d86813e94   apacheweb-dockerfile:latest   "/usr/sbin/httpd -DF…"   2 days ago     Exited (0) 12 seconds ago                          testweb05
+ee9be191c9bb   apacheweb-dockerfile:latest   "/usr/sbin/httpd -DF…"   2 days ago     Exited (0) 13 seconds ago                          testweb04
+6a9b5d2bc978   apacheweb-dockerfile:latest   "/usr/sbin/httpd -DF…"   2 days ago     Exited (0) 14 seconds ago                          testweb03
+47762d8d669d   apacheweb-dockerfile:latest   "/usr/sbin/httpd -DF…"   2 days ago     Created                                            testweb02
+d108c4296367   apacheweb-dockerfile:latest   "-it /bin/bash"          3 days ago     Created                                            testtest
+cded4b21dcad   apacheweb-dockerfile:latest   "/usr/sbin/httpd -DF…"   3 days ago     Exited (0) 14 seconds ago                          testweb01
+2bb6bc5699d6   apacheweb:v1.0                "/bin/bash"              5 days ago     Up 5 days (Paused)          0.0.0.0:8081->80/tcp   testweb2
+f29637beaac6   centos                        "/bin/bash"              5 days ago     Up 5 days                   0.0.0.0:8080->80/tcp   mycentos2
 ```
-`cat testfile.txt`{{execute}}
+
+停止したtestweb01からtestweb09を削除します。
+
+`for i in {2..9} ; do docker rm testweb0${i} ; done`{{execute}}
+
 ```text
-[root@0893cd3e1c07 /]# cat testfile.txt
-ContainerExercise
+[root@ik1-314-17333 ~]# for i in {2..9} ; do docker rm testweb0${i} ; done
+testweb02
+testweb03
+testweb04
+testweb05
+testweb06
+testweb07
+testweb08
+testweb09
 ```
+コンテナ一覧を確認すると停止したtestweb01からtestweb09までが一覧から消えていることが確認できます。
 
-先程作ったファイルはそのまま存在してます。コンテナの停止によって影響は受けないことはわかりました。
+`docker ps -a`{{execute}}
 
-`exit`{{execute}}
 ```text
-exit
+[root@ik1-314-17333 ~]# docker ps -a
+CONTAINER ID   IMAGE                         COMMAND                  CREATED        STATUS                     PORTS                  NAMES
+2cd97d3f908b   apacheweb:v1.0                "/bin/bash"              47 hours ago   Exited (0) 47 hours ago                           testweb10
+8d6cda605ee7   httpd:latest                  "httpd-foreground"       2 days ago     Up 2 days                  0.0.0.0:80->80/tcp     httpd
+41fa697c9b50   hello-world                   "/hello"                 2 days ago     Exited (0) 2 days ago                             stoic_goldwasser
+d108c4296367   apacheweb-dockerfile:latest   "-it /bin/bash"          3 days ago     Created                                           testtest
+cded4b21dcad   apacheweb-dockerfile:latest   "/usr/sbin/httpd -DF…"   3 days ago     Exited (0) 3 minutes ago                          testweb01
+2bb6bc5699d6   apacheweb:v1.0                "/bin/bash"              5 days ago     Up 5 days (Paused)         0.0.0.0:8081->80/tcp   testweb2
+f29637beaac6   centos                        "/bin/bash"              5 days ago     Up 5 days                  0.0.0.0:8080->80/tcp   mycentos2
 ```
+現在は以下の図のような状態です。
 
-コンテナの起動や停止・開始の一連の操作でコンテナの状態がどのように推移するかなんとなく理解できたかと思います。とはいえ、まだCentOSコンテナの操作をちょっと行ってみただけなので、次のステップではCentOSコンテナにアプリケーションをインストールして、アプリの動作を確認してみましょう。
-
-##  このステップで利用したdockerコマンド
-- docker pull [オプション] NAME[:TAG|@DIGEST] 
-   - レジストリからイメージまたはリポジトリを取得する
-- docker search [オプション] TERM
-   - Docker Hub上のイメージを検索する
-- docker exec [オプション] CONTAINER COMMAND [ARG...]
-   - 実行中のコンテナ内において新たなコマンドを実行する
-- docker start [オプション] CONTAINER [CONTAINER...]
-   - 停止しているコンテナを起動する
-- docker stop [オプション] CONTAINER [CONTAINER...]
-   - 実行中のコンテナを停止する
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image204.png)
