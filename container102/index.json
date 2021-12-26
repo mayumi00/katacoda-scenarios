@@ -31,6 +31,6 @@
     "imageid": "ubuntu:2004"
   },
       "files": [
-    "Dockerfile"
+    "Dockerfile","Dockerfile2"
 ]
 }
