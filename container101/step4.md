@@ -124,7 +124,7 @@ https://[[HOST_SUBDOMAIN]]-8081-[[KATACODA_HOST]].environments.katacoda.com/
 
 下記のような作業を、コマンドをちまちま打たずに済ませるために、DockerFileというもの使う方法を次のコースで学習します。
 
-- ベースとなるCentOSイメージを取得する
+- ベースとなるCentOSコンテナイメージを取得する
 - CentOSにhttpd（Apache HTTP Server）をインストールする
 - httpd（Apache HTTP Server）の設定を行う
 - ドキュメントルート配下にコンテンツを配置する
