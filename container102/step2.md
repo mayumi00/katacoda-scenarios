@@ -1,26 +1,7 @@
 ## ビルドされたイメージの利用例
 
-Step1でDockerfileを利用することで、インストールや設定作業が自動化できることを体験できたと思います。
+step1で、Dockerfileを利用することでインストールや設定作業が自動化できることを体験できたと思います。このように作成したコンテナイメージから同一のコンテナを大量に扱うことなどが可能になります。
 
- `docker images`{{execute}}
- 
-```text
-$ docker images
-REPOSITORY             TAG       IMAGE ID       CREATED              SIZE
-apacheweb-dockerfile   1.0       e6dd36800f1d   About a minute ago   278MB
-redis                  latest    b8477f2e393b   2 months ago         113MB
-mongo                  latest    c1a14d3979c5   2 months ago         691MB
-mariadb                10        b7220a722ce2   2 months ago         409MB
-mariadb                latest    b7220a722ce2   2 months ago         409MB
-ubuntu                 latest    597ce1600cf4   2 months ago         72.8MB
-postgres               12        fe603fe275ba   2 months ago         371MB
-postgres               latest    6ce504119cc8   2 months ago         374MB
-mysql                  8         2fe463762680   2 months ago         514MB
-mysql                  latest    2fe463762680   2 months ago         514MB
-centos                 latest    5d0da3dc9764   3 months ago         231MB
-alpine                 latest    14119a10abf4   4 months ago         5.59MB
-weaveworks/scope       1.11.4    a082d48f0b39   2 years ago          78.5MB
-```
 
 ---
 **複数のコンテナの起動**

@@ -1,22 +1,34 @@
-### Dockerfileの変更に基づくコンテナイメージの変更
+## Dockerfileの変更に基づくコンテナイメージの変更
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image204.png)
+
 
 step1でコンテナイメージをビルドしましたが、これに変更を加えたいと思います。ビルドされたイメージから起動しているコンテナに変更を加えて、それを`docker commit`でイメージ化することも可能ですが、変更の履歴の管理も考慮して、Dockerfileを変更して、そこからタグの異なるコンテナイメージを作成します。Dockerfileのバージョン管理を行えばスマートですが、今回は更新したDockerfile2を使ってビルドします。
 
 > Note: 今回はEditorを利用せずechoコマンドでファイルを作成します。
 
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image3-1.png)
+
+---
+**コンテンツの作成**
+
 step1ではコンテナ内にコピーするhtmlファイルとしてindex.htmlを指定しましたが、新しく作成したindex2.htmlをコンテナ内のindex.htmlにコピーします。自ホスト内にindex2.htmlを作成します。
 
 `echo "<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Chage HTML Web</H1>Apache on Docker Container using Dockerfile</body>"  > index2.html `{{execute}}
 
+---
+**Dockerfileの作成**
+
 新しいDockerfileであるDockerfile2を作成します。
+
+***FROM*** 
 
 `FROM centos`
 
 `echo "FROM centos"  > Dockerfile2 `{{execute}}
 
 `FROM`でベースとなるコンテナイメージを指定します。これはStep1と同じcentosを指定します。
+
+***RUN*** 
 
 `RUN dnf install -y httpd`
 
@@ -28,11 +40,15 @@ step1ではコンテナ内にコピーするhtmlファイルとしてindex.html�
 
 `RUN`によるhttpdのインストールとhttpd.confの設定はstep1と同様です。
 
+***COPY*** 
+
 `COPY index.html /var/www/html/index.html`
 
 `echo "COPY index2.html /var/www/html/index.html"  >> Dockerfile2 `{{execute}}
 
 `COPY`は、Step1とは異なり、自ホストの現在のディレクトリにあるindex2.htmlをファイルをコンテナイメージ内の/var/www/html/index.htmlにコピーしています。
+
+***CMD*** 
 
 `CMD ["/usr/sbin/httpd","-DFOREGROUND"]`
 
@@ -67,6 +83,9 @@ $ diff -C0 Dockerfile  Dockerfile2
 --- 4 ----
 ! COPY index2.html /var/www/html/index.html
  ```
+
+---
+**コンテナイメージのビルド**
 
 新しく作成したDockerfile2を使ってコンテナイメージをビルドします。`-t（or --tag）オプション` でapacheweb-dockerfile:2.0という名前:タグのイメージをビルドします。ビルドに使うDockerfileとして`-f（or --file）オプション`でDockerfile2を指定します。PATHは.（現在のディレクトリ）です。
 
@@ -123,6 +142,9 @@ alpine                 latest    14119a10abf4   4 months ago    5.59MB
 weaveworks/scope       1.11.4    a082d48f0b39   2 years ago     78.5MB
 ```
 
+---
+**作成したコンテナイメージからのコンテナの起動**
+
 作成されたapacheweb-dockerfile:2.0イメージからtestweb20をバックグラウンドで起動します。httpdにアクセスするため、自ホストの8000番とコンテナの80番をバインドしています。
 
 `docker run -d -p 8000:80 --name testweb20  apacheweb-dockerfile:2.0`{{execute}}
@@ -145,6 +167,9 @@ CONTAINER ID   IMAGE                      COMMAND                  CREATED      
 d92f2cf8234f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   3 minutes ago   Up 3 minutes   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testweb00
 ```
 
+---
+**httpdの動作確認**
+
 httpdにアクセスすると、自ホストで作成したindex2.htmlの内容が表示されることが確認できます。
 
 `curl http://localhost:8000/`{{execute}}
@@ -154,11 +179,14 @@ $ curl http://localhost:8000/
 <head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Chage HTML Web</H1>Apache on Docker Container using Dockerfile</body>
 ```
 
-ブラウザでの確認。以下のように表示されます。
+ ブラウザで確認する場合は以下をクリックしてください。index.html（自ホストではindex2.htmlの内容）の内容が表示されます。
 
 https://[[HOST_SUBDOMAIN]]-8000-[[KATACODA_HOST]].environments.katacoda.com/
+
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image102web2.png)
 
+---
+**コンテナ内でのプロセスの確認**
 
 実行中のtestweb20でbashを実行し、操作可能にします。
 
@@ -181,5 +209,4 @@ https://[[HOST_SUBDOMAIN]]-8000-[[KATACODA_HOST]].environments.katacoda.com/
 
 `exit`{{execute}}
 
-Dockerfileを利用すると、Container 101の演習で手作業で行ったインストールや設定作業を自動的に行えることがわかります。
-
+Dockerfileの変更を行うことで、変更を反映したコンテナイメージをビルドし、新しいコンテナを作成することができます。この演習では手動でDockerfileの管理を行っていますが、githubなどでDockerfileのバージョン管理を行い、変更を管理してゆくことも可能になります。
