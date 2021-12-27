@@ -148,10 +148,12 @@ httpdにアクセスすると、自ホストで作成したindex2.htmlの内容�
 $ curl http://localhost:8000/
 <head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Chage HTML Web</H1>Apache on Docker Container using Dockerfile</body>
 ```
-ブラウザでの確認
-https://[[HOST_SUBDOMAIN]]-8000-[[KATACODA_HOST]].environments.katacoda.com/
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image202.png)
+ブラウザでの確認。以下のように表示されます。
+
+https://[[HOST_SUBDOMAIN]]-8000-[[KATACODA_HOST]].environments.katacoda.com/
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image102web2.png)
+
 
 実行中のtestweb20でbashを実行し、操作可能にします。
 

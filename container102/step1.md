@@ -1,6 +1,8 @@
 ### Dockerfileを利用してのコンテナイメージのビルド
 
-このステップではDockerfileを利用することで、以下の操作をまとめて実施できることを学びます。
+このステップではDockerfileを利用してコンテナイメージをビルドすることを学習します。
+
+Dockerfileを利用すると以下のような処理を行うイメージを作成することができます。
 
 - ベースとなるCentOSコンテナイメージを取得する
 - CentOSにhttpd（Apache HTTP Server）をインストールする
@@ -143,6 +145,8 @@ CONTAINER ID   IMAGE                  COMMAND                  CREATED          
 0249c56bd715   apacheweb-dockerfile   "/usr/sbin/httpd -DF…"   17 minutes ago   Up 17 minutes   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testeweb00
 ```
 
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image202.png)
+
 httpdにアクセスすると、自ホストで作成したindex.htmlがコンテナ内に存在し、表示されることが確認できます。
 
 `curl http://localhost:8080/`{{execute}}
@@ -151,10 +155,12 @@ httpdにアクセスすると、自ホストで作成したindex.htmlがコン�
 $ curl http://localhost:8080/
 <head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>
 ```
-ブラウザでの確認
-https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
+ブラウザでの確認。以下のように表示されます。
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image202.png)
+https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image102web1.png)
+
+
 
 実行中のtesteweb00でbashを実行し、操作可能にします。
 
