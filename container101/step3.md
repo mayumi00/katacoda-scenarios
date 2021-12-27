@@ -1,13 +1,17 @@
-### コンテナへのアプリケーションの導入
+## コンテナへのアプリケーションの導入
 
 コンテナにアプリケーションをインストールして、アプリの動作確認を行います。
 
 このステップでは以下を実施します。
 
-- CentOSコンテナを80番ポート接続可能な状態で起動する
-- CentOSコンテナにhttpd（Apache HTTP Server）をインストールする
-- テスト用のhtmlをhttpdのドキュメントルート配下に配置する
-- ローカルホストにアクセスしてhttpdの動作を確認する
+- CentOSコンテナを80番ポート接続可能な状態で起動
+- CentOSコンテナにhttpd（Apache HTTP Server）をインストール
+- テスト用のhtmlをhttpdのドキュメントルート配下に配置
+- コンテナ内でのhttpdの動作を確認
+- ローカルホスト（自ホスト）でのhttpdの動作を確認
+
+---
+**CentOSコンテナを80番ポート接続可能な状態で起動**
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image3-1.png)　
 
@@ -18,6 +22,10 @@
 ```text
 [root@1af9407b90df /]#
 ```
+
+---
+**CentOSコンテナにhttpd（Apache HTTP Server）をインストール**
+
 コンテナ内でhttpdをインストールします。
 
 `dnf install -y httpd`{{execute}}
@@ -38,10 +46,16 @@ Complete!
 httpdがインストールされたので、httpd.confの中でServerNameのコメントをはずしlocalhostに書き換えます。
 
 `sed -i -e "s/#ServerName www.example.com/ServerName localhost/" /etc/httpd/conf/httpd.conf`{{execute}}
+
+---
+**テスト用のhtmlをhttpdのドキュメントルート配下に配置**
  
 ドキュメントルートにコンテンツを配置します。今回は、コンテナ内で完結するために、echoコマンドでファイルを生成しています。
 
 `echo "<head><title>Apache on Docker Container</title></head><body><H1>Container 101 - Web</H1>Apache on Docker Container</body>"  > /var/www/html/index.html `{{execute}}
+
+---
+**コンテナ内でのhttpdの動作を確認**
 
 httpdを起動します。ここで「systemctlを使わないのか？」とツッコまれそうですが、訳あって使いません。その説明は別途します。
 
@@ -71,6 +85,11 @@ httpdを起動します。ここで「systemctlを使わないのか？」とツ
 [root@1af9407b90df /]# curl http://localhost/index.html
 <head><title>Apache on Docker Container</title></head><body><H1>Container 101 - Web</H1>Apache on Docker Container</body>
  ```
+
+---
+**ローカルホスト（自ホスト）でのhttpdの動作を確認**
+
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image3-2.png)
 
 ここで一旦コンテナから抜けます。
 
@@ -151,7 +170,7 @@ CONTAINER ID   IMAGE          COMMAND              CREATED              STATUS  
 e14e3cbf21be   hello-world    "/hello"             10 minutes ago       Exited (0) 10 minutes ago                                           musing_shamir
 $
 ```
-execからexitしたので、mycentos02コンテナは停止せず80番で待ち受けしており、自ホストの8080番にアクセスすれば接続できるはずです。先程はコンテナ内でcurlで確認しましたが、今度は自ホストでcurlで確認します。ローカルホスト（自ホスト）の8080番ポートとコンテナ内の80番ポートをバインドしてあるので、8080番ポートへアクセスします。
+execからexitしたので、mycentos02コンテナは停止せず80番で待ち受けしており、自ホストの8080番にアクセスすれば接続できるはずです。先程はコンテナ内でcurlで確認しましたが、今度は自ホストでcurlで確認します。ローカルホストの8080番ポートとコンテナ内の80番ポートをバインドしてあるので、8080番ポートへアクセスします。
 
 `curl http://localhost:8080/index.html`{{execute}}
 
@@ -160,7 +179,7 @@ curlだけでなく、このkatacodaの仕組みを使ってブラウザで表�
 https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
  ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image101web2.png)
  
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image3-2.png)
+---
 
 以上がCentOSのイメージをベースにアプリケーション（Apache HTTP Server）をインストールする流れとなります。
 
