@@ -1,12 +1,10 @@
 ### コンテナの起動
 
-この演習環境は以下の図のようになっています。
+この演習環境は以下の図のようになっています。図の右側の「コンテナを稼働させるホスト（自ホスト）」が、このコースの左側に表示されているTerminalに対応しています。
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-1.png)　
 
-図における右側の「コンテナを稼働させるホスト（自ホスト）」が、このコースの左側に表示されているTerminalに対応しています。
-
-この環境は既にDockerが利用できる状態になっていますので、Dockerを利用してコンテナを起動して、動作を確認してみましょう。`docker version`{{execute}}←このように表示されている部分をクリックすると右のTerminalでコマンドが実行されます。
+この環境は既にDockerが利用できる状態になっていますので、Dockerを利用してコンテナを起動して、動作を確認してみましょう。`docker version`{{execute}} ←このように表示されている部分の✔をクリックすると右のTerminalでコマンドが実行されます。
 
 ```text
 $ docker version
@@ -40,6 +38,8 @@ Server: Docker Engine - Community
   GitCommit:        de40ad0
   ```
 
+** hello-world コンテナ **
+---
 「hello-world」というDockerについての簡単な説明を出力するコンテナを起動してみます。
 
 `docker run hello-world`{{execute}}

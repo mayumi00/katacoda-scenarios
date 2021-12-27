@@ -15,8 +15,6 @@
  - ビルドされたイメージの利用例
  - Dockerfileの変更に基づくコンテナイメージの変更
  - コンテナイメージのレイヤー構造
- 
-  ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image00.png)
   
 この演習で利用してるDockerコマンドの紹介は、DockerDocsのリファレンスを参照しています。
 
