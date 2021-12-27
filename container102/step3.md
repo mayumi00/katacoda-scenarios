@@ -1,33 +1,38 @@
-### Dockerfileの変更とコンテナイメージの変更
+### Dockerfileの変更に基づくコンテナイメージの変更
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image204.png)
 
-Step1でコンテナイメージをビルドしましたが、これに変更を加えたいと思います。ビルドされたイメージから起動しているコンテナに変更を加えて、それを`docker commit`でイメージ化することも可能ですが、変更の履歴の管理も考慮して、Dockerfileを変更して、そこからタグの異なるコンテナイメージを作成します。Dockerfileのバージョン管理を行えばスマートですが、今回は更新したDockerfile2を使ってビルドします。
+step1でコンテナイメージをビルドしましたが、これに変更を加えたいと思います。ビルドされたイメージから起動しているコンテナに変更を加えて、それを`docker commit`でイメージ化することも可能ですが、変更の履歴の管理も考慮して、Dockerfileを変更して、そこからタグの異なるコンテナイメージを作成します。Dockerfileのバージョン管理を行えばスマートですが、今回は更新したDockerfile2を使ってビルドします。
 
-Step1ではコンテナ内にコピーするhtmlファイルとしてindex.htmlを指定しましたが、新しく作成したindex2.htmlをコンテナ内のindex.htmlにコピーします。
+> Note: 今回はEditorを利用せずechoコマンドでファイルを作成します。
 
+step1ではコンテナ内にコピーするhtmlファイルとしてindex.htmlを指定しましたが、新しく作成したindex2.htmlをコンテナ内のindex.htmlにコピーします。自ホスト内にindex2.htmlを作成します。
 
 `echo "<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Chage HTML Web</H1>Apache on Docker Container using Dockerfile</body>"  > index2.html `{{execute}}
 
-`echo "FROM centos"  > Dockerfile `{{execute}}
+新しいDockerfileであるDockerfile2を作成します。
+
+`echo "FROM centos"  > Dockerfile2 `{{execute}}
 
 `FROM`でベースとなるコンテナイメージを指定します。これはStep1と同じcentosを指定します。
 
-`echo "RUN dnf install -y httpd"  >> Dockerfile `{{execute}}
+`echo "RUN dnf install -y httpd"  >> Dockerfile2 `{{execute}}
 
-`echo "RUN sed -i -e \"s/#ServerName www.example.com/ServerName localhost/\" /etc/httpd/conf/httpd.conf"  >> Dockerfile `{{execute}}
+`echo "RUN sed -i -e \"s/#ServerName www.example.com/ServerName localhost/\" /etc/httpd/conf/httpd.conf"  >> Dockerfile2 `{{execute}}
 
-`RUN`によるhttpdのインストールとhttpd.confの設定はStep1と同様です。
+`RUN`によるhttpdのインストールとhttpd.confの設定はstep1と同様です。
 
-`echo "COPY index2.html /var/www/html/index.html"  >> Dockerfile `{{execute}}
+`echo "COPY index2.html /var/www/html/index.html"  >> Dockerfile2 `{{execute}}
 
 `COPY`は、Step1とは異なり、自ホストの現在のディレクトリにあるindex2.htmlをファイルをコンテナイメージ内の/var/www/html/index.htmlにコピーしています。
 
-`echo "CMD [\"/usr/sbin/httpd\",\"-DFOREGROUND\"]" >> Dockerfile `{{execute}}
+`echo "CMD [\"/usr/sbin/httpd\",\"-DFOREGROUND\"]" >> Dockerfile2 `{{execute}}
 
 `CMD`は先程と同様/usr/sbin/httpdコマンドにパラメータ -DFOREGROUNDを指定してフォアグラウンドで実行します
 
-`cat Dockerfile2 `{{execute}}
+作成したDockerfile2の内容を確認します。
+
+`cat 2 `{{execute}}
 
 以下の内容になっていればOKです。
 
@@ -51,7 +56,8 @@ DockerfileとDockerfile2の違いは1箇所です。
 --- 6,7 ----
 ! COPY index2.html /var/www/html/index.html
  ```
-新しく作成したDockerfile2を使ってコンテナイメージをビルドします。`-t（or --tag）オプション` で名前およびタグを指定します。この例ではapacheweb-dockerfile:2.0という名前のイメージをビルドします。
+
+新しく作成したDockerfile2を使ってコンテナイメージをビルドします。`-t（or --tag）オプション` でapacheweb-dockerfile:2.0という名前:タグのイメージをビルドします。ビルドに使うDockerfileとして`-f（or --file）オプション`でDockerfile2を指定します。PATHは.（現在のディレクトリ）です。
 
 `docker build -t apacheweb-dockerfile:2.0 -f Dockerfile2 .`{{execute}}
  
@@ -75,13 +81,13 @@ Removing intermediate container af63086acad0
 Successfully built 765b2ec091a4
 Successfully tagged apacheweb-dockerfile:2.0
 ```
-Step1と異なり、centosコンテナイメージは既に自ホストにあるのでダウンロードは行われません。また、httpdのインストールに関してもキャッシュを利用しています。
+step1と異なり、centosコンテナイメージは既に自ホストにあるのでダウンロードは行われません。また、httpdのインストールに関してもキャッシュを利用しています。
 
-イメージ一覧を確認します。
+コンテナイメージが作成されたので、イメージ一覧を確認します。
 
 `docker images`{{execute}}
 
-大元のcentosイメージと、Step1でビルドされたapacheweb-dockerfile:1.0、新しくビルドされたapacheweb-dockerfile:2.0があります。
+大元のcentosイメージと、step1でビルドされたapacheweb-dockerfile:1.0、新しくビルドされたapacheweb-dockerfile:2.0があります。
 ```text
 $ docker images
 REPOSITORY             TAG       IMAGE ID       CREATED          SIZE
@@ -101,9 +107,9 @@ alpine                 latest    14119a10abf4   4 months ago     5.59MB
 weaveworks/scope       1.11.4    a082d48f0b39   2 years ago      78.5MB
 ```
 
-作成されたapacheweb-dockerfile:2.0イメージからtesteweb20をバックグラウンドで起動します。httpdにアクセスするため、自ホストの8000番とコンテナの80番をバインドしています。
+作成されたapacheweb-dockerfile:2.0イメージからtestweb20をバックグラウンドで起動します。httpdにアクセスするため、自ホストの8000番とコンテナの80番をバインドしています。
 
-`docker run -d -p 8000:80 --name testeweb20  apacheweb-dockerfile:2.0`{{execute}}
+`docker run -d -p 8000:80 --name testweb20  apacheweb-dockerfile:2.0`{{execute}}
 
 ```text
 See 'docker run --help'.
@@ -115,7 +121,7 @@ $ docker run -d  -p 8000:80 --name testweb20 apacheweb-dockerfile:2.0
 
 `docker ps -a`{{execute}}
 
-testeweb20というコンテナが起動していることがわかります。
+apacheweb-dockerfile:2.0から生成されたtestweb20というコンテナが起動していることがわかります。
 
 ```text
 $ docker ps -a
@@ -138,7 +144,7 @@ https://[[HOST_SUBDOMAIN]]-8000-[[KATACODA_HOST]].environments.katacoda.com/
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image202.png)
 
-実行中のtesteweb20でbashを実行し、操作可能にします。
+実行中のtestweb20でbashを実行し、操作可能にします。
 
 `docker exec -it testweb20 /bin/bash`{{execute}}
 

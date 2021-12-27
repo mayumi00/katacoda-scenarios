@@ -11,8 +11,10 @@
   
 
 - 102
- - Dockerfileを利用してのコンテナのビルド
+ - Dockerfileを利用してのコンテナイメージのビルド
+ - ビルドされたイメージの利用例
+ - Dockerfileの変更に基づくコンテナイメージの変更
+ - コンテナイメージのレイヤー構造
  
 この演習で利用してるDockerコマンドの紹介は、DockerDocsのリファレンスを参照しています。
-
-https://matsuand.github.io/docs.docker.jp.onthefly/reference/
+https://docs.docker.com/reference/

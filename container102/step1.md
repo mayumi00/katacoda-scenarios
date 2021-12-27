@@ -1,4 +1,4 @@
-### Dockerfileの利用
+### Dockerfileを利用してのコンテナイメージのビルド
 
 このステップではDockerfileを利用することで、以下の操作をまとめて実施できることを学びます。
 
@@ -14,6 +14,8 @@
 
 続いてDockerfileに必要事項を記載してゆきます。
 
+> Note: 今回はEditorを利用せずechoコマンドでファイルを作成します。
+
 `echo "FROM centos"  > Dockerfile `{{execute}}
 
 `FROM`は、ベースとなるコンテナイメージを指定します。コンテナイメージが自ホストにない場合は自動的にコンテナレジストリからダウンロードします。Dockerfileは基本的にFROMから始める必要があります。
@@ -21,7 +23,6 @@
 `echo "RUN dnf install -y httpd"  >> Dockerfile `{{execute}}
 
 `echo "RUN sed -i -e \"s/#ServerName www.example.com/ServerName localhost/\" /etc/httpd/conf/httpd.conf"  >> Dockerfile `{{execute}}
-
 
 `RUN`は`FROM`で指定したコンテナイイメージに対してコマンドを実行します。`RUN`は複数使用可能です。`RUN`にはshell形式とexec形式があり、この例ではshell形式で記述しています。httpdのインストールとhttpd.confの設定を行っています。
 
@@ -33,11 +34,12 @@
 
 `CMD`はコンテナが起動する際に実行するコマンドを指定します。記述方法はexec形式、shell形式、ENTRYPOINTのデフォルトパラメーターの３種類があります。Dockerfileでは`CMD`は１つしか記述できません。もし複数の`CMD`があった場合は、最後の`CMD`しか処理されません。記述方式はexec形式が推奨されており、[]内に、["コマンド","パラメータ1","パラメータ2"]のように記載します。この例では、/usr/sbin/httpdコマンドにパラメータ -DFOREGROUNDを指定してフォアグラウンドで実行します。
 
-Dockerfileの内容を確認します。
+作成したDockerfileの内容を確認します。
 
 `cat Dockerfile `{{execute}}
 
 以下の内容になっていればOKです。
+
 ```text
 FROM centos
 RUN dnf install -y httpd
@@ -46,11 +48,14 @@ COPY index.html /var/www/html/index.html
 CMD ["/usr/sbin/httpd","-DFOREGROUND"]
 ```
 
-Dockerfileの記載方法はDockerfile リファレンスを参照してください。https://matsuand.github.io/docs.docker.jp.onthefly/engine/reference/builder/
+Dockerfileの記載方法はDockerfile リファレンスを参照してください。
+https://docs.docker.com/engine/reference/builder/
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image201.png)
 
-Dockerfileが作成できたので、これを利用してコンテナイメージをビルドします。`-t（or --tag）オプション` で名前およびタグを指定します。Dockerfileを指定してないように見えますが、デフォルトでは、指定したPATHにあるDockerfileを使うので、PATH「.」（現在のディレクトリ）にあるDockerfileを使用しています。もし、他のファイルを利用する場合は`-f（or --file）オプション` で明示的に指定することができます。この例ではapacheweb-dockerfile:1.0という名前:タグでイメージをビルドします。
+Dockerfileが作成できたので、これを利用してコンテナイメージをビルドします。`-t（or --tag）オプション` で名前およびタグを指定します。以下の例ではDockerfileを指定してないように見えますが、デフォルトで指定したPATHにあるDockerfileを使うので、「PATH .（現在のディレクトリ）にあるDockerfileを使用する」という意味になります。もし、他のファイルを利用する場合は`-f（or --file）オプション` で明示的に指定します。この例ではapacheweb-dockerfile:1.0という名前:タグでイメージをビルドします。
+
+> Note: 途中で「warning: /var/cache/dnf」というwarningが出ることがありますが、今回は無視してください。
 
 `docker build -t apacheweb-dockerfile:1.0 .`{{execute}}
  
@@ -88,11 +93,12 @@ Successfully built 0c8e45773b1e
 Successfully tagged apacheweb-dockerfile:latest
 ```
 
-イメージ一覧を確認します。
+コンテナイメージが作成されたので、イメージ一覧を確認します。
 
 `docker images`{{execute}}
 
 大元のcentosイメージと、ビルドされたapacheweb-dockerfile:1.0があります。
+
 ```text
 $ docker images 
 REPOSITORY             TAG       IMAGE ID       CREATED          SIZE
@@ -168,8 +174,8 @@ https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
 
 Dockerfileを利用すると、Container 101の演習で手作業で行ったインストールや設定作業を自動的に行えることがわかります。
 
-##  このステップで利用したdockerコマンド
-- docker build [オプション] PATH | URL | -
+###  このステップで利用したdockerコマンド
+- docker build [OPTIONS] PATH | URL | -
   - Dockerfileからイメージをビルドする
 
 

@@ -1,4 +1,4 @@
-### Dockerfileの利用その２
+### ビルドされたイメージの利用例
 
 Step1でDockerfileを利用することで、インストールや設定作業が自動化できることを体験できたと思います。
 
@@ -165,3 +165,8 @@ c8f2d3a6d38a   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   47 seconds 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image204.png)
 
 コンテナの操作性というものの良さをちょっとは感じられるのではないでしょうか？
+
+
+###  このステップで利用したdockerコマンド
+- docker rm [OPTIONS] CONTAINER [CONTAINER...]
+  - コンテナを削除する

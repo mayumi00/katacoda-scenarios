@@ -1,7 +1,4 @@
-
-## コンテナの操作とコンテナ内の操作
-
-
+### コンテナの操作とコンテナ内の操作
 
 このステップでは、普段利用している仮想マシンのような感覚で触れるコンテナを利用してみましょう。
 
@@ -272,11 +269,11 @@ exit
 コンテナの起動や停止・開始の一連の操作でコンテナの状態がどのように推移するかなんとなく理解できたかと思います。とはいえ、まだCentOSコンテナの操作をちょっと行ってみただけなので、次のステップではCentOSコンテナにアプリケーションをインストールして、アプリの動作を確認してみましょう。
 
 ###  このステップで利用したdockerコマンド
-- docker pull [オプション] NAME[:TAG|@DIGEST] 
+- docker pull [OPTIONS] NAME[:TAG|@DIGEST]
    - レジストリからイメージまたはリポジトリを取得する
-- docker exec [オプション] CONTAINER COMMAND [ARG...]
+- docker exec [OPTIONS] CONTAINER COMMAND [ARG...]
    - 実行中のコンテナ内において新たなコマンドを実行する
-- docker start [オプション] CONTAINER [CONTAINER...]
+- docker start [OPTIONS] CONTAINER [CONTAINER...]
    - 停止しているコンテナを起動する
-- docker stop [オプション] CONTAINER [CONTAINER...]
+- docker stop [OPTIONS] CONTAINER [CONTAINER...]
    - 実行中のコンテナを停止する

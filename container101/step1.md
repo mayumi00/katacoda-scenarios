@@ -1,4 +1,4 @@
-## コンテナの起動
+### コンテナの起動
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image00.png)　
 
@@ -161,14 +161,14 @@ CONTAINER ID   IMAGE                         COMMAND                  CREATED   
 
 
 ###  このステップで利用したdockerコマンド
-- docker search [オプション] TERM
+- docker search [OPTIONS] TERM
    - Docker Hub上のイメージを検索する
-- docker run [オプション] IMAGE [COMMAND] [ARG...]
+- docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
   - コンテナを起動する
-- docker images [オプション] [REPOSITORY[:TAG]]
+- docker images [OPTIONS] [REPOSITORY[:TAG]]
   - コンテナイメージ一覧を表示する
 - docker ps [オプション]
-  - コンテナ一覧を表示する
+  - docker ps [OPTIONS]
 
 
 

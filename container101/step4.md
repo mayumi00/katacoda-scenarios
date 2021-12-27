@@ -1,4 +1,4 @@
-## コンテナイメージの作成
+### コンテナイメージの作成
 
 step3でhttpd（Apache HTTP Server）がインストールされたコンテナを作成しました。同じようなコンテナを生成する際に、同じようなステップを踏むのは手間になるので、このhttpdインストール済のコンテナを元にコンテナイメージを作成してみましょう。コンテナイメージは稼働中または停止中のコンテナいずれからも作成できます。
 
@@ -60,7 +60,7 @@ execコマンドを利用してbashの利用を可能にします。
 
 `ps f -e`{{execute}}
 
-そもそも、作成したコンテナイメージは、httpdインストール済だがhttpdを自動起動する設定無しのコンテナを元にしているので、httpdは自動起動しません。
+そもそも、作成したコンテナイメージは、httpdインストール済ですがhttpdを自動起動する設定が無いのコンテナを元にしているので、httpdは自動起動しません。
 
 ```text
 [root@2bb6bc5699d6 /]# ps f -e
@@ -129,8 +129,6 @@ https://[[HOST_SUBDOMAIN]]-8081-[[KATACODA_HOST]].environments.katacoda.com/
 
 ##  このステップで利用したdockerコマンド
 
-- docker commit [オプション] CONTAINER [REPOSITORY[:TAG]]
+- docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]
   - コンテナをからイメージを作成する
- - docker run -dオプション
-   - コンテナをバックグラウンドで起動する
  

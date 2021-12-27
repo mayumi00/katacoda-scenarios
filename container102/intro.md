@@ -6,12 +6,15 @@
   - コンテナの起動
   - コンテナの操作とコンテナ内の操作
   - コンテナへのアプリケーションの導入
-  -  コンテナイメージの作成
+  - コンテナイメージの作成
+  - コンテナのステータス
   
 
 - 102
- - Dockerfileの利用
+ - Dockerfileを利用してのコンテナイメージのビルド
+ - ビルドされたイメージの利用例
+ - Dockerfileの変更に基づくコンテナイメージの変更
+ - コンテナイメージのレイヤー構造
  
 この演習で利用してるDockerコマンドの紹介は、DockerDocsのリファレンスを参照しています。
-
-https://matsuand.github.io/docs.docker.jp.onthefly/reference/
+https://docs.docker.com/reference/
