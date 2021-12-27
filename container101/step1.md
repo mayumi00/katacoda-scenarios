@@ -38,7 +38,7 @@ Server: Docker Engine - Community
   GitCommit:        de40ad0
   ```
 
-** hello-world コンテナ **
+**hello-world コンテナ**
 ---
 「hello-world」というDockerについての簡単な説明を出力するコンテナを起動してみます。
 
