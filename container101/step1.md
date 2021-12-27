@@ -231,14 +231,16 @@ $ curl  http://localhost:81/
  ```
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-5.png)
-  
+
+*コンテナの停止*
+
 稼働中のコンテナを停止するには`docker stop`コマンドでコンテナ名またはコンテナIDを指定します。
  
 `docker stop httpd2 `{{execute}}
 
 `docker ps -a `{{execute}}
  
-コンテナ一覧を取得すると、httpd2コンテナのSTATUSがExitedになっています。
+コンテナ一覧を取得すると、httpd2コンテナのSTATUSがExitedになっており停止していることが確認できます。
 
 ```text
 $ docker ps -a
@@ -254,6 +256,8 @@ e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2
 [root@ik1-314-17333 ~]# curl  http://localhost:81/
 curl: (7) Failed to connect to localhost port 81: Connection refused
  ```
+
+*コンテナの開始*
 
 停止中のコンテナを起動するには`docker start`コマンドでコンテナ名またはコンテナIDを指定します。
 
@@ -279,6 +283,8 @@ $ curl  http://localhost:81/
 
  ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-6.png)
 
+*コンテナの削除*
+
 不要になったコンテナを削除するには`docker rm`コマンドでコンテナ名またはコンテナIDを指定します。デフォルトでは停止しているコンテナを削除し、稼働中のコンテナを指定するとエラーになります。稼働状況に関わらず強制的に削除する場合は`-f（or --force）オプション`を利用します。
 
 `docker stop httpd2 `{{execute}}
@@ -293,6 +299,8 @@ CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS      
 694ebd43af1d   httpd:latest   "httpd-foreground"   31 seconds ago   Up 29 seconds              0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
 e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2 minutes ago                                       musing_shamir
  ```
+
+httpd2を削除します。
 
 `docker rm httpd2 `{{execute}}
 
