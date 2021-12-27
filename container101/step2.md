@@ -1,4 +1,4 @@
-### コンテナの操作とコンテナ内の操作
+## コンテナの操作とコンテナ内の操作
 
 このステップでは、普段利用している仮想マシンのような感覚で触れるコンテナを利用してみましょう。
 
@@ -6,7 +6,10 @@
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-1.png)　
 
-今回はいきなり`docker run`するのではなく、dockerイメージをpullするところから始めます。馴染みの深いCentOSを利用します。再度、現在自ホストにあるコンテナイメージを確認します。centosという文字は見当たりません。
+---
+**コンテナのpull**
+
+今回はいきなり`docker run`するのではなく、dockerイメージをpullするところから始めます。馴染みの深いCentOSを利用したいと思います。現在、自ホストにあるコンテナイメージを確認するとcentosという文字は見当たりません。
 
  `docker images`{{execute}}
  
@@ -58,7 +61,7 @@ Status: Downloaded newer image for centos:latest
 docker.io/library/centos:lates
 ```
 
-再度、コンテナイメージ一覧を確認すると、下から3行目、CentOSの最新版が自ホストのイメージ格納領域にダウンロードされたことがわかります。
+再度、コンテナイメージ一覧を確認すると、下から3行目、CentOSの最新版コンテナイメージcentosが自ホストのイメージ格納領域にダウンロードされたことがわかります。
 
 `docker images`{{execute}}
 
@@ -82,7 +85,10 @@ alpine             latest    14119a10abf4   4 months ago   5.59MB
 weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ```
 
-それでは、このCentOSコンテナイメージからコンテナを起動します。コンテナを起動する際に`--nameオプション`を付けるとコンテナに任意の名前をつけることができます。今回はmycentos01という名前を付けることにします。また、標準入力を受け付ける`-i（or --interactive）オプション`と疑似TTYの割当を行う`-t（or --tty）オプション`を組み合わせてbashをインタラクティブモードで起動すると、コンテナ内での操作が可能になります。
+---
+**インタラクティブな状態のコンテナの起動**
+
+それでは、このcentosイメージからコンテナを起動します。コンテナを起動する際に`--nameオプション`を付けるとコンテナに任意の名前をつけることができます。今回はmycentos01という名前を付けることにします。また、標準入力を受け付ける`-i（or --interactive）オプション`と疑似TTYの割当を行う`-t（or --tty）オプション`を組み合わせてbashをインタラクティブモードで起動すると、コンテナ内での操作が可能になります。
 
 `docker run -it --name mycentos01 centos /bin/bash`{{execute}}
 
@@ -90,10 +96,16 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 [root@7b1d77ed91f8 /]#
 ```
 
-[root@文字列]#のプロンプトが表示され、bashの利用が可能になっていることがわかります。プロンプトのroot@の後ろの文字列はコンテナホスト名＝コンテナIDなので、実行した環境によって異なります。コンテナを起動する際に`-h（or --hostname）オプション`を付けるとコンテナのホスト名を指定することができますが、今回は指定していないので、ホスト名としてコンテナIDが利用されています。
+[root@文字列]#のプロンプトが表示され、bashの利用が可能になっていることがわかります。プロンプトのroot@の後ろの文字列はコンテナのホスト名です。コンテナを起動する際に`-h（or --hostname）オプション`を付けるとコンテナのホスト名を指定することができますが、今回は指定していないので、ホスト名としてコンテナIDが利用されています。
+
+> Note: コンテナIDなので、実行した環境によって異なります
+
+---
+**linuxコマンドの実行**
 
 いくつかのファイルの内容の確認やコマンドの実行を行ってみます。
 
+***確認項目***
 - /etc/os-releaseの確認
 - unameコマンド
 - /etc/hostnameの確認
@@ -128,7 +140,7 @@ Linux 7b1d77ed91f8 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 
 
 `cat /etc/hostname`{{execute}}
 
-ホスト名です。
+ホスト名です。ホスト名を指定していないので、コンテナIDになっています。
 
 ```text
 [root@7b1d77ed91f8 /]# cat /etc/hostname
@@ -145,7 +157,7 @@ Linux 7b1d77ed91f8 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 
      18 pts/0    R+     0:00 ps f -e
 ```
 
-一通り確認したところで、exitコマンドでコンテナから抜けます。
+linuxのコマンドが使えることや、ファイルの内容を確認したところで、exitコマンドでコンテナから抜けます。
 
 `exit`{{execute}}
 
@@ -153,6 +165,10 @@ Linux 7b1d77ed91f8 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 
 [root@7b1d77ed91f8 /]# exit
 exit
 ```
+
+---
+**docker execコマンド**
+
 コンテナを抜けた後、再度コンテナ一覧を取得します。
 
 `docker ps -a`{{execute}}
@@ -189,8 +205,13 @@ e14e3cbf21be   hello-world    "/hello"             6 minutes ago        Exited (
 $ docker exec -it mycentos01 /bin/bash
 [root@7b1d77ed91f8 /]# ls
 ```
+
+---
+**コンテナ内でのファイル作成と停止・起動による影響**
+
 再びbashが利用できる状態になったので、いくつかのコマンドを実行してみましょう。
 
+***実施項目***
 - 現在存在するファイル/ディレクトリの表示
 - テキストファイルを作成
 - ファイルが作られたことを確認
@@ -239,7 +260,7 @@ CONTAINER ID   IMAGE          COMMAND              CREATED              STATUS  
 e14e3cbf21be   hello-world    "/hello"             6 minutes ago        Exited (0) 6 minutes ago                                       musing_shamir
 ```
 
-コンテナ一覧を確認すると、先程の`docker run`の場合と異なりコンテナは停止せず、起動したままです。今度はdockerコマンドで明示的にコンテナを停止します。
+コンテナ一覧を確認すると、先程の`docker run`の場合と異なりコンテナは停止せず、起動したままです。続いてdockerコマンドで明示的にコンテナを停止します。
 
 `docker stop mycentos01`{{execute}}
 
@@ -296,9 +317,11 @@ exit
 
 コンテナの起動や停止・開始の一連の操作でコンテナの状態がどのように推移するかなんとなく理解できたかと思います。とはいえ、まだCentOSコンテナの操作をちょっと行ってみただけなので、次のステップではCentOSコンテナにアプリケーションをインストールして、アプリの動作を確認してみましょう。
 
+---
+
 ###  このステップで利用したdockerコマンド
+
 - docker pull [OPTIONS] NAME[:TAG|@DIGEST]
    - レジストリからイメージまたはリポジトリを取得する
 - docker exec [OPTIONS] CONTAINER COMMAND [ARG...]
-   - 実行中のコンテナ内において新たなコマンドを実行する
-る
+   - 実行中のコンテナ内において新たなコマンドを実行するる
