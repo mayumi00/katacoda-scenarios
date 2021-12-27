@@ -7,7 +7,6 @@
   "details": {
     "intro": {
       "text": "intro.md",
-      "credits": "https://github.com/mayumi00/katacoda-scenarios"
     },
     "finish": {
       "text": "finish.md"
