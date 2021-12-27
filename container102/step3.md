@@ -87,6 +87,8 @@ $ diff -C0 Dockerfile  Dockerfile2
 ---
 **コンテナイメージのビルド**
 
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image3-2.png)
+
 新しく作成したDockerfile2を使ってコンテナイメージをビルドします。`-t（or --tag）オプション` でapacheweb-dockerfile:2.0という名前:タグのイメージをビルドします。ビルドに使うDockerfileとして`-f（or --file）オプション`でDockerfile2を指定します。PATHは.（現在のディレクトリ）です。
 
 `docker build -t apacheweb-dockerfile:2.0 -f Dockerfile2 .`{{execute}}
@@ -144,6 +146,8 @@ weaveworks/scope       1.11.4    a082d48f0b39   2 years ago     78.5MB
 
 ---
 **作成したコンテナイメージからのコンテナの起動**
+
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image3-3.png)
 
 作成されたapacheweb-dockerfile:2.0イメージからtestweb20をバックグラウンドで起動します。httpdにアクセスするため、自ホストの8000番とコンテナの80番をバインドしています。
 
