@@ -1,4 +1,4 @@
-### ビルドされたイメージの利用例
+## ビルドされたイメージの利用例
 
 Step1でDockerfileを利用することで、インストールや設定作業が自動化できることを体験できたと思います。
 
@@ -21,6 +21,9 @@ centos                 latest    5d0da3dc9764   3 months ago         231MB
 alpine                 latest    14119a10abf4   4 months ago         5.59MB
 weaveworks/scope       1.11.4    a082d48f0b39   2 years ago          78.5MB
 ```
+
+---
+**複数のコンテナの起動**
 
 同じ設定を持つコンテナを複数個起動したい場合などはDockerfileを使って作成したコンテナイメージからコンテンを起動すれば良いわけです。以下の例は、apacheweb-dockerfile:1.0から9個のコンテナを起動しています。
 
@@ -49,9 +52,31 @@ testweb09
 5660c3ddb092f317104103542ea88296c0f58d35707c8911f3d72987e020b9bb
 ```
 
-現在は図のように、Dockerfileからビルドされたapacheweb-dockerfile:1.0を元に同じコンテナが9個起動してます。
+図のように、Dockerfileからビルドされたapacheweb-dockerfile:1.0を元に同じコンテナが9個起動してます。
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image203.png)
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image2-1.png)
+
+`docker ps -a`{{execute}}
+
+コンテナ一覧を見ると、step1で起動したtestweb00とその後起動したtestweb01〜testweb09が起動していることがわかります。
+
+```text
+$ docker ps -a
+CONTAINER ID   IMAGE                      COMMAND                  CREATED              STATUS              PORTS                                   NAMES
+5660c3ddb092   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   11 seconds ago       Up 10 seconds       0.0.0.0:8089->80/tcp, :::8089->80/tcp   testweb09
+7cbac08014c6   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   11 seconds ago       Up 10 seconds       0.0.0.0:8088->80/tcp, :::8088->80/tcp   testweb08
+3c53983b694a   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   12 seconds ago       Up 11 seconds       0.0.0.0:8087->80/tcp, :::8087->80/tcp   testweb07
+13d6eeb16dd8   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   13 seconds ago       Up 12 seconds       0.0.0.0:8086->80/tcp, :::8086->80/tcp   testweb06
+8fdef0cdd27d   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   13 seconds ago       Up 12 seconds       0.0.0.0:8085->80/tcp, :::8085->80/tcp   testweb05
+b26e7070b45a   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   14 seconds ago       Up 13 seconds       0.0.0.0:8084->80/tcp, :::8084->80/tcp   testweb04
+02c76f7d9c5d   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   15 seconds ago       Up 14 seconds       0.0.0.0:8083->80/tcp, :::8083->80/tcp   testweb03
+57403617f93f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   16 seconds ago       Up 14 seconds       0.0.0.0:8082->80/tcp, :::8082->80/tcp   testweb02
+3f2c0f3eda01   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   16 seconds ago       Up 15 seconds       0.0.0.0:8081->80/tcp, :::8081->80/tcp   testweb01
+d92f2cf8234f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   About a minute ago   Up About a minute   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testweb00
+```
+
+---
+**複数のコンテナの動作確認**
 
 `for i in {1..9} ; do echo testweb0${i} ; curl http://localhost:808${i} ; done`{{execute}}
 
@@ -77,24 +102,9 @@ testweb09
 <head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>
 ```
 
-`docker ps -a`{{execute}}
 
-コンテナ一覧を見ると、step1で起動したtestweb00とその後起動したtestweb01〜testweb09が起動していることがわかります。
-
-```text
-$ docker ps -a
-CONTAINER ID   IMAGE                      COMMAND                  CREATED              STATUS              PORTS                                   NAMES
-5660c3ddb092   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   11 seconds ago       Up 10 seconds       0.0.0.0:8089->80/tcp, :::8089->80/tcp   testweb09
-7cbac08014c6   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   11 seconds ago       Up 10 seconds       0.0.0.0:8088->80/tcp, :::8088->80/tcp   testweb08
-3c53983b694a   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   12 seconds ago       Up 11 seconds       0.0.0.0:8087->80/tcp, :::8087->80/tcp   testweb07
-13d6eeb16dd8   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   13 seconds ago       Up 12 seconds       0.0.0.0:8086->80/tcp, :::8086->80/tcp   testweb06
-8fdef0cdd27d   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   13 seconds ago       Up 12 seconds       0.0.0.0:8085->80/tcp, :::8085->80/tcp   testweb05
-b26e7070b45a   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   14 seconds ago       Up 13 seconds       0.0.0.0:8084->80/tcp, :::8084->80/tcp   testweb04
-02c76f7d9c5d   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   15 seconds ago       Up 14 seconds       0.0.0.0:8083->80/tcp, :::8083->80/tcp   testweb03
-57403617f93f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   16 seconds ago       Up 14 seconds       0.0.0.0:8082->80/tcp, :::8082->80/tcp   testweb02
-3f2c0f3eda01   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   16 seconds ago       Up 15 seconds       0.0.0.0:8081->80/tcp, :::8081->80/tcp   testweb01
-d92f2cf8234f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   About a minute ago   Up About a minute   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testweb00
-```
+---
+**複数のコンテナの停止**
 
 次のステップに進む前に、大量に起動してしまったコンテナを停止し削除します。
 
@@ -135,6 +145,10 @@ b26e7070b45a   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   38 seconds 
 3f2c0f3eda01   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   40 seconds ago       Exited (0) 7 seconds ago                                           testweb01
 d92f2cf8234f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   About a minute ago   Up About a minute          0.0.0.0:8080->80/tcp, :::8080->80/tcp   testweb00
 ```
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image2-2.png)
+
+---
+**複数のコンテナの削除**
 
 testweb00以外は停止（Exited）していることがわかります。続いて、停止したtestweb01からtestweb09を削除します。
 
@@ -161,14 +175,9 @@ $ docker ps -a
 CONTAINER ID   IMAGE                      COMMAND                  CREATED              STATUS              PORTS                                   NAMES
 d92f2cf8234f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   About a minute ago   Up About a minute   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testweb00
 
-```
-現在は以下の図のような状態です。
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image2-3.png)
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image204.png)
+```
+
 
 コンテナの操作性というものの良さをちょっとは感じられるのではないでしょうか？
-
-
-###  このステップで利用したdockerコマンド
-- docker rm [OPTIONS] CONTAINER [CONTAINER...]
-  - コンテナを削除する
