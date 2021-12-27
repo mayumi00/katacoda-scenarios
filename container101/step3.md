@@ -9,7 +9,7 @@
 - テスト用のhtmlをhttpdのドキュメントルート配下に配置する
 - ローカルホストにアクセスしてhttpdの動作を確認する
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image04.png)　
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image3-1.png)　
 
 ベースとなるCentOSコンテナイメージはstep2と同じイメージを利用し、step2で生成したコンテナとは異なるコンテナを生成します。ここではコンテナ名として`mycentos02`としています。アプリケーションをインストールしたいので、bashを利用してコンテナの操作を行えるようにします。また「CentOSコンテナを80番ポート接続可能な状態」にするために`-p（or --publish）オプション`を利用します。コンテナ内でhttpdはTCP80で起動するので、ローカルホスト（自ホスト）の8080番ポートとコンテナ内の80番ポートをバインドします。
 
@@ -160,7 +160,7 @@ curlだけでなく、このkatacodaの仕組みを使ってブラウザで表�
 https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
  ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image101web2.png)
  
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image05.png)
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image3-2.png)
 
 以上がCentOSのイメージをベースにアプリケーション（Apache HTTP Server）をインストールする流れとなります。
 

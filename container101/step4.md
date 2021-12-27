@@ -45,7 +45,7 @@ alpine             latest    14119a10abf4   4 months ago    5.59MB
 weaveworks/scope   1.11.4    a082d48f0b39   2 years ago     78.5MB
 ```
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image06.png)　
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image4-1.png)　
 
 作成したapachewebイメージを元にコンテナを起動します。作成したapachewebイメージにはタグを付けていたので、タグ（:1.0）も指定します。タグを指定しないとデフォルトでlatestを探そうとするのでイメージを見つけられずに「docker: Error response from daemon」のようなエラーが返ってきます。`-d（or --detach）オプション` はコンテナをバックグラウンドで実行し、コンテナIDを出力するものです。前のステップでローカルホストの8080番は既に割当済で使用中なので、8081番にバインドしてます。
 
@@ -58,7 +58,7 @@ $ docker run -d -p 8081:80 -it --name testweb2 apacheweb:1.0 /bin/bash
 e11268340a162720529606f64c7a2102b06d4132bfaa8853db7014e48a137e47
 ```
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image07.png)
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image4-2.png)
 
 execコマンドを利用してbashの利用を可能にします。
 
@@ -126,9 +126,10 @@ e14e3cbf21be   hello-world     "/hello"             12 minutes ago   Exited (0) 
 <head><title>Apache on Docker Container</title></head><body><H1>Container 101 - Web</H1>Apache on Docker Container</body>
 ```
 https://[[HOST_SUBDOMAIN]]-8081-[[KATACODA_HOST]].environments.katacoda.com/
+
  ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image101web2.png)
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image08.png)
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image4-3.png)
 
 なんとなくコンテナの起動やコンテナ内の操作がわかってきたと思いますが、まだ手作業で行っている事が多い印象です。次のコースで、下記のような作業を、コマンドをちまちま打たずに済ませるために、DockerFileというもの使う方法を学習します。
 

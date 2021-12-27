@@ -4,7 +4,7 @@
 
 > Note: 出力例に表示されているコンテナIDやイメージID、起動時間などは使用している環境と状態によって異なります。このテキストとまったく同じにはならないのでご注意ください。
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image03.png)　
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-1.png)　
 
 今回はいきなり`docker run`するのではなく、dockerイメージをpullするところから始めます。馴染みの深いCentOSを利用します。再度、現在自ホストにあるコンテナイメージを確認します。centosという文字は見当たりません。
 
@@ -167,7 +167,7 @@ e14e3cbf21be   hello-world    "/hello"             5 minutes ago    Exited (0) 5
 
 mycentos01は「Exited」と停止状態です。`docker run`で起動したコンテナのターミナルをexitで抜けると、コンテナが停止します。
 
-再度、コンテナを起動します。起動するコンテナを指定する方法にはコンテナ名またはコンテナIDが利用できます。mycentos01というコンテナ名を指定してコンテナを起動します。
+再度、コンテナを起動します。
 
 `docker start mycentos01`{{execute}}
 
@@ -301,7 +301,4 @@ exit
    - レジストリからイメージまたはリポジトリを取得する
 - docker exec [OPTIONS] CONTAINER COMMAND [ARG...]
    - 実行中のコンテナ内において新たなコマンドを実行する
-- docker start [OPTIONS] CONTAINER [CONTAINER...]
-   - 停止しているコンテナを起動する
-- docker stop [OPTIONS] CONTAINER [CONTAINER...]
-   - 実行中のコンテナを停止する
+る

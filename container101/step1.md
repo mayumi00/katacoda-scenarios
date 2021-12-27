@@ -2,7 +2,7 @@
 
 この演習環境は以下の図のようになっています。
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image00.png)　
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-1.png)　
 
 図における右側の「コンテナを稼働させるホスト（自ホスト）」が、このコースの左側に表示されているTerminalに対応しています。
 
@@ -84,7 +84,7 @@ For more examples and ideas, visit:
 1. Dockerについての簡単な説明を出力します
 1. 説明の表示が終わるとコンテナは停止します
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-2.png)
 
 自ホストにhello-worldのイメージをダンロードされたので、コンテナ一覧を表示する `docker images`コマンドを使ってイメージが格納されているか確認してみましょう。 下から3行目にhello-worldというイメージがあることがわかります。
 > Note: この環境では既にいくつかのコンテナイメージが準備されているのでhello-world以外も表示されます。
@@ -168,8 +168,20 @@ Status: Downloaded newer image for httpd:latest
 694ebd43af1d0cdcc52a1ae9ae474d24411d8b9f1e986b4270d4d6a871914e67
  ```
  
-hello-world同様に、自ホストにはhttpdイメージがなかったので、コンテナレジストリからダウンロードしていることがわかります。-p 80:80の意味するところは、ローカルホスト（自ホスト）の80番ポートとコンテナ内の80番ポートをバインドすることです。curl でローカルホストの80番にアクセスすると「It works!」と表示され、httpdが稼働していることがわかります。
+hello-world同様に、自ホストにはhttpdイメージがなかったので、コンテナレジストリからダウンロードしていることがわかります。-p 80:80の意味するところは、ローカルホスト（自ホスト）の80番ポートとコンテナ内の80番ポートをバインドすることです。
 
+ ` docker ps -a `{{execute}}
+ 
+再度コンテナ一覧を取得すると、停止したhello-worldとは異なり、STATUSがUpと表示され、httpdコンテナが80番で待ち受けしながら稼働していることが確認できます。
+
+```text
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS                     PORTS                               NAMES
+694ebd43af1d   httpd:latest   "httpd-foreground"   31 seconds ago   Up 29 seconds              0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2 minutes ago                                       musing_shamir
+ ```
+ curl でローカルホストの80番にアクセスすると「It works!」と表示さます。
+ 
  `curl  http://localhost:80/ `{{execute}}
  
  ```text
@@ -179,12 +191,29 @@ $ curl  http://localhost:80/
  
  ブラウザで確認する場合は以下をクリックしてください。
  https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/
+ 
  ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image101web1.png)
   
- 
- ` docker ps -a `{{execute}}
+ このように既存のコンテナイメージを使うことで簡単にコンテナを利用できます。
 
-再度コンテナ一覧を取得すると、停止したhello-worldとは異なり、STATUSがUpと表示され、httpdコンテナが80番で待ち受けしながら稼働していることが確認できます。
+ ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-3.png)
+ 
+###  コンテナの操作
+ 
+ コンテナのよく行う操作として、起動以外に開始・停止・削除があります。実際に操作を行ってみましょう。
+ 
+先程のhttpdコンテナイメージから異なるコンテナを作成します。ローカルホスト（自ホスト）の80番ポートは使用中なので、ローカルホスト（自ホスト）の81番ポートとコンテナ内の80番ポートをバインドします。コンテナ名はユニークでないといけないので、httpd2とします。
+ 
+ `docker run -d --name httpd2 -p 81:80 httpd:latest `{{execute}}
+ 
+ ```text
+[root@ik1-314-17333 ~]# docker run -d --name httpd2 -p 81:80 httpd:latest
+5ca50ab4849219fa50eaac6a79805478c4cb4ddc9bb10bae3e42dfa05b807f3e
+ ```
+
+` docker ps -a `{{execute}}
+ 
+コンテナ一覧を取得すると、httpd2コンテナが81番で待ち受けしながら稼働していることが確認できます。
 
 ```text
 $ docker ps -a
@@ -192,20 +221,107 @@ CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS      
 694ebd43af1d   httpd:latest   "httpd-foreground"   31 seconds ago   Up 29 seconds              0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
 e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2 minutes ago                                       musing_shamir
  ```
-
- ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image02.png)
+ curl でローカルホストの81番にアクセスすると「It works!」と表示さます。
+ 
+ `curl  http://localhost:81/ `{{execute}}
+ 
+ ```text
+$ curl  http://localhost:81/
+<html><body><h1>It works!</h1></body></html>
+ ```
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-4.png)
    
+この稼働中のコンテナを停止するには`docker stop`コマンドでコンテナ名またはコンテナIDを指定します。
+ 
+`docker stop httpd2 `{{execute}}
+
+`docker ps -a `{{execute}}
+ 
+コンテナ一覧を取得すると、httpd2コンテナのSTATUSがExitedになっています。
+
+```text
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS                     PORTS                               NAMES
+694ebd43af1d   httpd:latest   "httpd-foreground"   31 seconds ago   Up 29 seconds              0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2 minutes ago                                       musing_shamir
+ ```
+ `curl  http://localhost:81/`{{execute}}
+ 
+接続を試みると、稼働していないので接続できません。
+ 
+ ```text
+[root@ik1-314-17333 ~]# curl  http://localhost:81/
+curl: (7) Failed to connect to localhost port 81: Connection refused
+ ```
+
+停止中のコンテナを起動するには`docker start`コマンドでコンテナ名またはコンテナIDを指定します。
+
+`docker start httpd2 `{{execute}}
+
+`docker ps -a `{{execute}}
+ 
+コンテナ一覧を取得すると、httpd2コンテナのSTATUSがUpになり、81番でアクセス可能になっています。
+
+```text
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS                     PORTS                               NAMES
+694ebd43af1d   httpd:latest   "httpd-foreground"   31 seconds ago   Up 29 seconds              0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2 minutes ago                                       musing_shamir
+ ```
+ 
+ `curl  http://localhost:81/ `{{execute}}
+ 
+ ```text
+$ curl  http://localhost:81/
+<html><body><h1>It works!</h1></body></html>
+ ```
+
+不要になったコンテナを削除するには`docker rm`コマンドでコンテナ名またはコンテナIDを指定します。デフォルトでは停止しているコンテナを削除しますが、強制的に削除する場合は`-f（or --force）オプション`を利用します。
+
+`docker stop httpd2 `{{execute}}
+
+`docker ps -a `{{execute}}
+ 
+httpd2コンテナは停止済です。
+
+```text
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS                     PORTS                               NAMES
+694ebd43af1d   httpd:latest   "httpd-foreground"   31 seconds ago   Up 29 seconds              0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2 minutes ago                                       musing_shamir
+ ```
+ 
+`docker rm httpd2 `{{execute}}
+
+削除実行後、コンテナ一覧を確認するとhttpd2が削除されていることがわかります。
+
+`docker ps -a `{{execute}}
+
+```text
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS                     PORTS                               NAMES
+694ebd43af1d   httpd:latest   "httpd-foreground"   31 seconds ago   Up 29 seconds              0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2 minutes ago                                       musing_shamir
+ ```
+ 
+ ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-5.png)
+ 
  コンテナが簡単に起動できることを確認したところで、次のステップに進みます。
 
 ###  このステップで利用したdockerコマンド
-- docker search [OPTIONS] TERM
-   - Docker Hub上のイメージを検索する
+
 - docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
   - コンテナを起動する
+- docker start [OPTIONS] CONTAINER [CONTAINER...]
+   - 停止しているコンテナを起動する
+- docker stop [OPTIONS] CONTAINER [CONTAINER...]
+   - 実行中のコンテナを停止する
 - docker images [OPTIONS] [REPOSITORY[:TAG]]
   - コンテナイメージ一覧を表示する
-- docker ps [オプション]
-  - docker ps [OPTIONS]
+- docker ps [OPTIONS]
+  -  コンテナ一覧を表示する
+- docker search [OPTIONS] TERM
+  - Docker Hub上のイメージを検索する
 
 
 
