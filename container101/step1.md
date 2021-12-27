@@ -281,8 +281,6 @@ $ curl  http://localhost:81/
 <html><body><h1>It works!</h1></body></html>
  ```
 
- ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-6.png)
-
 ***コンテナの削除***
 
 不要になったコンテナを削除するには`docker rm`コマンドでコンテナ名またはコンテナIDを指定します。デフォルトでは停止しているコンテナを削除し、稼働中のコンテナを指定するとエラーになります。稼働状況に関わらず強制的に削除する場合は`-f（or --force）オプション`を利用します。
@@ -314,7 +312,7 @@ CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS      
 694ebd43af1d   httpd:latest   "httpd-foreground"   31 seconds ago   Up 29 seconds              0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
 e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2 minutes ago                                       musing_shamir
  ```
- 
+  ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-6.png)
 
  
  このように、コンテナが簡単に起動できることを確認したところで、次のステップに進みます。
