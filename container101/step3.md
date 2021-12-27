@@ -174,7 +174,7 @@ execからexitしたので、mycentos02コンテナは停止せず80番で待ち
 
 `curl http://localhost:8080/index.html`{{execute}}
 
- ブラウザで確認する場合は以下をクリックしてください。index.htmlの内容が表示されます。
+ブラウザで確認する場合は以下をクリックしてください。index.htmlの内容が表示されます。
  
 https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
 
