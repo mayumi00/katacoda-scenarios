@@ -1,10 +1,44 @@
 ### コンテナの起動
 
+この演習環境は以下の図のようになっています。
+
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image00.png)　
 
-上の図における右側の「コンテナを稼働させるホスト（自ホスト）」が、このコースの左側に表示されているTerminalに対応しています。
+図における右側の「コンテナを稼働させるホスト（自ホスト）」が、このコースの左側に表示されているTerminalに対応しています。
 
 この環境は既にDockerが利用できる状態になっていますので、Dockerを利用してコンテナを起動して、動作を確認してみましょう。`docker version`{{execute}}←このように表示されている部分をクリックすると右のTerminalでコマンドが実行されます。
+
+```text
+$ docker version
+Client: Docker Engine - Community
+ Version:           20.10.9
+ API version:       1.41
+ Go version:        go1.16.8
+ Git commit:        c2ea9bc
+ Built:             Mon Oct  4 16:08:29 2021
+ OS/Arch:           linux/amd64
+ Context:           default
+ Experimental:      true
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          20.10.9
+  API version:      1.41 (minimum version 1.12)
+  Go version:       go1.16.8
+  Git commit:       79ea9d3
+  Built:            Mon Oct  4 16:06:34 2021
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.4.11
+  GitCommit:        5b46e404f6b9f661a205e28d59c982d3634148f8
+ runc:
+  Version:          1.0.2
+  GitCommit:        v1.0.2-0-g52b36a2
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+  ```
 
 「hello-world」というDockerについての簡単な説明を出力するコンテナを起動してみます。
 
@@ -13,10 +47,11 @@
 以下のように出力されます。
 
 ```text
+$ docker run hello-world
 Unable to find image 'hello-world:latest' locally
 latest: Pulling from library/hello-world
 2db29710123e: Pull complete 
-Digest: sha256:cc15c5b292d8525effc0f89cb299f1804f3a725c8d05e158653a563f15e4f685
+Digest: sha256:2498fce14358aa50ead0cc6c19990fc6ff866ce72aeb5546e1d59caac3d0d60f
 Status: Downloaded newer image for hello-world:latest
 
 Hello from Docker!
@@ -41,7 +76,7 @@ For more examples and ideas, visit:
  https://docs.docker.com/get-started/
  ```
 
-このコマンドでは次の処理が実施されています。
+この`docker run`コマンドでは次の処理が実施されています。
 
 1. 自ホスト上ではhello-worldというイメージが見つけられなかったので、図の左にあるコンテナレジストリから最新版のhello-worldイメージをダウンロードして、自ホストのイメージ格納領域に保存します
 1. 格納されたイメージからコンテナを生成します
@@ -49,15 +84,15 @@ For more examples and ideas, visit:
 1. Dockerについての簡単な説明を出力します
 1. 説明の表示が終わるとコンテナは停止します
 
-
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image01.png)
 
-自ホストにhello-worldのイメージをダンロードされたので、イメージが格納されているか確認してみましょう。下から3行目にhello-worldというイメージがあることがわかります。
+自ホストにhello-worldのイメージをダンロードされたので、コンテナ一覧を表示する `docker images`コマンドを使ってイメージが格納されているか確認してみましょう。 下から3行目にhello-worldというイメージがあることがわかります。
 > Note: この環境では既にいくつかのコンテナイメージが準備されているのでhello-world以外も表示されます。
 
  `docker images`{{execute}}
  
 ```text
+$ docker images
 REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
 redis              latest    b8477f2e393b   2 months ago   113MB
 mongo              latest    c1a14d3979c5   2 months ago   691MB
@@ -68,8 +103,8 @@ postgres           12        fe603fe275ba   2 months ago   371MB
 postgres           latest    6ce504119cc8   2 months ago   374MB
 mysql              8         2fe463762680   2 months ago   514MB
 mysql              latest    2fe463762680   2 months ago   514MB
-hello-world        latest    feb5d9fea6a5   2 months ago   13.3kB
-alpine             latest    14119a10abf4   3 months ago   5.59MB
+hello-world        latest    feb5d9fea6a5   3 months ago   13.3kB
+alpine             latest    14119a10abf4   4 months ago   5.59MB
 weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ```
  `docker images`コマンドで表示される項目には以下があります。
@@ -82,13 +117,14 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 | CREATED | イメージが作成された時刻（ 自ホストにダウンロードされた時刻ではありません） |
 | SIZE | イメージのサイズ |
 
-次にイメージから生成されたコンテナの一覧を見てみましょう。デフォルトでは実行中のコンテナのみが表示されます。`-a（or --all）オプション`を付けると、起動していないコンテナも含めてすべてを表示します。hello-worldコンテナは説明を出力すると終了してしまうので`-a（or --all）オプション`を付けないと表示されません。 
+次にイメージから生成されたコンテナの一覧を見てみましょう。`docker ps`がコンテナ一覧を表示するコマンドです。デフォルトでは実行中のコンテナのみが表示されます。`-a（or --all）オプション`を付けると、起動していないコンテナも含めてすべてを表示します。hello-worldコンテナは説明を出力すると終了してしまうので`-a（or --all）オプション`を付けないと表示されません。 
 
 `docker ps -a `{{execute}}
 
 ```text
-CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                     PORTS     NAMES
-655c23e742bf   hello-world   "/hello"   8 minutes ago   Exited (0) 8 minutes ago             elegant_yonath
+$ docker ps -a
+CONTAINER ID   IMAGE         COMMAND    CREATED          STATUS                      PORTS     NAMES
+e14e3cbf21be   hello-world   "/hello"   52 seconds ago   Exited (0) 51 seconds ago             musing_shamir
  ```
   `docker ps`コマンドで表示される項目は以下になります。ExitedというSTATUSはコンテナが実行され、終了した状態を指しています。コンテナの各ステータスと遷移については別途説明いたします。
 
@@ -102,15 +138,15 @@ CONTAINER ID   IMAGE         COMMAND    CREATED         STATUS                  
 | PORTS | 公開ポート、プロトコル |
 | NAMES | コンテナの名前（ コンテナを生成する際に `--nameオプション`で指定して名前を付けることが可能）|
 
-特定の処理をして停止するコンテナを動かしてみましたが、停止してしまっているので今ひとつピンと来ないかもしれませんので、続いて、稼働していることがわかるコンテナを利用してみます。静的コンテンツを表示するWebサーバのコンテナを起動してみます。コンテナイメージ名称がわからないので、httpdという文字列でコンテナレジストリを検索します。
+特定の処理をして停止するコンテナを動かしてみましたが、停止してしまっているので今ひとつピンと来ないかもしれませんので、続いて、稼働していることがわかるコンテナを利用してみます。静的コンテンツを表示するWebサーバのコンテナを起動してみます。コンテナイメージ名称がわからないので、httpdという文字列でコンテナレジストリを検索します。`docker search`コマンドは指定された文字列でコンテナレジストリを検索します。
 
 `docker search httpd`{{execute}}
 ```text
-[root@ik1-314-17333 ~]# docker search httpd
+$ docker search httpd
 NAME                                    DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
-httpd                                   The Apache HTTP Server Project                  3806      [OK]
-centos/httpd-24-centos7                 Platform for running Apache httpd 2.4 or bui…   40
-centos/httpd                                                                            34                   [OK]
+httpd                                   The Apache HTTP Server Project                  3809      [OK]       
+centos/httpd-24-centos7                 Platform for running Apache httpd 2.4 or bui…   40                   
+centos/httpd                                                                            34                   [OK]     
 （以下、略）
 ```
 
@@ -119,17 +155,17 @@ centos/httpd                                                                    
 `docker run -d --name httpd -p 80:80 httpd:latest `{{execute}}
 
 ```text
-[root@ik1-314-17333 ~]# docker run -d --name httpd -p 80:80 httpd:latest
+$ docker run -d --name httpd -p 80:80 httpd:latest
 Unable to find image 'httpd:latest' locally
 latest: Pulling from library/httpd
-a2abf6c4d29d: Pull complete
-dcc4698797c8: Pull complete
-41c22baa66ec: Pull complete
-67283bbdd4a0: Pull complete
-d982c879c57e: Pull complete
+a2abf6c4d29d: Pull complete 
+dcc4698797c8: Pull complete 
+41c22baa66ec: Pull complete 
+67283bbdd4a0: Pull complete 
+d982c879c57e: Pull complete 
 Digest: sha256:0954cc1af252d824860b2c5dc0a10720af2b7a3d3435581ca788dff8480c7b32
 Status: Downloaded newer image for httpd:latest
-8d6cda605ee754f70f89d0fffb5048faafa10bddbc3137d18206793f037a6649
+694ebd43af1d0cdcc52a1ae9ae474d24411d8b9f1e986b4270d4d6a871914e67
  ```
  
 hello-world同様に、自ホストにはhttpdイメージがなかったので、コンテナレジストリからダウンロードしていることがわかります。-p 80:80の意味するところは、ローカルホスト（自ホスト）の80番ポートとコンテナ内の80番ポートをバインドすることです。curl でローカルホストの80番にアクセスすると「It works!」と表示され、httpdが稼働していることがわかります。
@@ -137,28 +173,29 @@ hello-world同様に、自ホストにはhttpdイメージがなかったので�
  `curl  http://localhost:80/ `{{execute}}
  
  ```text
-[root@ik1-314-17333 ~]# curl http://localhost:80/
+$ curl  http://localhost:80/
 <html><body><h1>It works!</h1></body></html>
  ```
  
  ブラウザで確認する場合は以下をクリックしてください。
  https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/
- 
- ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image02.png)　
+ ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image101web1.png)
+  
  
  ` docker ps -a `{{execute}}
 
 再度コンテナ一覧を取得すると、停止したhello-worldとは異なり、STATUSがUpと表示され、httpdコンテナが80番で待ち受けしながら稼働していることが確認できます。
 
 ```text
-[root@ik1-314-17333 ~]# docker ps -a
-CONTAINER ID   IMAGE                         COMMAND                  CREATED          STATUS                      PORTS                  NAMES
-8d6cda605ee7   httpd:latest                  "httpd-foreground"       55 seconds ago   Up 53 seconds               0.0.0.0:80->80/tcp     httpd
-41fa697c9b50   hello-world                   "/hello"                 23 minutes ago   Exited (0) 12 minutes ago                          stoic_goldwasser
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS                     PORTS                               NAMES
+694ebd43af1d   httpd:latest   "httpd-foreground"   31 seconds ago   Up 29 seconds              0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2 minutes ago                                       musing_shamir
  ```
+
+ ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image02.png)
+   
  コンテナが簡単に起動できることを確認したところで、次のステップに進みます。
-
-
 
 ###  このステップで利用したdockerコマンド
 - docker search [OPTIONS] TERM

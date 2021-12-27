@@ -11,7 +11,9 @@
  `docker images`{{execute}}
  
 ```text
+$ docker images
 REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
+httpd              latest    dabbfbe0c57b   6 days ago     144MB
 redis              latest    b8477f2e393b   2 months ago   113MB
 mongo              latest    c1a14d3979c5   2 months ago   691MB
 mariadb            10        b7220a722ce2   2 months ago   409MB
@@ -21,7 +23,8 @@ postgres           12        fe603fe275ba   2 months ago   371MB
 postgres           latest    6ce504119cc8   2 months ago   374MB
 mysql              8         2fe463762680   2 months ago   514MB
 mysql              latest    2fe463762680   2 months ago   514MB
-alpine             latest    14119a10abf4   3 months ago   5.59MB
+hello-world        latest    feb5d9fea6a5   3 months ago   13.3kB
+alpine             latest    14119a10abf4   4 months ago   5.59MB
 weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ```
 
@@ -29,8 +32,9 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 
 `docker search centos`{{execute}}
 ```text
+$ docker search centos
 NAME                              DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
-centos                            The official build of CentOS.                   6928      [OK]       
+centos                            The official build of CentOS.                   6947      [OK]       
 ansible/centos7-ansible           Ansible on Centos7                              135                  [OK]
 consol/centos-xfce-vnc            Centos container with "headless" VNC session…   132                  [OK]
 jdeathe/centos-ssh                OpenSSH / Supervisor / EPEL/IUS/SCL Repos - …   121                  [OK]
@@ -43,19 +47,26 @@ centos/systemd                    systemd enabled base container.               
 `docker pull centos`{{execute}}
 
 ```text
+$ docker pull centos
+Using default tag: latest
+latest: Pulling from library/centos
+a1d0c7532777: Downloading [==================================================>]  83.52MB/83.52MB
 latest: Pulling from library/centos
 a1d0c7532777: Pull complete 
 Digest: sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
 Status: Downloaded newer image for centos:latest
-docker.io/library/centos:latest
+docker.io/library/centos:lates
 ```
 
-再度、コンテナイメージを確認すると、CentOSの最新版が自ホストのイメージ格納領域にダウンロードされたことがわかります。
+再度、コンテナイメージ一覧を確認すると、下から3行目、CentOSの最新版が自ホストのイメージ格納領域にダウンロードされたことがわかります。
 
 `docker images`{{execute}}
 
 ```text
+docker.io/library/centos:latest
+$ docker images
 REPOSITORY         TAG       IMAGE ID       CREATED        SIZE
+httpd              latest    dabbfbe0c57b   6 days ago     144MB
 redis              latest    b8477f2e393b   2 months ago   113MB
 mongo              latest    c1a14d3979c5   2 months ago   691MB
 mariadb            10        b7220a722ce2   2 months ago   409MB
@@ -65,9 +76,9 @@ postgres           12        fe603fe275ba   2 months ago   371MB
 postgres           latest    6ce504119cc8   2 months ago   374MB
 mysql              8         2fe463762680   2 months ago   514MB
 mysql              latest    2fe463762680   2 months ago   514MB
-hello-world        latest    feb5d9fea6a5   2 months ago   13.3kB
+hello-world        latest    feb5d9fea6a5   3 months ago   13.3kB
 centos             latest    5d0da3dc9764   3 months ago   231MB
-alpine             latest    14119a10abf4   3 months ago   5.59MB
+alpine             latest    14119a10abf4   4 months ago   5.59MB
 weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ```
 
@@ -76,7 +87,7 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 `docker run -it --name mycentos01 centos /bin/bash`{{execute}}
 
 ```text
-[root@0893cd3e1c07 /]#
+[root@7b1d77ed91f8 /]#
 ```
 
 [root@文字列]#のプロンプトが表示され、bashの利用が可能になっていることがわかります。プロンプトのroot@の後ろの文字列はコンテナホスト名＝コンテナIDなので、実行した環境によって異なります。コンテナを起動する際に`-h（or --hostname）オプション`を付けるとコンテナのホスト名を指定することができますが、今回は指定していないので、ホスト名としてコンテナIDが利用されています。
@@ -91,7 +102,7 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 
 このコンテナは CentOS Linux 8 であることがわかります。
 ```text
-[root@0893cd3e1c07 /]# cat /etc/os-release
+[root@7b1d77ed91f8 /]# cat /etc/os-release
 NAME="CentOS Linux"
 VERSION="8"
 ID="centos"
@@ -111,8 +122,8 @@ CENTOS_MANTISBT_PROJECT_VERSION="8"
 
 Linuxのカーネルの情報です。
 ```text
-[root@187c07b01562 /]# uname -a
-Linux 187c07b01562 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+[root@7b1d77ed91f8 /]# uname -a
+Linux 7b1d77ed91f8 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 ```
 
 `cat /etc/hostname`{{execute}}
@@ -120,16 +131,18 @@ Linux 187c07b01562 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 
 ホスト名です。
 
 ```text
-[root@0893cd3e1c07 /]# cat /etc/hostname
-0893cd3e1c07
+[root@7b1d77ed91f8 /]# cat /etc/hostname
+7b1d77ed91f8
 ```
 コンテナ内でのプロセスの状態を確認します。
 
 `ps f -e`{{execute}}
 
 ```text
-[root@0893cd3e1c07 /]# ps f -e
-0893cd3e1c07
+[root@7b1d77ed91f8 /]# ps f -e
+    PID TTY      STAT   TIME COMMAND
+      1 pts/0    Ss     0:00 /bin/bash
+     18 pts/0    R+     0:00 ps f -e
 ```
 
 一通り確認したところで、exitコマンドでコンテナから抜けます。
@@ -137,18 +150,24 @@ Linux 187c07b01562 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 
 `exit`{{execute}}
 
 ```text
-[root@0893cd3e1c07 /]# exit
+[root@7b1d77ed91f8 /]# exit
 exit
 ```
 コンテナを抜けた後、再度コンテナ一覧を取得します。
 
 `docker ps -a`{{execute}}
+
 ```text
-CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS                     PORTS     NAMES
-0893cd3e1c07   centos    "/bin/bash"   49 seconds ago   Exited (0) 4 seconds ago             mycentos01
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS                     PORTS                               NAMES
+7b1d77ed91f8   centos         "/bin/bash"          32 seconds ago   Exited (0) 7 seconds ago                                       mycentos01
+694ebd43af1d   httpd:latest   "httpd-foreground"   4 minutes ago    Up 4 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+e14e3cbf21be   hello-world    "/hello"             5 minutes ago    Exited (0) 5 minutes ago                                       musing_shamir
 ```
 
-`docker run`で起動したコンテナのターミナルをexitで抜けると、コンテナが停止します。再度、コンテナを起動します。起動するコンテナを指定する方法にはコンテナ名またはコンテナIDが利用できます。先程、mycentos01というコンテナ名を付けておいたので、それを指定してコンテナを起動します。
+mycentos01は「Exited」と停止状態です。`docker run`で起動したコンテナのターミナルをexitで抜けると、コンテナが停止します。
+
+再度、コンテナを起動します。起動するコンテナを指定する方法にはコンテナ名またはコンテナIDが利用できます。mycentos01というコンテナ名を指定してコンテナを起動します。
 
 `docker start mycentos01`{{execute}}
 
@@ -156,15 +175,19 @@ CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS                  
 
 `docker ps -a`{{execute}}
 ```text
-CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS         PORTS     NAMES
-0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Up 7 seconds             mycentos01
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND              CREATED              STATUS                     PORTS                               NAMES
+7b1d77ed91f8   centos         "/bin/bash"          About a minute ago   Up 2 seconds                                                   mycentos01
+694ebd43af1d   httpd:latest   "httpd-foreground"   4 minutes ago        Up 4 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+e14e3cbf21be   hello-world    "/hello"             6 minutes ago        Exited (0) 6 minutes ago 
 ```
 
 起動はしましたが、標準入力を受け付けるオプションを指定しなかったので操作できない状態になってしまいました。そこで、実行中のコンテナ内において新たなコマンドを実行する`docker exec`コマンドを利用してbashの利用を可能にします。
 
 `docker exec -it mycentos01 /bin/bash`{{execute}}
 ```text
-[root@0893cd3e1c07 /]# 
+$ docker exec -it mycentos01 /bin/bash
+[root@7b1d77ed91f8 /]# ls
 ```
 再びbashが利用できる状態になったので、いくつかのコマンドを実行してみましょう。
 
@@ -177,10 +200,9 @@ CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS         PORTS
 現在コンテナ内に存在するファイル/ディレクトリ一覧を表示します
 
 ```text
-[root@0893cd3e1c07 /]# ls
-bin  dev  etc  home  lib  lib64  lost+found  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+[root@7b1d77ed91f8 /]# ls
+bin  dev  etc  home  lib  lib64  lost+found  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  va
 ```
-
 echoコマンドを使って、ファイルを作成します。
 
 `echo ContainerExercise > testfile.txt`{{execute}}
@@ -190,30 +212,31 @@ echoコマンドを使って、ファイルを作成します。
 ファイルが作成されているか確認します。
 
 ```text
-[root@0893cd3e1c07 /]# ls
+[root@7b1d77ed91f8 /]# ls
 bin  etc   lib    lost+found  mnt  proc  run   srv  testfile.txt  usr
 dev  home  lib64  media       opt  root  sbin  sys  tmp           var
+
 ```
- testfile.txtが作成されていることが確認できます。
- 
+testfile.txtが作成されていることが確認できたので、testfile.txtの内容を確認します。
  
 `cat testfile.txt`{{execute}}
 
-testfile.txtの内容を確認します。
-
 ```text
-[root@0893cd3e1c07 /]# cat testfile.txt
+[root@7b1d77ed91f8 /]# cat testfile.txt
 ContainerExercise
 ```
 
 `exit`{{execute}}
 
-一通り確認したところで、先程同様exitコマンドでコンテナのターミナルから抜け、コンテナ一覧を確認します。
+一通り確認したところで、先程同様exitでコンテナのターミナルから抜け、コンテナ一覧を確認します。
 
 `docker ps -a`{{execute}}
 ```text
-CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS          PORTS     NAMES
-0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Up 37 seconds             mycentos01
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND              CREATED              STATUS                     PORTS                               NAMES
+7b1d77ed91f8   centos         "/bin/bash"          About a minute ago   Up 37 seconds                                                  mycentos01
+694ebd43af1d   httpd:latest   "httpd-foreground"   5 minutes ago        Up 5 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+e14e3cbf21be   hello-world    "/hello"             6 minutes ago        Exited (0) 6 minutes ago                                       musing_shamir
 ```
 
 コンテナ一覧を確認すると、先程の`docker run`の場合と異なりコンテナは停止せず、起動したままです。今度はdockerコマンドで明示的にコンテナを停止します。
@@ -225,8 +248,11 @@ CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS          PORT
 停止したことが確認できます。
 
 ```text
-CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS                     PORTS     NAMES
-0893cd3e1c07   centos    "/bin/bash"   About a minute ago   Exited (0) 3 seconds ago             mycentos01
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND              CREATED              STATUS                     PORTS                               NAMES
+7b1d77ed91f8   centos         "/bin/bash"          About a minute ago   Exited (0) 2 seconds ago                                       mycentos01
+694ebd43af1d   httpd:latest   "httpd-foreground"   5 minutes ago        Up 5 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+e14e3cbf21be   hello-world    "/hello"             7 minutes ago        Exited (0) 7 minutes ago                                       musing_shamir
 ```
 コンテナをまた起動して、状態を確認します。
 
@@ -235,30 +261,32 @@ CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS              
 `docker ps -a`{{execute}}
 
 ```text
-CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     NAMES
-0893cd3e1c07   centos    "/bin/bash"   2 minutes ago   Up 4 seconds             mycentos01
+$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND              CREATED         STATUS                     PORTS                               NAMES
+7b1d77ed91f8   centos         "/bin/bash"          2 minutes ago   Up 2 seconds                                                   mycentos01
+694ebd43af1d   httpd:latest   "httpd-foreground"   5 minutes ago   Up 5 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+e14e3cbf21be   hello-world    "/hello"             7 minutes ago   Exited (0) 7 minutes ago                                       musing_shamir
 ```
 
-execコマンドを利用してbashの利用を可能にします。
+mycentos01が起動したので`docker exec`コマンドを利用してbashの利用を可能にします。
 
 `docker exec -it mycentos01 /bin/bash`{{execute}}
 ```text
-[root@0893cd3e1c07 /]# 
+[root@7b1d77ed91f8 /]#
 ```
 ここで、先程作成したファイル`testfile.txt`が、コンテナ停止の影響を受けてるか確認します。
 
 `ls`{{execute}}
 ```text
-[root@0893cd3e1c07 /]# ls
+[root@7b1d77ed91f8 /]# ls
 bin  etc   lib    lost+found  mnt  proc  run   srv  testfile.txt  usr
 dev  home  lib64  media       opt  root  sbin  sys  tmp           var
 ```
 `cat testfile.txt`{{execute}}
 ```text
-[root@0893cd3e1c07 /]# cat testfile.txt
+[root@7b1d77ed91f8 /]# cat testfile.txt
 ContainerExercise
 ```
-
 先程作ったファイルはそのまま存在してます。コンテナの停止によって影響は受けないことはわかりました。
 
 `exit`{{execute}}

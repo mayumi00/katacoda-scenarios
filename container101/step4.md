@@ -10,31 +10,39 @@ step3でhttpd（Apache HTTP Server）がインストールされたコンテナ�
 
 ```text
 $ docker ps -a
-CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS          PORTS                                   NAMES
-7ec897a6ca6c   centos    "/bin/bash"   2 minutes ago   Up 38 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   mycentos02
+CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS                      PORTS                                   NAMES
+1af9407b90df   centos         "/bin/bash"          2 minutes ago    Up About a minute           0.0.0.0:8080->80/tcp, :::8080->80/tcp   mycentos02
+7b1d77ed91f8   centos         "/bin/bash"          5 minutes ago    Up 3 minutes                                                        mycentos01
+694ebd43af1d   httpd:latest   "httpd-foreground"   9 minutes ago    Up 9 minutes                0.0.0.0:80->80/tcp, :::80->80/tcp       httpd
+e14e3cbf21be   hello-world    "/hello"             10 minutes ago   Exited (0) 10 minutes ago                                           musing_shamir
+
 ```
 
-コンテナイメージを作成します。元になるコンテナ名と、作成するイメージ名とタグを指定します。ここでは1.0というタグを付けました。
+`docker commit`コマンドを使って、コンテナからコンテナイメージを作成します。コマンド実行時に、元になるコンテナ名と、作成するイメージ名とタグを指定します。ここでは1.0というタグを付けました。
 
 `docker commit mycentos02 apacheweb:1.0`{{execute}}
 
 ```text
-[root@ik1-314-17333 ~]# docker commit mycentos02 apacheweb:1.0
-sha256:8f6df70219036bb1341eb156ccbc43f96ad1a533f5ca60a4ab530544f15bebc4
+$ docker commit mycentos02 apacheweb:1.0
+sha256:3518d1945326dad229c9987dd8022bed7197064538e8a6db96493bffca8397fe
 ```
 
-イメージができたか確認しましょう
+イメージができたか確認しましょう。
 
 `docker images`{{execute}}
 
 1.0のタグがついたapachewebが作成されていることが確認できます。
 
 ```text
-[root@ik1-314-17333 ~]# docker images
-REPOSITORY    TAG       IMAGE ID       CREATED          SIZE
-apacheweb     v1.0      8f6df7021903   19 seconds ago   277MB
-hello-world   latest    feb5d9fea6a5   2 months ago     13.3kB
-centos        latest    5d0da3dc9764   3 months ago     231MB
+$ docker images
+REPOSITORY         TAG       IMAGE ID       CREATED         SIZE
+apacheweb          1.0       3518d1945326   6 seconds ago   278MB
+httpd              latest    dabbfbe0c57b   6 days ago      144MB
+（略）
+hello-world        latest    feb5d9fea6a5   3 months ago    13.3kB
+centos             latest    5d0da3dc9764   3 months ago    231MB
+alpine             latest    14119a10abf4   4 months ago    5.59MB
+weaveworks/scope   1.11.4    a082d48f0b39   2 years ago     78.5MB
 ```
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image06.png)　
@@ -46,8 +54,8 @@ centos        latest    5d0da3dc9764   3 months ago     231MB
 コンテナが生成され、コンテナIDが出力されました。
 
 ```text
-[root@ik1-314-17333 ~]# docker run -d -p 8081:80 -it --name testweb2 apacheweb:1.0 /bin/bash
-2bb6bc5699d6017a07302a1068c7f9f87c18c1c9d02d9f435083286e49e50401
+$ docker run -d -p 8081:80 -it --name testweb2 apacheweb:1.0 /bin/bash
+e11268340a162720529606f64c7a2102b06d4132bfaa8853db7014e48a137e47
 ```
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image07.png)
@@ -63,10 +71,10 @@ execコマンドを利用してbashの利用を可能にします。
 そもそも、作成したコンテナイメージは、httpdインストール済ですがhttpdを自動起動する設定が無いのコンテナを元にしているので、httpdは自動起動しません。
 
 ```text
-[root@2bb6bc5699d6 /]# ps f -e
+[root@e11268340a16 /]# ps f -e
     PID TTY      STAT   TIME COMMAND
      15 pts/1    Ss     0:00 /bin/bash
-     29 pts/1    R+     0:00  \_ ps f -e
+     30 pts/1    R+     0:00  \_ ps f -e
       1 pts/0    Ss+    0:00 /bin/bash
 ```
 
@@ -79,16 +87,16 @@ execコマンドを利用してbashの利用を可能にします。
 `ps f -e`{{execute}}
 
 ```text
-[root@2bb6bc5699d6 /]# ps f -e
+[root@e11268340a16 /]# ps f -e
     PID TTY      STAT   TIME COMMAND
      15 pts/1    Ss     0:00 /bin/bash
-    247 pts/1    R+     0:00  \_ ps f -e
+    248 pts/1    R+     0:00  \_ ps f -e
       1 pts/0    Ss+    0:00 /bin/bash
-     31 ?        Ss     0:00 /usr/sbin/httpd
-     32 ?        S      0:00  \_ /usr/sbin/httpd
-     33 ?        Sl     0:00  \_ /usr/sbin/httpd
+     32 ?        Ss     0:00 /usr/sbin/httpd
+     33 ?        S      0:00  \_ /usr/sbin/httpd
      34 ?        Sl     0:00  \_ /usr/sbin/httpd
      35 ?        Sl     0:00  \_ /usr/sbin/httpd
+     36 ?        Sl     0:00  \_ /usr/sbin/httpd
 ```
 
 httpdが起動したので、コンテナから抜けます。
@@ -100,10 +108,13 @@ httpdが起動したので、コンテナから抜けます。
 `docker ps -a`{{execute}}
 
 ```text
-[root@ik1-314-17333 ~]# docker ps -a
-CONTAINER ID   IMAGE            COMMAND       CREATED          STATUS          PORTS                  NAMES
-2bb6bc5699d6   apacheweb:1.0   "/bin/bash"   2 minutes ago    Up 2 minutes    0.0.0.0:8081->80/tcp   testweb2
-f29637beaac6   centos           "/bin/bash"   39 minutes ago   Up 36 minutes   0.0.0.0:8080->80/tcp   mycentos02
+$ docker ps -a
+CONTAINER ID   IMAGE           COMMAND              CREATED          STATUS                      PORTS                                   NAMES
+e11268340a16   apacheweb:1.0   "/bin/bash"          45 seconds ago   Up 43 seconds               0.0.0.0:8081->80/tcp, :::8081->80/tcp   testweb2
+1af9407b90df   centos          "/bin/bash"          3 minutes ago    Up 2 minutes                0.0.0.0:8080->80/tcp, :::8080->80/tcp   mycentos02
+7b1d77ed91f8   centos          "/bin/bash"          7 minutes ago    Up 5 minutes                                                        mycentos01
+694ebd43af1d   httpd:latest    "httpd-foreground"   10 minutes ago   Up 10 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp       httpd
+e14e3cbf21be   hello-world     "/hello"             12 minutes ago   Exited (0) 12 minutes ago                                           musing_shamir
 ```
 
 8081番で待ち受けしていることがわかります。curlでの確認とブラウザでの確認を行います。
@@ -115,6 +126,7 @@ f29637beaac6   centos           "/bin/bash"   39 minutes ago   Up 36 minutes   0
 <head><title>Apache on Docker Container</title></head><body><H1>Container 101 - Web</H1>Apache on Docker Container</body>
 ```
 https://[[HOST_SUBDOMAIN]]-8081-[[KATACODA_HOST]].environments.katacoda.com/
+ ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image101web2.png)
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image08.png)
 
