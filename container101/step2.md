@@ -4,8 +4,6 @@
 
 > Note: 出力例に表示されているコンテナIDやイメージID、起動時間などは使用している環境と状態によって異なります。このテキストとまったく同じにはならないのでご注意ください。
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-1.png)　
-
 ---
 **コンテナのpull**
 
@@ -89,6 +87,8 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 **インタラクティブな状態のコンテナの起動**
 
 それでは、このcentosイメージからコンテナを起動します。コンテナを起動する際に`--nameオプション`を付けるとコンテナに任意の名前をつけることができます。今回はmycentos01という名前を付けることにします。また、標準入力を受け付ける`-i（or --interactive）オプション`と疑似TTYの割当を行う`-t（or --tty）オプション`を組み合わせてbashをインタラクティブモードで起動すると、コンテナ内での操作が可能になります。
+
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-1.png)
 
 `docker run -it --name mycentos01 centos /bin/bash`{{execute}}
 
@@ -197,6 +197,8 @@ CONTAINER ID   IMAGE          COMMAND              CREATED              STATUS  
 694ebd43af1d   httpd:latest   "httpd-foreground"   4 minutes ago        Up 4 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
 e14e3cbf21be   hello-world    "/hello"             6 minutes ago        Exited (0) 6 minutes ago 
 ```
+
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-2.png)
 
 起動はしましたが、標準入力を受け付けるオプションを指定しなかったので操作できない状態になってしまいました。そこで、実行中のコンテナ内において新たなコマンドを実行する`docker exec`コマンドを利用してbashの利用を可能にします。
 
