@@ -230,7 +230,7 @@ $ curl  http://localhost:81/
 <html><body><h1>It works!</h1></body></html>
  ```
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-4.png)
-   
+
 この稼働中のコンテナを停止するには`docker stop`コマンドでコンテナ名またはコンテナIDを指定します。
  
 `docker stop httpd2 `{{execute}}
@@ -290,6 +290,7 @@ CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS      
 694ebd43af1d   httpd:latest   "httpd-foreground"   31 seconds ago   Up 29 seconds              0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
 e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2 minutes ago                                       musing_shamir
  ```
+  ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-5.png)
  
 `docker rm httpd2 `{{execute}}
 
@@ -304,7 +305,7 @@ CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS      
 e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2 minutes ago                                       musing_shamir
  ```
  
- ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-5.png)
+ ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-6.png)
  
  コンテナが簡単に起動できることを確認したところで、次のステップに進みます。
 
