@@ -1,4 +1,4 @@
-### コンテナの起動
+## コンテナの起動
 
 この演習環境は下図のようになっています。図の右側の「コンテナを稼働させるホスト（自ホスト）」が、このコースの左側に表示されているTerminalに対応しています。
 
@@ -181,7 +181,7 @@ $ curl  http://localhost:80/
 <html><body><h1>It works!</h1></body></html>
  ```
  
- ブラウザで確認する場合は以下をクリックしてください。
+ ブラウザで確認する場合は以下をクリックしてください。「It works!」という画面が表示されます。
  
  https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/
  
@@ -215,7 +215,7 @@ CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS      
 694ebd43af1d   httpd:latest   "httpd-foreground"   31 seconds ago   Up 29 seconds              0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
 e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2 minutes ago                                       musing_shamir
  ```
- curl でローカルホストの81番にアクセスすると「It works!」と表示さます。
+ curl でローカルホストの81番にアクセスするとhttpdコンテナと同様、「It works!」と表示さます。
  
  `curl  http://localhost:81/ `{{execute}}
  
