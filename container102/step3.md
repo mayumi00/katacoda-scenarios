@@ -209,4 +209,6 @@ https://[[HOST_SUBDOMAIN]]-8000-[[KATACODA_HOST]].environments.katacoda.com/
 
 `exit`{{execute}}
 
-Dockerfileの変更を行うことで、変更を反映したコンテナイメージをビルドし、新しいコンテナを作成することができます。この演習では手動でDockerfileの管理を行っていますが、githubなどでDockerfileのバージョン管理を行い、変更を管理してゆくことも可能になります。
+---
+
+このようにDockerfileの変更を行うことで、変更を反映した新しいバージョンのコンテナイメージをビルドし、新しいコンテナを作成することができます。この演習では手動でDockerfileの管理を行っていますが、githubなどでDockerfileのバージョン管理を行い、変更を管理してゆくことも可能になります。
