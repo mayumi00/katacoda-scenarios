@@ -7,7 +7,7 @@ Step1でDockerfileを利用することで、インストールや設定作業�
 ```text
 $ docker images
 REPOSITORY             TAG       IMAGE ID       CREATED              SIZE
-apacheweb-dockerfile   1.0       3224927b24a4   About a minute ago   278MB
+apacheweb-dockerfile   1.0       e6dd36800f1d   About a minute ago   278MB
 redis                  latest    b8477f2e393b   2 months ago         113MB
 mongo                  latest    c1a14d3979c5   2 months ago         691MB
 mariadb                10        b7220a722ce2   2 months ago         409MB
@@ -30,24 +30,28 @@ weaveworks/scope       1.11.4    a082d48f0b39   2 years ago          78.5MB
 ```text
 $ for i in {1..9} ; do  echo testweb0${i} ; docker run -d -p 808${i}:80 --name testweb0${i} apacheweb-dockerfile:1.0 ; done
 testweb01
-c8f2d3a6d38afd25fa38291ef6ad9e6062b853581e1502450cc57a738ba33c37
+3f2c0f3eda01d5cf345acddcf167825fcc9138a95721ca4b2d9786debb991410
 testweb02
-fa59ff20d5d0ed9b248cdea153ec5ef1f6494e835a82f18c61dff4c7226987f2
+57403617f93f0374ec711343647c286512f67fa6f220b0c49734731c68be7aa3
 testweb03
-e4248d60288764ed0e992f0e7611511b9364e2091126a52fd47e51aa4b252e3f
+02c76f7d9c5de1a788c8888668fc108312e493df1d97199ee668602eee3d55d5
 testweb04
-9bdf98fc9ba067bb838d8717c001b70b40eea8b984a1fc271c7b89c4b65018a9
+b26e7070b45a375857406f3eb5890314f2b40c3dcd7026bd1a0dc9e288db0226
 testweb05
-9ae5cc511156c4cc14ab571f62622681aca65464f3efd8d73812a04cc90d7ac2
+8fdef0cdd27d881425020535fb07c7ae517d1bf9777817689d188f8dff242269
 testweb06
-bb3f5a7b6acb14f274dc79e70ac3f5b81f785d4a05ccb489f1bce069f81df0c1
+13d6eeb16dd80139498ef52d2a2663d6689abf8c46190a8bb73413659a6b4672
 testweb07
-adbb50899a65ce1265c94fbd41dee764344c3946a1ee7cef6d3212aaca139134
+3c53983b694a8802c8c4baf4611687cee728674708c4e8ba3e3c5c8090099f3c
 testweb08
-b015d6ea166566b446a30a37c66bff6e2df90309e2d31300a9caba835a9879ae
+7cbac08014c6c97066ede9bfc23c5cb3aca98fba30562702fad5fa5bcd1bdc4a
 testweb09
-51b9a819ea63d3acf91a8c72c33a28f2e42727326cfb20c5e355185ea04af0cb
+5660c3ddb092f317104103542ea88296c0f58d35707c8911f3d72987e020b9bb
 ```
+
+現在は図のように、Dockerfileからビルドされたapacheweb-dockerfile:1.0を元に同じコンテナが9個起動してます。
+
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image203.png)
 
 `for i in {1..9} ; do echo testweb0${i} ; curl http://localhost:808${i} ; done`{{execute}}
 
@@ -75,24 +79,22 @@ testweb09
 
 `docker ps -a`{{execute}}
 
+コンテナ一覧を見ると、step1で起動したtestweb00とその後起動したtestweb01〜testweb09が起動していることがわかります。
+
 ```text
 $ docker ps -a
 CONTAINER ID   IMAGE                      COMMAND                  CREATED              STATUS              PORTS                                   NAMES
-51b9a819ea63   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   11 seconds ago       Up 11 seconds       0.0.0.0:8089->80/tcp, :::8089->80/tcp   testweb09
-b015d6ea1665   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   12 seconds ago       Up 11 seconds       0.0.0.0:8088->80/tcp, :::8088->80/tcp   testweb08
-adbb50899a65   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   13 seconds ago       Up 12 seconds       0.0.0.0:8087->80/tcp, :::8087->80/tcp   testweb07
-bb3f5a7b6acb   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   13 seconds ago       Up 13 seconds       0.0.0.0:8086->80/tcp, :::8086->80/tcp   testweb06
-9ae5cc511156   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   14 seconds ago       Up 13 seconds       0.0.0.0:8085->80/tcp, :::8085->80/tcp   testweb05
-9bdf98fc9ba0   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   14 seconds ago       Up 14 seconds       0.0.0.0:8084->80/tcp, :::8084->80/tcp   testweb04
-e4248d602887   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   15 seconds ago       Up 14 seconds       0.0.0.0:8083->80/tcp, :::8083->80/tcp   testweb03
-fa59ff20d5d0   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   15 seconds ago       Up 15 seconds       0.0.0.0:8082->80/tcp, :::8082->80/tcp   testweb02
-c8f2d3a6d38a   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   16 seconds ago       Up 15 seconds       0.0.0.0:8081->80/tcp, :::8081->80/tcp   testweb01
-14d51cd305c8   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   About a minute ago   Up About a minute   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testeweb00
+5660c3ddb092   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   11 seconds ago       Up 10 seconds       0.0.0.0:8089->80/tcp, :::8089->80/tcp   testweb09
+7cbac08014c6   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   11 seconds ago       Up 10 seconds       0.0.0.0:8088->80/tcp, :::8088->80/tcp   testweb08
+3c53983b694a   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   12 seconds ago       Up 11 seconds       0.0.0.0:8087->80/tcp, :::8087->80/tcp   testweb07
+13d6eeb16dd8   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   13 seconds ago       Up 12 seconds       0.0.0.0:8086->80/tcp, :::8086->80/tcp   testweb06
+8fdef0cdd27d   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   13 seconds ago       Up 12 seconds       0.0.0.0:8085->80/tcp, :::8085->80/tcp   testweb05
+b26e7070b45a   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   14 seconds ago       Up 13 seconds       0.0.0.0:8084->80/tcp, :::8084->80/tcp   testweb04
+02c76f7d9c5d   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   15 seconds ago       Up 14 seconds       0.0.0.0:8083->80/tcp, :::8083->80/tcp   testweb03
+57403617f93f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   16 seconds ago       Up 14 seconds       0.0.0.0:8082->80/tcp, :::8082->80/tcp   testweb02
+3f2c0f3eda01   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   16 seconds ago       Up 15 seconds       0.0.0.0:8081->80/tcp, :::8081->80/tcp   testweb01
+d92f2cf8234f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   About a minute ago   Up About a minute   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testweb00
 ```
-
-現在は図のように、Dockerfileからビルドされたapacheweb-dockerfile:1.0を元に同じコンテナが10起動してます。
-
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image203.png)
 
 次のステップに進む前に、大量に起動してしまったコンテナを停止し削除します。
 
@@ -103,7 +105,7 @@ testweb01からtestweb09を停止します。
 ` for i in {1..9} ; do docker stop testweb0${i} ; done`{{execute}}
 
 ```text
-[root@ik1-314-17333 ~]#  for i in {1..9} ; do docker stop testweb0${i} ; done
+$ for i in {1..9} ; do docker stop testweb0${i} ; done
 testweb01
 testweb02
 testweb03
@@ -120,19 +122,18 @@ testweb09
 `docker ps -a`{{execute}}
 
 ```text
-[root@ik1-314-17333 ~]# docker ps -a
 $ docker ps -a
 CONTAINER ID   IMAGE                      COMMAND                  CREATED              STATUS                     PORTS                                   NAMES
-51b9a819ea63   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   28 seconds ago       Exited (0) 4 seconds ago                                           testweb09
-b015d6ea1665   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   29 seconds ago       Exited (0) 4 seconds ago                                           testweb08
-adbb50899a65   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   30 seconds ago       Exited (0) 5 seconds ago                                           testweb07
-bb3f5a7b6acb   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   30 seconds ago       Exited (0) 5 seconds ago                                           testweb06
-9ae5cc511156   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   31 seconds ago       Exited (0) 5 seconds ago                                           testweb05
-9bdf98fc9ba0   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   31 seconds ago       Exited (0) 6 seconds ago                                           testweb04
-e4248d602887   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   32 seconds ago       Exited (0) 6 seconds ago                                           testweb03
-fa59ff20d5d0   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   32 seconds ago       Exited (0) 6 seconds ago                                           testweb02
-c8f2d3a6d38a   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   33 seconds ago       Exited (0) 7 seconds ago                                           testweb01
-14d51cd305c8   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   About a minute ago   Up About a minute          0.0.0.0:8080->80/tcp, :::8080->80/tcp   testeweb00
+5660c3ddb092   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   35 seconds ago       Exited (0) 5 seconds ago                                           testweb09
+7cbac08014c6   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   35 seconds ago       Exited (0) 5 seconds ago                                           testweb08
+3c53983b694a   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   36 seconds ago       Exited (0) 5 seconds ago                                           testweb07
+13d6eeb16dd8   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   37 seconds ago       Exited (0) 6 seconds ago                                           testweb06
+8fdef0cdd27d   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   37 seconds ago       Exited (0) 6 seconds ago                                           testweb05
+b26e7070b45a   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   38 seconds ago       Exited (0) 6 seconds ago                                           testweb04
+02c76f7d9c5d   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   39 seconds ago       Exited (0) 7 seconds ago                                           testweb03
+57403617f93f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   40 seconds ago       Exited (0) 7 seconds ago                                           testweb02
+3f2c0f3eda01   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   40 seconds ago       Exited (0) 7 seconds ago                                           testweb01
+d92f2cf8234f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   About a minute ago   Up About a minute          0.0.0.0:8080->80/tcp, :::8080->80/tcp   testweb00
 ```
 
 testweb00以外は停止（Exited）していることがわかります。続いて、停止したtestweb01からtestweb09を削除します。
@@ -140,7 +141,7 @@ testweb00以外は停止（Exited）していることがわかります。続�
 `for i in {1..9} ; do docker rm testweb0${i} ; done`{{execute}}
 
 ```text
-[root@ik1-314-17333 ~]# for i in {1..9} ; do docker rm testweb0${i} ; done
+$ for i in {1..9} ; do docker rm testweb0${i} ; done
 testweb01
 testweb02
 testweb03
@@ -156,9 +157,10 @@ testweb09
 `docker ps -a`{{execute}}
 
 ```text
-CONTAINER ID   IMAGE                      COMMAND                  CREATED          STATUS                      PORTS                                   NAMES
-c8f2d3a6d38a   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   47 seconds ago   Exited (0) 20 seconds ago                                           testweb01
-14d51cd305c8   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   2 minutes ago    Up 2 minutes                0.0.0.0:8080->80/tcp, :::8080->80/tcp   testeweb00
+$ docker ps -a
+CONTAINER ID   IMAGE                      COMMAND                  CREATED              STATUS              PORTS                                   NAMES
+d92f2cf8234f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   About a minute ago   Up About a minute   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testweb00
+
 ```
 現在は以下の図のような状態です。
 
