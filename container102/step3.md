@@ -26,7 +26,7 @@ step1ではコンテナ内にコピーするhtmlファイルとしてindex.html�
 
 `echo "FROM centos"  > Dockerfile2 `{{execute}}
 
-`FROM`でベースとなるコンテナイメージを指定します。これはStep1と同じcentosを指定します。
+`FROM`でベースとなるコンテナイメージを指定します。これはstep1と同じcentosを指定します。
 
 ***RUN*** 
 
@@ -46,7 +46,7 @@ step1ではコンテナ内にコピーするhtmlファイルとしてindex.html�
 
 `echo "COPY index2.html /var/www/html/index.html"  >> Dockerfile2 `{{execute}}
 
-`COPY`は、Step1とは異なり、自ホストの現在のディレクトリにあるindex2.htmlをファイルをコンテナイメージ内の/var/www/html/index.htmlにコピーしています。
+`COPY`は、step1とは異なり、自ホストの現在のディレクトリにあるindex2.htmlをファイルをコンテナイメージ内の/var/www/html/index.htmlにコピーしています。
 
 ***CMD*** 
 
