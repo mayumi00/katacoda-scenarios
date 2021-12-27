@@ -1,6 +1,6 @@
 ### コンテナの起動
 
-この演習環境は以下の図のようになっています。図の右側の「コンテナを稼働させるホスト（自ホスト）」が、このコースの左側に表示されているTerminalに対応しています。
+この演習環境は下図のようになっています。図の右側の「コンテナを稼働させるホスト（自ホスト）」が、このコースの左側に表示されているTerminalに対応しています。
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-1.png)　
 
@@ -78,14 +78,17 @@ For more examples and ideas, visit:
 
 この`docker run`コマンドでは次の処理が実施されています。
 
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-2.png)
+
 1. 自ホスト上ではhello-worldというイメージが見つけられなかったので、図の左にあるコンテナレジストリから最新版のhello-worldイメージをダウンロードして、自ホストのイメージ格納領域に保存します
 1. 格納されたイメージからコンテナを生成します
 1. 生成したコンテナを起動します
 1. Dockerについての簡単な説明を出力します
 1. 説明の表示が終わるとコンテナは停止します
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-2.png)
 
+**コンテナイメージ一覧**
+---
 自ホストにhello-worldのイメージをダンロードされたので、コンテナ一覧を表示する `docker images`コマンドを使ってイメージが格納されているか確認してみましょう。 下から3行目にhello-worldというイメージがあることがわかります。
 > Note: この環境では既にいくつかのコンテナイメージが準備されているのでhello-world以外も表示されます。
 
@@ -107,17 +110,10 @@ hello-world        latest    feb5d9fea6a5   3 months ago   13.3kB
 alpine             latest    14119a10abf4   4 months ago   5.59MB
 weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ```
- `docker images`コマンドで表示される項目には以下があります。
- 
- | 項目 | 意味 | 
-|:-----------|:------------|
-| REPOSITORY | リポジトリ、名前は同じでタグが異なるDockerイメージの集まり | 
-| TAG | イメージに付けられているタグ、リポジトリやバージョン情報 | 
-| IMAGE ID | イメージID | 
-| CREATED | イメージが作成された時刻（ 自ホストにダウンロードされた時刻ではありません） |
-| SIZE | イメージのサイズ |
 
-次にイメージから生成されたコンテナの一覧を見てみましょう。`docker ps`がコンテナ一覧を表示するコマンドです。デフォルトでは実行中のコンテナのみが表示されます。`-a（or --all）オプション`を付けると、起動していないコンテナも含めてすべてを表示します。hello-worldコンテナは説明を出力すると終了してしまうので`-a（or --all）オプション`を付けないと表示されません。 
+**コンテナ一覧**
+---
+イメージから生成されたコンテナの一覧を見てみましょう。`docker ps`がコンテナ一覧を表示するコマンドです。デフォルトでは実行中のコンテナのみが表示されます。`-a（or --all）オプション`を付けると、起動していないコンテナも含めてすべてを表示します。hello-worldコンテナは説明を出力すると終了してしまうので`-a（or --all）オプション`を付けないと表示されません。 
 
 `docker ps -a `{{execute}}
 
@@ -126,18 +122,10 @@ $ docker ps -a
 CONTAINER ID   IMAGE         COMMAND    CREATED          STATUS                      PORTS     NAMES
 e14e3cbf21be   hello-world   "/hello"   52 seconds ago   Exited (0) 51 seconds ago             musing_shamir
  ```
-  `docker ps`コマンドで表示される項目は以下になります。ExitedというSTATUSはコンテナが実行され、終了した状態を指しています。コンテナの各ステータスと遷移については別途説明いたします。
+  `docker ps`コマンドで表示される項目のSTATUS「Exited」という状態は、コンテナが実行され、終了した状態を指しています。コンテナの各ステータスと遷移については別途説明いたします。
 
-  | 項目 | 意味 | 
-|:-----------|:------------|
-| CONTAINER ID | コンテナのIDでユニークな値が付けられる | 
-| IMAGE | イメージに付けられているタグ、リポジトリやバージョン情報 | 
-| COMMAND | コンテナで実行されたコマンド | 
-| CREATED | コンテナが生成された時刻 |
-| STATUS | コンテナの状態、起動中の場合は「Up」停止してる場合は「Exited」となる |
-| PORTS | 公開ポート、プロトコル |
-| NAMES | コンテナの名前（ コンテナを生成する際に `--nameオプション`で指定して名前を付けることが可能）|
-
+**コンテナイメージの検索**
+---
 特定の処理をして停止するコンテナを動かしてみましたが、停止してしまっているので今ひとつピンと来ないかもしれませんので、続いて、稼働していることがわかるコンテナを利用してみます。静的コンテンツを表示するWebサーバのコンテナを起動してみます。コンテナイメージ名称がわからないので、httpdという文字列でコンテナレジストリを検索します。`docker search`コマンドは指定された文字列でコンテナレジストリを検索します。
 
 `docker search httpd`{{execute}}
@@ -150,7 +138,11 @@ centos/httpd                                                                    
 （以下、略）
 ```
 
-いろいろ表示されますがDESCRIPTIONを見ると`httpd / The Apache HTTP Server Project`がApache Projectのhttpdイメージのようです。それではhttpdコンテナを起動してみましょう。hello-worldを起動した場合に比べると`docker run`にいくつかのオプションが追加されてますが、それは次のステップで説明しますのでとりあえずは「httpdコンテナを起動したんだな」くらいに思ってください。
+**コンテナの起動**
+---
+ ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-3.png)
+ 
+検索の結果、文字列が含まれるコンテナイメージがいろいろ表示されますが、DESCRIPTIONを見ると`httpd / The Apache HTTP Server Project`がApache Projectのhttpdイメージのようです。それではhttpdコンテナを起動してみましょう。hello-worldを起動した場合に比べると`docker run`にいくつかのオプションが追加されてますが、それは次のステップで説明しますのでとりあえずは「httpdコンテナを起動したんだな」くらいに思ってください。
 
 `docker run -d --name httpd -p 80:80 httpd:latest `{{execute}}
 
@@ -190,19 +182,21 @@ $ curl  http://localhost:80/
  ```
  
  ブラウザで確認する場合は以下をクリックしてください。
+ 
  https://[[HOST_SUBDOMAIN]]-80-[[KATACODA_HOST]].environments.katacoda.com/
  
- ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image101web1.png)
-  
+  ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image101web1.png)
+ 
  このように既存のコンテナイメージを使うことで簡単にコンテナを利用できます。
 
- ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-3.png)
+**コンテナの操作**
+---
  
-###  コンテナの操作
+ コンテナに対して頻繁に行う操作として、起動以外に開始・停止・削除があります。実際に操作を行ってみましょう。
  
- コンテナのよく行う操作として、起動以外に開始・停止・削除があります。実際に操作を行ってみましょう。
+ ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-4.png)
  
-先程のhttpdコンテナイメージから異なるコンテナを作成します。ローカルホスト（自ホスト）の80番ポートは使用中なので、ローカルホスト（自ホスト）の81番ポートとコンテナ内の80番ポートをバインドします。コンテナ名はユニークでないといけないので、httpd2とします。
+先程のhttpdコンテナイメージから新しいコンテナを作成します。ローカルホスト（自ホスト）の80番ポートは使用中なので、ローカルホスト（自ホスト）の81番ポートとコンテナ内の80番ポートをバインドします。コンテナ名はユニークでないといけないので、httpd2とします。
  
  `docker run -d --name httpd2 -p 81:80 httpd:latest `{{execute}}
  
@@ -229,7 +223,6 @@ e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2
 $ curl  http://localhost:81/
 <html><body><h1>It works!</h1></body></html>
  ```
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-4.png)
 
 この稼働中のコンテナを停止するには`docker stop`コマンドでコンテナ名またはコンテナIDを指定します。
  
@@ -276,6 +269,8 @@ $ curl  http://localhost:81/
 <html><body><h1>It works!</h1></body></html>
  ```
 
+  ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-5.png)
+  
 不要になったコンテナを削除するには`docker rm`コマンドでコンテナ名またはコンテナIDを指定します。デフォルトでは停止しているコンテナを削除しますが、強制的に削除する場合は`-f（or --force）オプション`を利用します。
 
 `docker stop httpd2 `{{execute}}
@@ -290,8 +285,7 @@ CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS      
 694ebd43af1d   httpd:latest   "httpd-foreground"   31 seconds ago   Up 29 seconds              0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
 e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2 minutes ago                                       musing_shamir
  ```
-  ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-5.png)
- 
+
 `docker rm httpd2 `{{execute}}
 
 削除実行後、コンテナ一覧を確認するとhttpd2が削除されていることがわかります。
