@@ -12,27 +12,36 @@ step1ではコンテナ内にコピーするhtmlファイルとしてindex.html�
 
 新しいDockerfileであるDockerfile2を作成します。
 
+`FROM centos`
+
 `echo "FROM centos"  > Dockerfile2 `{{execute}}
 
 `FROM`でベースとなるコンテナイメージを指定します。これはStep1と同じcentosを指定します。
 
+`RUN dnf install -y httpd`
+
 `echo "RUN dnf install -y httpd"  >> Dockerfile2 `{{execute}}
+
+`RUN sed -i -e "s/#ServerName www.example.com/ServerName localhost/" /etc/httpd/conf/httpd.conf`
 
 `echo "RUN sed -i -e \"s/#ServerName www.example.com/ServerName localhost/\" /etc/httpd/conf/httpd.conf"  >> Dockerfile2 `{{execute}}
 
 `RUN`によるhttpdのインストールとhttpd.confの設定はstep1と同様です。
 
+`COPY index.html /var/www/html/index.html`
+
 `echo "COPY index2.html /var/www/html/index.html"  >> Dockerfile2 `{{execute}}
 
 `COPY`は、Step1とは異なり、自ホストの現在のディレクトリにあるindex2.htmlをファイルをコンテナイメージ内の/var/www/html/index.htmlにコピーしています。
 
+`CMD ["/usr/sbin/httpd","-DFOREGROUND"]`
 `echo "CMD [\"/usr/sbin/httpd\",\"-DFOREGROUND\"]" >> Dockerfile2 `{{execute}}
 
 `CMD`は先程と同様/usr/sbin/httpdコマンドにパラメータ -DFOREGROUNDを指定してフォアグラウンドで実行します
 
 作成したDockerfile2の内容を確認します。
 
-`cat 2 `{{execute}}
+`cat Dockerfie2 `{{execute}}
 
 以下の内容になっていればOKです。
 
