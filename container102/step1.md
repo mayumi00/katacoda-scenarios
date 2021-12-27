@@ -1,4 +1,10 @@
-### Dockerfileを利用してのコンテナイメージのビルド
+## Dockerfileを利用してのコンテナイメージのビルド
+
+この演習環境は下図のようになっています。図の右側の「コンテナを稼働させるホスト（自ホスト）」が、このコースの左側に表示されているTerminalに対応しています。
+
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-1.png)　
+
+この環境は既にDockerが利用できる状態になっていますので、Dockerを利用してコンテナを起動して、動作を確認してみましょう。`docker version`{{execute}} ←このように表示されている部分をクリックすると右のTerminalでコマンドが実行されます。
 
 このステップではDockerfileを利用してコンテナイメージをビルドすることを学習します。
 
@@ -10,19 +16,29 @@ Dockerfileを利用すると以下のような処理を行うイメージを作�
 - ドキュメントルート配下にコンテンツを配置する
 - httpdを起動する
 
-まずは自ホスト内に、Webのコンテンツとなるindex.htmlを作成しておきます。Container 101の演習では、コンテナ内でindex.htmlを作成しましたが、この演習では自ホストに置かれたindex.htmlをコンテナにコピーして使う方法を取ります。
+---
+**コンテンツの作成**
+
+まずは自ホスト内に、Webのコンテンツとなるindex.htmlを作成しておきます。Container 101の演習では、コンテナ内でindex.htmlを作成しましたが、この演習では自ホストに置かれたHTMLファイルをコンテナにコピーして使う方法を取ります。
 
 `echo "<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>"  > index.html `{{execute}}
 
-続いてDockerfileに必要事項を記載してゆきます。
+---
+**Dockerfileの作成**
+
+Dockerfileに行いたい処理を記述します。
 
 > Note: 今回はEditorを利用せずechoコマンドでファイルを作成します。
+
+***FROM*** 
 
 `FROM centos`
 
 `echo "FROM centos"  > Dockerfile `{{execute}}
 
 `FROM`は、ベースとなるコンテナイメージを指定します。コンテナイメージが自ホストにない場合は自動的にコンテナレジストリからダウンロードします。Dockerfileは基本的にFROMから始める必要があります。
+
+***RUN*** 
 
 `RUN dnf install -y httpd`
 
@@ -34,11 +50,15 @@ Dockerfileを利用すると以下のような処理を行うイメージを作�
 
 `RUN`は`FROM`で指定したコンテナイイメージに対してコマンドを実行します。`RUN`は複数使用可能です。`RUN`にはshell形式とexec形式があり、この例ではshell形式で記述しています。httpdのインストールとhttpd.confの設定を行っています。
 
+***COPY*** 
+
 `COPY index.html /var/www/html/index.html`
 
 `echo "COPY index.html /var/www/html/index.html"  >> Dockerfile `{{execute}}
 
 `COPY`は、sourceからファイルやディレクトリをコピーして、コンテナ内のファイルシステムのパス destinationに追加します。この例では、自ホストの現在のディレクトリにあるindex.htmlをファイルをコンテナイメージ内の/var/www/html/index.htmlにコピーしています。
+
+***CMD*** 
 
 `CMD ["/usr/sbin/httpd","-DFOREGROUND"]`
 
@@ -63,7 +83,10 @@ CMD ["/usr/sbin/httpd","-DFOREGROUND"]
 Dockerfileの記載方法はDockerfile リファレンスを参照してください。
 https://docs.docker.com/engine/reference/builder/
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image201.png)
+---
+**コンテナイメージのビルド**
+
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image1-1.png)
 
 Dockerfileが作成できたので、これを利用してコンテナイメージをビルドします。`-t（or --tag）オプション` で名前およびタグを指定します。以下の例ではDockerfileを指定してないように見えますが、デフォルトで指定したPATHにあるDockerfileを使うので、「PATH .（現在のディレクトリ）にあるDockerfileを使用する」という意味になります。もし、他のファイルを利用する場合は`-f（or --file）オプション` で明示的に指定します。この例ではapacheweb-dockerfile:1.0という名前:タグでイメージをビルドします。
 
@@ -137,6 +160,11 @@ alpine                 latest    14119a10abf4   4 months ago     5.59MB
 weaveworks/scope       1.11.4    a082d48f0b39   2 years ago      78.5MB
 ```
 
+---
+**作成したコンテナイメージからのコンテナの起動**
+
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image1-2.png)
+
 作成されたapacheweb-dockerfile:1.0イメージからtestweb00をバックグラウンドで起動します。httpdにアクセスするため、自ホストの8080番とコンテナの80番をバインドしています。
 
 `docker run -d -p 8080:80 --name testweb00  apacheweb-dockerfile:1.0`{{execute}}
@@ -158,7 +186,8 @@ CONTAINER ID   IMAGE                      COMMAND                  CREATED      
 d92f2cf8234f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   3 seconds ago   Up 2 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testweb00
 ```
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image202.png)
+---
+**httpdの動作確認**
 
 httpdにアクセスすると、自ホストで作成したindex.htmlがコンテナ内に存在し、表示されることが確認できます。
 
@@ -168,12 +197,15 @@ httpdにアクセスすると、自ホストで作成したindex.htmlがコン�
 $ curl http://localhost:8080/
 <head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>
 ```
-ブラウザでの確認。以下のように表示されます。
+ ブラウザで確認する場合は以下をクリックしてください。index.htmlの内容が表示されます。
 
 https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
+
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image102web1.png)
 
 
+---
+**コンテナ内でのプロセスの確認**
 
 実行中のtestweb00でbashを実行し、操作可能にします。
 
@@ -197,6 +229,8 @@ https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
 `exit`{{execute}}
 
 Dockerfileを利用すると、Container 101の演習で手作業で行ったインストールや設定作業を自動的に行えることがわかります。
+
+---
 
 ###  このステップで利用したdockerコマンド
 - docker build [OPTIONS] PATH | URL | -
