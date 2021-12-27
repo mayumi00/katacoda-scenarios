@@ -230,7 +230,7 @@ $ curl  http://localhost:81/
 <html><body><h1>It works!</h1></body></html>
  ```
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-5.png)
+
 
 ***コンテナの停止***
 
@@ -280,6 +280,8 @@ e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2
 $ curl  http://localhost:81/
 <html><body><h1>It works!</h1></body></html>
  ```
+ 
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-5.png)
 
 ***コンテナの削除***
 
