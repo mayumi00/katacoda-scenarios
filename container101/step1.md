@@ -38,8 +38,10 @@ Server: Docker Engine - Community
   GitCommit:        de40ad0
   ```
 
-**hello-world コンテナ**
+
 ---
+**hello-world コンテナ**
+
 「hello-world」というDockerについての簡単な説明を出力するコンテナを起動してみます。
 
 `docker run hello-world`{{execute}}
@@ -86,10 +88,11 @@ For more examples and ideas, visit:
 1. Dockerについての簡単な説明を出力します
 1. 説明の表示が終わるとコンテナは停止します
 
-
-**コンテナイメージ一覧**
 ---
+**コンテナイメージ一覧**
+
 自ホストにhello-worldのイメージをダンロードされたので、コンテナ一覧を表示する `docker images`コマンドを使ってイメージが格納されているか確認してみましょう。 下から3行目にhello-worldというイメージがあることがわかります。
+
 > Note: この環境では既にいくつかのコンテナイメージが準備されているのでhello-world以外も表示されます。
 
  `docker images`{{execute}}
@@ -111,8 +114,9 @@ alpine             latest    14119a10abf4   4 months ago   5.59MB
 weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ```
 
-**コンテナ一覧**
 ---
+**コンテナ一覧**
+
 イメージから生成されたコンテナの一覧を見てみましょう。`docker ps`がコンテナ一覧を表示するコマンドです。デフォルトでは実行中のコンテナのみが表示されます。`-a（or --all）オプション`を付けると、起動していないコンテナも含めてすべてを表示します。hello-worldコンテナは説明を出力すると終了してしまうので`-a（or --all）オプション`を付けないと表示されません。 
 
 `docker ps -a `{{execute}}
@@ -124,8 +128,9 @@ e14e3cbf21be   hello-world   "/hello"   52 seconds ago   Exited (0) 51 seconds a
  ```
   `docker ps`コマンドで表示される項目のSTATUS「Exited」という状態は、コンテナが実行され、終了した状態を指しています。コンテナの各ステータスと遷移については別途説明いたします。
 
-**コンテナイメージの検索**
 ---
+**コンテナイメージの検索**
+
 特定の処理をして停止するコンテナを動かしてみましたが、停止してしまっているので今ひとつピンと来ないかもしれませんので、続いて、稼働していることがわかるコンテナを利用してみます。静的コンテンツを表示するWebサーバのコンテナを起動してみます。コンテナイメージ名称がわからないので、httpdという文字列でコンテナレジストリを検索します。`docker search`コマンドは指定された文字列でコンテナレジストリを検索します。
 
 `docker search httpd`{{execute}}
@@ -138,8 +143,9 @@ centos/httpd                                                                    
 （以下、略）
 ```
 
-**コンテナの起動**
 ---
+**コンテナの起動**
+
  ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-3.png)
  
 検索の結果、文字列が含まれるコンテナイメージがいろいろ表示されますが、DESCRIPTIONを見ると`httpd / The Apache HTTP Server Project`がApache Projectのhttpdイメージのようです。それではhttpdコンテナを起動してみましょう。hello-worldを起動した場合に比べると`docker run`にいくつかのオプションが追加されてますが、それは次のステップで説明しますのでとりあえずは「httpdコンテナを起動したんだな」くらいに思ってください。
@@ -189,8 +195,8 @@ $ curl  http://localhost:80/
  
  このように既存のコンテナイメージを使うことで簡単にコンテナを利用できます。
 
-**コンテナの操作**
 ---
+**コンテナの操作**
  
  コンテナに対して頻繁に行う操作として、起動以外に開始・停止・削除があります。実際に操作を行ってみましょう。
  
@@ -303,6 +309,7 @@ e14e3cbf21be   hello-world    "/hello"             2 minutes ago    Exited (0) 2
  
  コンテナが簡単に起動できることを確認したところで、次のステップに進みます。
 
+---
 ###  このステップで利用したdockerコマンド
 
 - docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
