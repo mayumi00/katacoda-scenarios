@@ -322,6 +322,8 @@ ContainerExercise
 
 次に、コンテナ内の既存ディレクトリをいくつか削除します。
 
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-3.png)
+
 `rm -rf  media mnt opt var`{{execute}}
 
 ```text
@@ -334,6 +336,8 @@ ContainerExercise
 `docker start mycentos01`{{execute}}
 
 `docker rm mycentos01`{{execute}}
+
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-3.png)
 
 `docker run -it --name mycentos01 centos /bin/bash`{{execute}}
 
