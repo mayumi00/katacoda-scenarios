@@ -331,7 +331,7 @@ ContainerExercise
 ContainerExercise
 ```
 
-このコンテナを停止→削除して、同じコンテナイメージから新たに同じ名前でコンテナを起動します。
+この変更済コンテナを停止→削除して、同じコンテナイメージから新たに同じ名前でコンテナを起動します。
 
 `docker start mycentos01`{{execute}}
 
