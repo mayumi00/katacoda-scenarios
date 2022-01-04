@@ -325,7 +325,7 @@ HELLO CONTAINER WORLD
 先程作ったファイルはそのまま存在してます。コンテナの停止によって影響は受けないことはわかりました。
 
 
-**コンテナ内でのファイル作成と停止・起動による影響**
+**コンテナの不変性**
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-3.png)
 
@@ -339,7 +339,7 @@ bin   etc/   lib    lost+found/  mnt/     opt/   root/  sbin  sys/  usr/
 dev/  home/  lib64  media/       newdir/  proc/  run/   srv/  tmp/  var/
 ```
 
-次に、コンテナ内の既存ディレクトリをいくつか削除します。
+コンテナ内のディレクトリをいくつか削除します。
 
 `rm -rf  media mnt opt var home`{{execute}}
 
