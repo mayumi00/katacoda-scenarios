@@ -38,7 +38,6 @@ Server: Docker Engine - Community
   GitCommit:        de40ad0
   ```
 
-
 ---
 **hello-world コンテナ**
 
@@ -124,7 +123,7 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ```text
 $ docker ps -a
 CONTAINER ID   IMAGE         COMMAND    CREATED          STATUS                      PORTS     NAMES
-17f148821d9a   hello-world   "/hello"   12 seconds ago   Exited (0) 11 seconds ago             laughing_payne
+b157d4669472   hello-world   "/hello"   22 seconds ago   Exited (0) 20 seconds ago             trusting_shamir
  ```
   `docker ps`コマンドで表示される項目のSTATUS「Exited」という状態は、コンテナが実行され、終了した状態を指しています。コンテナの各ステータスと遷移については別途説明いたします。
 
@@ -134,12 +133,13 @@ CONTAINER ID   IMAGE         COMMAND    CREATED          STATUS                 
 特定の処理をして停止するコンテナを動かしてみましたが、停止してしまっているので今ひとつピンと来ないかもしれないので、続いて、稼働していることがわかるコンテナを利用してみます。静的コンテンツを表示するWebサーバのコンテナを起動してみます。コンテナイメージ名称がわからないので、httpdという文字列を指定してコンテナレジストリを検索します。`docker search`コマンドは指定された文字列でコンテナレジストリを検索します。
 
 `docker search httpd`{{execute}}
+
 ```text
 $ docker search httpd
 NAME                                    DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
 httpd                                   The Apache HTTP Server Project                  3819      [OK]       
 centos/httpd-24-centos7                 Platform for running Apache httpd 2.4 or bui…   41                   
-centos/httpd                                                                            34                   [OK]                                                                         34                   [OK]     
+centos/httpd                                                                            34                   [OK]
 （以下、略）
 ```
 
@@ -163,7 +163,7 @@ dcc4698797c8: Pull complete
 d982c879c57e: Pull complete 
 Digest: sha256:0954cc1af252d824860b2c5dc0a10720af2b7a3d3435581ca788dff8480c7b32
 Status: Downloaded newer image for httpd:latest
-631c2e48e89fad6b084b31abee8dc43ace45b97feaf3a75f01c84d2b094e3f88
+da36e29f033d3a85182ea91c805b69c8b3dbe1594bab74b59e26dc637e05da69
  ```
  
 hello-world同様に、自ホストにはhttpdイメージがなかったので、コンテナレジストリからダウンロードしていることがわかります。「-p 80:80」の意味は、ローカルホスト（自ホスト）の80番ポートとコンテナ内の80番ポートをバインドすることです。
@@ -175,8 +175,8 @@ hello-world同様に、自ホストにはhttpdイメージがなかったので�
 ```text
 $ docker ps -a
 CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS                      PORTS                               NAMES
-631c2e48e89f   httpd:latest   "httpd-foreground"   7 seconds ago    Up 5 seconds                0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
-17f148821d9a   hello-world    "/hello"             49 seconds ago   Exited (0) 48 seconds ago                                       laughing_payne
+da36e29f033d   httpd:latest   "httpd-foreground"   12 seconds ago   Up 10 seconds               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+b157d4669472   hello-world    "/hello"             54 seconds ago   Exited (0) 53 seconds ago                                       trusting_shamir
  ```
  curl でローカルホストの80番にアクセスすると「It works!」と表示さます。
  
@@ -208,7 +208,7 @@ $ curl  http://localhost:80/
  
  ```text
 $ docker run -d --name httpd2 -p 81:80 httpd:latest
-9f70a536656d8b621e0b4b418122c3b3b2de31233273071e5b5c80598cb94d62
+66515ebd0e4c40d014f2650a8ba14e1a1d74b9ec687a7abffc572e775d5d709c
  ```
 
 ` docker ps -a `{{execute}}
@@ -218,9 +218,9 @@ $ docker run -d --name httpd2 -p 81:80 httpd:latest
 ```text
 $ docker ps -a
 CONTAINER ID   IMAGE          COMMAND              CREATED              STATUS                          PORTS                               NAMES
-9f70a536656d   httpd:latest   "httpd-foreground"   5 seconds ago        Up 3 seconds                    0.0.0.0:81->80/tcp, :::81->80/tcp   httpd2
-631c2e48e89f   httpd:latest   "httpd-foreground"   42 seconds ago       Up 40 seconds                   0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
-17f148821d9a   hello-world    "/hello"             About a minute ago   Exited (0) About a minute ago                                       laughing_payne
+66515ebd0e4c   httpd:latest   "httpd-foreground"   4 seconds ago        Up 3 seconds                    0.0.0.0:81->80/tcp, :::81->80/tcp   httpd2
+da36e29f033d   httpd:latest   "httpd-foreground"   40 seconds ago       Up 38 seconds                   0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+b157d4669472   hello-world    "/hello"             About a minute ago   Exited (0) About a minute ago                                       trusting_shamir
  ```
  curl でローカルホストの81番にアクセスするとhttpdコンテナと同様、「It works!」と表示さます。
  
@@ -251,9 +251,9 @@ httpd2
 ```text
 $ docker ps -a
 CONTAINER ID   IMAGE          COMMAND              CREATED              STATUS                          PORTS                               NAMES
-9f70a536656d   httpd:latest   "httpd-foreground"   25 seconds ago       Exited (0) 3 seconds ago                                            httpd2
-631c2e48e89f   httpd:latest   "httpd-foreground"   About a minute ago   Up About a minute               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
-17f148821d9a   hello-world    "/hello"             About a minute ago   Exited (0) About a minute ago                                       laughing_payne
+66515ebd0e4c   httpd:latest   "httpd-foreground"   21 seconds ago       Exited (0) 3 seconds ago                                            httpd2
+da36e29f033d   httpd:latest   "httpd-foreground"   57 seconds ago       Up 54 seconds                   0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+b157d4669472   hello-world    "/hello"             About a minute ago   Exited (0) About a minute ago                                       trusting_shamir
  ```
  `curl  http://localhost:81/`{{execute}}
  
@@ -283,10 +283,10 @@ httpd2
 
 ```text
 $ docker ps -a
-CONTAINER ID   IMAGE          COMMAND              CREATED              STATUS                          PORTS                               NAMES
-9f70a536656d   httpd:latest   "httpd-foreground"   38 seconds ago       Up 2 seconds                    0.0.0.0:81->80/tcp, :::81->80/tcp   httpd2
-631c2e48e89f   httpd:latest   "httpd-foreground"   About a minute ago   Up About a minute               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
-17f148821d9a   hello-world    "/hello"             About a minute ago   Exited (0) About a minute ago                                       laughing_payne
+CONTAINER ID   IMAGE          COMMAND              CREATED              STATUS                     PORTS                               NAMES
+66515ebd0e4c   httpd:latest   "httpd-foreground"   45 seconds ago       Up 4 seconds               0.0.0.0:81->80/tcp, :::81->80/tcp   httpd2
+da36e29f033d   httpd:latest   "httpd-foreground"   About a minute ago   Up About a minute          0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+b157d4669472   hello-world    "/hello"             2 minutes ago        Exited (0) 2 minutes ago                                       trusting_shamir
  ```
  
  `curl  http://localhost:81/ `{{execute}}
@@ -318,9 +318,9 @@ httpd2
 ```text
 $ docker ps -a
 CONTAINER ID   IMAGE          COMMAND              CREATED              STATUS                     PORTS                               NAMES
-9f70a536656d   httpd:latest   "httpd-foreground"   About a minute ago   Exited (0) 2 seconds ago                                       httpd2
-631c2e48e89f   httpd:latest   "httpd-foreground"   About a minute ago   Up About a minute          0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
-17f148821d9a   hello-world    "/hello"             2 minutes ago        Exited (0) 2 minutes ago                                       laughing_payne
+66515ebd0e4c   httpd:latest   "httpd-foreground"   About a minute ago   Exited (0) 3 seconds ago                                       httpd2
+da36e29f033d   httpd:latest   "httpd-foreground"   About a minute ago   Up About a minute          0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+b157d4669472   hello-world    "/hello"             2 minutes ago        Exited (0) 2 minutes ago                                       trusting_shamir
  ```
 
 httpd2を削除します。
@@ -340,9 +340,9 @@ httpd2
 
 ```text
 $ docker ps -a
-CONTAINER ID   IMAGE          COMMAND              CREATED              STATUS                     PORTS                               NAMES
-631c2e48e89f   httpd:latest   "httpd-foreground"   About a minute ago   Up About a minute          0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
-17f148821d9a   hello-world    "/hello"             2 minutes ago        Exited (0) 2 minutes ago                                       laughing_payne
+CONTAINER ID   IMAGE          COMMAND              CREATED         STATUS                     PORTS                               NAMES
+da36e29f033d   httpd:latest   "httpd-foreground"   2 minutes ago   Up 2 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+b157d4669472   hello-world    "/hello"             2 minutes ago   Exited (0) 2 minutes ago                                       trusting_shamir
  ```
   ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-6.png)
 

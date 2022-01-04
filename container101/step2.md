@@ -91,7 +91,8 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 `docker run -it --name mycentos01 centos /bin/bash`{{execute}}
 
 ```text
-[root@d2cc880cb92e /]#
+$ docker run -it --name mycentos01 centos /bin/bash
+[root@3fcd0427f74b /]# 
 ```
 
 [root@文字列]#のプロンプトが表示され、bashの利用が可能になっていることがわかります。プロンプトのroot@の後ろの文字列はコンテナのホスト名です。コンテナを起動する際に`-h（or --hostname）オプション`を付けるとコンテナのホスト名を指定することができますが、今回は指定していないので、ホスト名としてコンテナIDが利用されています。
@@ -112,7 +113,7 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 
 このコンテナは CentOS Linux 8 であることがわかります。
 ```text
-[root@d2cc880cb92e /]# cat /etc/os-release
+[root@3fcd0427f74b /]# cat /etc/os-release
 NAME="CentOS Linux"
 VERSION="8"
 ID="centos"
@@ -133,8 +134,8 @@ CENTOS_MANTISBT_PROJECT_VERSION="8"
 Linuxのカーネルの情報です。
 
 ```text
-[root@d2cc880cb92e /]# uname -a
-Linux d2cc880cb92e 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+[root@3fcd0427f74b /]# uname -a
+Linux 3fcd0427f74b 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 ```
 
 `cat /etc/hostname`{{execute}}
@@ -142,18 +143,18 @@ Linux d2cc880cb92e 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 
 ホスト名です。ホスト名を指定していないので、コンテナIDになっています。
 
 ```text
-[root@d2cc880cb92e /]# cat /etc/hostname
-d2cc880cb92e
+[root@3fcd0427f74b /]# cat /etc/hostname
+3fcd0427f74b
 ```
 コンテナ内でのプロセスの状態を確認します。
 
 `ps f -e`{{execute}}
 
 ```text
-[root@d2cc880cb92e /]# ps f -e
+[root@3fcd0427f74b /]# ps f -e
     PID TTY      STAT   TIME COMMAND
       1 pts/0    Ss     0:00 /bin/bash
-     19 pts/0    R+     0:00 ps f -e
+     18 pts/0    R+     0:00 ps f -e
 ```
 
 linuxのコマンドが使えることや、ファイルの内容を確認したところで、exitコマンドでコンテナから抜けます。
@@ -161,8 +162,9 @@ linuxのコマンドが使えることや、ファイルの内容を確認した
 `exit`{{execute}}
 
 ```text
-[root@d2cc880cb92e /]# exit
+[root@3fcd0427f74b /]# exit
 exit
+$ 
 ```
 
 ---
@@ -175,9 +177,9 @@ exit
 ```text
 $ docker ps -a
 CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS                     PORTS                               NAMES
-d2cc880cb92e   centos         "/bin/bash"          38 seconds ago   Exited (0) 3 seconds ago                                       mycentos01
-631c2e48e89f   httpd:latest   "httpd-foreground"   4 minutes ago    Up 4 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
-17f148821d9a   hello-world    "/hello"             4 minutes ago    Exited (0) 4 minutes ago                                       laughing_payne
+3fcd0427f74b   centos         "/bin/bash"          40 seconds ago   Exited (0) 9 seconds ago                                       mycentos01
+da36e29f033d   httpd:latest   "httpd-foreground"   4 minutes ago    Up 4 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+b157d4669472   hello-world    "/hello"             4 minutes ago    Exited (0) 4 minutes ago                                       trusting_shamir
 ```
 
 mycentos01は「Exited」と停止状態です。`docker run`で起動したコンテナのターミナルをexitで抜けると、コンテナが停止します。
@@ -192,10 +194,10 @@ mycentos01は「Exited」と停止状態です。`docker run`で起動したコ�
 
 ```text
 $ docker ps -a
-CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS                     PORTS                               NAMES
-d2cc880cb92e   centos         "/bin/bash"          50 seconds ago   Up Less than a second                                          mycentos01
-631c2e48e89f   httpd:latest   "httpd-foreground"   4 minutes ago    Up 4 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
-17f148821d9a   hello-world    "/hello"             5 minutes ago    Exited (0) 5 minutes ago                                       laughing_payne
+CONTAINER ID   IMAGE          COMMAND              CREATED              STATUS                     PORTS                               NAMES
+3fcd0427f74b   centos         "/bin/bash"          About a minute ago   Up 5 seconds                                                   mycentos01
+da36e29f033d   httpd:latest   "httpd-foreground"   4 minutes ago        Up 4 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+b157d4669472   hello-world    "/hello"             5 minutes ago        Exited (0) 5 minutes ago                                       trusting_shamir
 ```
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-2.png)
@@ -206,7 +208,7 @@ d2cc880cb92e   centos         "/bin/bash"          50 seconds ago   Up Less than
 
 ```text
 $ docker exec -it mycentos01 /bin/bash
-[root@d2cc880cb92e /]#
+[root@3fcd0427f74b /]#
 ```
 
 ---
@@ -224,7 +226,7 @@ $ docker exec -it mycentos01 /bin/bash
 現在コンテナ内に存在するファイル/ディレクトリ一覧を表示します
 
 ```text
-[root@d2cc880cb92e /]# ls -p
+[root@3fcd0427f74b /]# ls -p
 bin   etc/   lib    lost+found/  mnt/  proc/  run/  srv/  tmp/  var/
 dev/  home/  lib64  media/       opt/  root/  sbin  sys/  usr/
 ```
@@ -242,17 +244,16 @@ echoコマンドを使って、newdirディレクトリの下にmessagefileと�
 newdirディレクトリが作成されているか確認します。
 
 ```text
-[root@d2cc880cb92e /]# ls -p
+[root@3fcd0427f74b /]# ls -p
 bin   etc/   lib    lost+found/  mnt/     opt/   root/  sbin  sys/  usr/
 dev/  home/  lib64  media/       newdir/  proc/  run/   srv/  tmp/  var/
-
 ```
 newdir/messagefileの内容を確認します。
  
 `cat newdir/messagefile`{{execute}}
 
 ```text
-[root@d2cc880cb92e /]# cat newdir/messagefile
+[root@3fcd0427f74b /]# cat newdir/messagefile
 HELLO CONTAINER WORLD
 ```
 
@@ -265,9 +266,9 @@ HELLO CONTAINER WORLD
 ```text
 $ docker ps -a
 CONTAINER ID   IMAGE          COMMAND              CREATED         STATUS                     PORTS                               NAMES
-d2cc880cb92e   centos         "/bin/bash"          2 minutes ago   Up About a minute                                              mycentos01
-631c2e48e89f   httpd:latest   "httpd-foreground"   5 minutes ago   Up 5 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
-17f148821d9a   hello-world    "/hello"             6 minutes ago   Exited (0) 6 minutes ago                                       laughing_payne
+3fcd0427f74b   centos         "/bin/bash"          2 minutes ago   Up About a minute                                              mycentos01
+da36e29f033d   httpd:latest   "httpd-foreground"   5 minutes ago   Up 5 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+b157d4669472   hello-world    "/hello"             6 minutes ago   Exited (0) 6 minutes ago                                       trusting_shamir
 ```
 
 コンテナ一覧を確認すると、先程の`docker run`の場合と異なりコンテナは停止せず、起動したままです。続いてdockerコマンドで明示的にmycentos01コンテナを停止します。
@@ -281,9 +282,9 @@ mycentos01が停止したことが確認できます。
 ```text
 $ docker ps -a
 CONTAINER ID   IMAGE          COMMAND              CREATED         STATUS                     PORTS                               NAMES
-d2cc880cb92e   centos         "/bin/bash"          2 minutes ago   Exited (0) 3 seconds ago                                       mycentos01
-631c2e48e89f   httpd:latest   "httpd-foreground"   6 minutes ago   Up 6 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
-17f148821d9a   hello-world    "/hello"             6 minutes ago   Exited (0) 6 minutes ago                                       laughing_payne
+3fcd0427f74b   centos         "/bin/bash"          2 minutes ago   Exited (0) 2 seconds ago                                       mycentos01
+da36e29f033d   httpd:latest   "httpd-foreground"   5 minutes ago   Up 5 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+b157d4669472   hello-world    "/hello"             6 minutes ago   Exited (0) 6 minutes ago                                       trusting_shamir
 ```
 
 mycentos01コンテナをまた起動して、状態を確認します。
@@ -295,9 +296,9 @@ mycentos01コンテナをまた起動して、状態を確認します。
 ```text
 $ docker ps -a
 CONTAINER ID   IMAGE          COMMAND              CREATED         STATUS                     PORTS                               NAMES
-d2cc880cb92e   centos         "/bin/bash"          2 minutes ago   Up 2 seconds                                                   mycentos01
-631c2e48e89f   httpd:latest   "httpd-foreground"   6 minutes ago   Up 6 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
-17f148821d9a   hello-world    "/hello"             6 minutes ago   Exited (0) 6 minutes ago                                       laughing_payne
+3fcd0427f74b   centos         "/bin/bash"          2 minutes ago   Up 2 seconds                                                   mycentos01
+da36e29f033d   httpd:latest   "httpd-foreground"   6 minutes ago   Up 6 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp   httpd
+b157d4669472   hello-world    "/hello"             6 minutes ago   Exited (0) 6 minutes ago                                       trusting_shamir
 ```
 
 mycentos01が起動したので`docker exec`コマンドを利用してbashの利用を可能にします。
@@ -306,20 +307,21 @@ mycentos01が起動したので`docker exec`コマンドを利用してbashの�
 
 ```text
 $ docker exec -it mycentos01 /bin/bash
-[root@d2cc880cb92e /]#
+[root@3fcd0427f74b /]#
 ```
 ここで、先程作成したファイル`newdir/messagefile`が、コンテナ停止の影響を受けてるか確認します。
 
 `ls -p newdir`{{execute}}
 
 ```text
-[root@d2cc880cb92e /]# ls -p newdir
+[root@3fcd0427f74b /]# ls -p newdir
 messagefile
 ```
+
 `cat newdir/messagefile`{{execute}}
 
 ```text
-[root@d2cc880cb92e /]# cat newdir/messagefile
+[root@3fcd0427f74b /]# cat newdir/messagefile
 HELLO CONTAINER WORLD
 ```
 先程作ったファイルはそのまま存在してます。コンテナの停止によって影響は受けないことはわかりました。
@@ -332,7 +334,7 @@ HELLO CONTAINER WORLD
 `ls -p`{{execute}}
 
 ```text
-[root@d2cc880cb92e /]# ls -p
+[root@3fcd0427f74b /]# ls -p
 bin   etc/   lib    lost+found/  mnt/     opt/   root/  sbin  sys/  usr/
 dev/  home/  lib64  media/       newdir/  proc/  run/   srv/  tmp/  var/
 ```
@@ -341,16 +343,25 @@ dev/  home/  lib64  media/       newdir/  proc/  run/   srv/  tmp/  var/
 `rm -rf  media mnt opt var home`{{execute}}
 
 ```text
-[root@d2cc880cb92e /]# rm -rf  media mnt opt var home
+[root@3fcd0427f74b /]# rm -rf  media mnt opt var home
 ```
 削除されていることを確認します。
 
 `ls -p`{{execute}}
 
 ```text
-[root@d2cc880cb92e /]# ls -p
-bin   etc/   lib    lost+found/  mnt/     opt/   root/  sbin  sys/  usr/
-dev/  home/  lib64  media/       newdir/  proc/  run/   srv/  tmp/  var/
+[root@3fcd0427f74b /]# ls -p
+bin  dev/  etc/  lib  lib64  lost+found/  newdir/  proc/  root/  run/  sbin  srv/  sys/  tmp/  usr/
+```
+
+コンテナから抜けます。
+
+`exit`{{execute}}
+
+```text
+[root@3fcd0427f74b /]# exit
+exit
+$ 
 ```
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-3.png)
@@ -358,7 +369,7 @@ dev/  home/  lib64  media/       newdir/  proc/  run/   srv/  tmp/  var/
 
 この変更済コンテナを停止→削除して、同じコンテナイメージから新たに同じ名前でコンテナを起動します。
 
-`docker start mycentos01`{{execute}}
+`docker stop mycentos01`{{execute}}
 
 `docker rm mycentos01`{{execute}}
 
@@ -371,12 +382,16 @@ dev/  home/  lib64  media/       newdir/  proc/  run/   srv/  tmp/  var/
 先程のファイル作成やディレクトリ削除を行う前の状態になっているのがわかります。
 
 ```text
-[root@e807036c20e4 /]# ls -p
+[root@7b51274d250c /]# ls -p
 bin   etc/   lib    lost+found/  mnt/  proc/  run/  srv/  tmp/  var/
 dev/  home/  lib64  media/       opt/  root/  sbin  sys/  usr/
 ```
 
 コンテナに変更を加えたとしても、同じコンテナイメージから再度作成すれば変更を加えないコンテナを作成することができます。これがコンテナの不変性 (Immutable)という特徴です。
+
+確認ができたので、次のステップのためにmycentos01コンテナを起動しておきます。
+
+`docker start mycentos01`{{execute}}
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-4.png)
 

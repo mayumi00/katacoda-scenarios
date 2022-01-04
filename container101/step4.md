@@ -10,12 +10,11 @@ mycentos02コンテナは起動した状態です。
 
 ```text
 $ docker ps -a
-CONTAINER ID   IMAGE          COMMAND              CREATED          STATUS                      PORTS                                   NAMES
-1af9407b90df   centos         "/bin/bash"          2 minutes ago    Up About a minute           0.0.0.0:8080->80/tcp, :::8080->80/tcp   mycentos02
-7b1d77ed91f8   centos         "/bin/bash"          5 minutes ago    Up 3 minutes                                                        mycentos01
-694ebd43af1d   httpd:latest   "httpd-foreground"   9 minutes ago    Up 9 minutes                0.0.0.0:80->80/tcp, :::80->80/tcp       httpd
-e14e3cbf21be   hello-world    "/hello"             10 minutes ago   Exited (0) 10 minutes ago                                           musing_shamir
-
+CONTAINER ID   IMAGE          COMMAND              CREATED              STATUS                      PORTS                                   NAMES
+fb322537fce3   centos         "/bin/bash"          About a minute ago   Up 29 seconds               0.0.0.0:8080->80/tcp, :::8080->80/tcp   mycentos02
+7b51274d250c   centos         "/bin/bash"          3 minutes ago        Up About a minute                                                   mycentos01
+da36e29f033d   httpd:latest   "httpd-foreground"   12 minutes ago       Up 12 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp       httpd
+b157d4669472   hello-world    "/hello"             13 minutes ago       Exited (0) 13 minutes ago                                           trusting_shamir
 ```
 
 ---
@@ -29,7 +28,7 @@ e14e3cbf21be   hello-world    "/hello"             10 minutes ago   Exited (0) 1
 
 ```text
 $ docker commit mycentos02 apacheweb:1.0
-sha256:3518d1945326dad229c9987dd8022bed7197064538e8a6db96493bffca8397fe
+sha256:a4bc75a2a7947220ebc6de5091fdba02edd4b14d7fa32b5c0c5a304341673bd6
 ```
 
 イメージができたか確認しましょう。
@@ -41,8 +40,8 @@ sha256:3518d1945326dad229c9987dd8022bed7197064538e8a6db96493bffca8397fe
 ```text
 $ docker images
 REPOSITORY         TAG       IMAGE ID       CREATED         SIZE
-apacheweb          1.0       3518d1945326   6 seconds ago   278MB
-httpd              latest    dabbfbe0c57b   6 days ago      144MB
+apacheweb          1.0       a4bc75a2a794   2 seconds ago   280MB
+httpd              latest    dabbfbe0c57b   2 weeks ago     144MB
 （略）
 hello-world        latest    feb5d9fea6a5   3 months ago    13.3kB
 centos             latest    5d0da3dc9764   3 months ago    231MB
@@ -63,7 +62,7 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago     78.5MB
 
 ```text
 $ docker run -d -p 8081:80 -it --name testweb2 apacheweb:1.0 /bin/bash
-e11268340a162720529606f64c7a2102b06d4132bfaa8853db7014e48a137e47
+331b468aebaf72998783af7ce0d2c7cb46c04ed9cdf14305fdc58fa4b88e2252
 ```
 
 execコマンドを利用してbashの利用を可能にします。
@@ -77,10 +76,10 @@ execコマンドを利用してbashの利用を可能にします。
 そもそも、作成したコンテナイメージは、httpdインストール済ですがhttpdを自動起動する設定が無いのコンテナを元にしているので、httpdは自動起動しません。
 
 ```text
-[root@e11268340a16 /]# ps f -e
+[root@331b468aebaf /]# ps f -e
     PID TTY      STAT   TIME COMMAND
-     15 pts/1    Ss     0:00 /bin/bash
-     30 pts/1    R+     0:00  \_ ps f -e
+     16 pts/1    Ss     0:00 /bin/bash
+     31 pts/1    R+     0:00  \_ ps f -e
       1 pts/0    Ss+    0:00 /bin/bash
 ```
 
@@ -93,16 +92,16 @@ execコマンドを利用してbashの利用を可能にします。
 `ps f -e`{{execute}}
 
 ```text
-[root@e11268340a16 /]# ps f -e
+[root@331b468aebaf /]# ps f -e
     PID TTY      STAT   TIME COMMAND
-     15 pts/1    Ss     0:00 /bin/bash
-    248 pts/1    R+     0:00  \_ ps f -e
+     16 pts/1    Ss     0:00 /bin/bash
+    249 pts/1    R+     0:00  \_ ps f -e
       1 pts/0    Ss+    0:00 /bin/bash
-     32 ?        Ss     0:00 /usr/sbin/httpd
-     33 ?        S      0:00  \_ /usr/sbin/httpd
-     34 ?        Sl     0:00  \_ /usr/sbin/httpd
+     33 ?        Ss     0:00 /usr/sbin/httpd
+     34 ?        S      0:00  \_ /usr/sbin/httpd
      35 ?        Sl     0:00  \_ /usr/sbin/httpd
      36 ?        Sl     0:00  \_ /usr/sbin/httpd
+     38 ?        Sl     0:00  \_ /usr/sbin/httpd
 ```
 
 httpdが起動したので、コンテナから抜けます。
@@ -121,11 +120,11 @@ httpdが起動したので、コンテナから抜けます。
 ```text
 $ docker ps -a
 CONTAINER ID   IMAGE           COMMAND              CREATED          STATUS                      PORTS                                   NAMES
-e11268340a16   apacheweb:1.0   "/bin/bash"          45 seconds ago   Up 43 seconds               0.0.0.0:8081->80/tcp, :::8081->80/tcp   testweb2
-1af9407b90df   centos          "/bin/bash"          3 minutes ago    Up 2 minutes                0.0.0.0:8080->80/tcp, :::8080->80/tcp   mycentos02
-7b1d77ed91f8   centos          "/bin/bash"          7 minutes ago    Up 5 minutes                                                        mycentos01
-694ebd43af1d   httpd:latest    "httpd-foreground"   10 minutes ago   Up 10 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp       httpd
-e14e3cbf21be   hello-world     "/hello"             12 minutes ago   Exited (0) 12 minutes ago                                           musing_shamir
+331b468aebaf   apacheweb:1.0   "/bin/bash"          24 seconds ago   Up 23 seconds               0.0.0.0:8081->80/tcp, :::8081->80/tcp   testweb2
+fb322537fce3   centos          "/bin/bash"          2 minutes ago    Up About a minute           0.0.0.0:8080->80/tcp, :::8080->80/tcp   mycentos02
+7b51274d250c   centos          "/bin/bash"          4 minutes ago    Up 2 minutes                                                        mycentos01
+da36e29f033d   httpd:latest    "httpd-foreground"   13 minutes ago   Up 13 minutes               0.0.0.0:80->80/tcp, :::80->80/tcp       httpd
+b157d4669472   hello-world     "/hello"             14 minutes ago   Exited (0) 14 minutes ago                                           trusting_shamir
 ```
 
 8081番で待ち受けしていることがわかります。curlでの確認とブラウザでの確認を行います。
@@ -133,7 +132,7 @@ e14e3cbf21be   hello-world     "/hello"             12 minutes ago   Exited (0) 
 `curl http://localhost:8081/`{{execute}}
 
 ```text
-[root@ik1-314-17333 ~]# curl http://localhost:8081/
+$ curl http://localhost:8081/
 <head><title>Apache on Docker Container</title></head><body><H1>Container 101 - Web</H1>Apache on Docker Container</body>
 ```
 
