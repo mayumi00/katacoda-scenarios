@@ -337,7 +337,7 @@ ContainerExercise
 
 `docker rm mycentos01`{{execute}}
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-3.png)
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-4.png)
 
 `docker run -it --name mycentos01 centos /bin/bash`{{execute}}
 
