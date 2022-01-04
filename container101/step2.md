@@ -205,7 +205,7 @@ e14e3cbf21be   hello-world    "/hello"             6 minutes ago        Exited (
 `docker exec -it mycentos01 /bin/bash`{{execute}}
 ```text
 $ docker exec -it mycentos01 /bin/bash
-[root@7b1d77ed91f8 /]# ls
+[root@7b1d77ed91f8 /]# 
 ```
 
 ---
@@ -218,7 +218,7 @@ $ docker exec -it mycentos01 /bin/bash
 - テキストファイルを作成
 - ファイルが作られたことを確認
 
-`ls`{{execute}}
+`ls -p`{{execute}}
 
 現在コンテナ内に存在するファイル/ディレクトリ一覧を表示します
 
@@ -226,11 +226,16 @@ $ docker exec -it mycentos01 /bin/bash
 [root@7b1d77ed91f8 /]# ls
 bin  dev  etc  home  lib  lib64  lost+found  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  va
 ```
+
+新しいディレクトリを作成します
+
+`mkdir newdir`{{execute}}
+
 echoコマンドを使って、ファイルを作成します。
 
-`echo ContainerExercise > testfile.txt`{{execute}}
+`echo "HELLO CONTAINER WORLD" > newdir/messagefile`{{execute}}
 
-`ls`{{execute}}
+`ls -p`{{execute}}
 
 ファイルが作成されているか確認します。
 
@@ -242,10 +247,10 @@ dev  home  lib64  media       opt  root  sbin  sys  tmp           var
 ```
 testfile.txtが作成されていることが確認できたので、testfile.txtの内容を確認します。
  
-`cat testfile.txt`{{execute}}
+`cat newdir/messagefile`{{execute}}
 
 ```text
-[root@7b1d77ed91f8 /]# cat testfile.txt
+[root@7b1d77ed91f8 /]# cat newdir/messagefile
 ContainerExercise
 ```
 
@@ -297,25 +302,56 @@ mycentos01が起動したので`docker exec`コマンドを利用してbashの�
 ```text
 [root@7b1d77ed91f8 /]#
 ```
-ここで、先程作成したファイル`testfile.txt`が、コンテナ停止の影響を受けてるか確認します。
+ここで、先程作成したファイル`newdir/messagefile`が、コンテナ停止の影響を受けてるか確認します。
 
-`ls`{{execute}}
+`ls -p newdir`{{execute}}
 ```text
 [root@7b1d77ed91f8 /]# ls
 bin  etc   lib    lost+found  mnt  proc  run   srv  testfile.txt  usr
 dev  home  lib64  media       opt  root  sbin  sys  tmp           var
 ```
-`cat testfile.txt`{{execute}}
+`cat newdir/messagefile`{{execute}}
 ```text
-[root@7b1d77ed91f8 /]# cat testfile.txt
+[root@7b1d77ed91f8 /]# catnewdir/messagefile
 ContainerExercise
 ```
 先程作ったファイルはそのまま存在してます。コンテナの停止によって影響は受けないことはわかりました。
+
+
+**コンテナ内でのファイル作成と停止・起動による影響**
+
+次に、コンテナ内の既存ディレクトリをいくつか削除します。
+
+`rm -rf  media mnt opt var`{{execute}}
+
+```text
+[root@7b1d77ed91f8 /]# rm -rf  media mnt opt var
+ContainerExercise
+```
+
+このコンテナを停止→削除して、同じコンテナイメージから新たに同じ名前でコンテナを起動します。
+
+`docker start mycentos01`{{execute}}
+
+`docker rm mycentos01`{{execute}}
+
+`docker run -it --name mycentos01 centos /bin/bash`{{execute}}
+
+`ls -p`{{execute}}
+
+```text
+[root@7b1d77ed91f8 /]# ls -p
+```
+
+先程のファイル作成やディレクトリ削除を行う前の状態のコンテナが起動しており、コンテナに変更を加えたとしても、同じコンテナイメージから作成すれば変更を加える前の状態に戻すことができます。
+
 
 `exit`{{execute}}
 ```text
 exit
 ```
+
+
 
 コンテナの起動や停止・開始の一連の操作でコンテナの状態がどのように推移するかなんとなく理解できたかと思います。とはいえ、まだCentOSコンテナの操作をちょっと行ってみただけなので、次のステップではCentOSコンテナにアプリケーションをインストールして、アプリの動作を確認してみましょう。
 
