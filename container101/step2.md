@@ -327,8 +327,6 @@ HELLO CONTAINER WORLD
 
 **コンテナの不変性**
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-3.png)
-
 現在コンテナ内に存在するファイル/ディレクトリ一覧を表示します。
 
 `ls -p`{{execute}}
@@ -338,7 +336,6 @@ HELLO CONTAINER WORLD
 bin   etc/   lib    lost+found/  mnt/     opt/   root/  sbin  sys/  usr/
 dev/  home/  lib64  media/       newdir/  proc/  run/   srv/  tmp/  var/
 ```
-
 コンテナ内のディレクトリをいくつか削除します。
 
 `rm -rf  media mnt opt var home`{{execute}}
@@ -346,7 +343,6 @@ dev/  home/  lib64  media/       newdir/  proc/  run/   srv/  tmp/  var/
 ```text
 [root@d2cc880cb92e /]# rm -rf  media mnt opt var home
 ```
-
 削除されていることを確認します。
 
 `ls -p`{{execute}}
@@ -357,13 +353,14 @@ bin   etc/   lib    lost+found/  mnt/     opt/   root/  sbin  sys/  usr/
 dev/  home/  lib64  media/       newdir/  proc/  run/   srv/  tmp/  var/
 ```
 
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-3.png)
+
+
 この変更済コンテナを停止→削除して、同じコンテナイメージから新たに同じ名前でコンテナを起動します。
 
 `docker start mycentos01`{{execute}}
 
 `docker rm mycentos01`{{execute}}
-
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-4.png)
 
 `docker run -it --name mycentos01 centos /bin/bash`{{execute}}
 
@@ -380,6 +377,8 @@ dev/  home/  lib64  media/       opt/  root/  sbin  sys/  usr/
 ```
 
 コンテナに変更を加えたとしても、同じコンテナイメージから再度作成すれば変更を加えないコンテナを作成することができます。これがコンテナの不変性 (Immutable)という特徴です。
+
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-4.png)
 
 コンテナの起動や停止・開始の一連の操作でコンテナの状態がどのように推移するかなんとなく理解できたかと思います。とはいえ、まだCentOSコンテナの操作をちょっと行ってみただけなので、次のステップではCentOSコンテナにアプリケーションをインストールして、アプリの動作を確認してみましょう。
 
