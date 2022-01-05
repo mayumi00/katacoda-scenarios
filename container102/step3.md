@@ -35,7 +35,7 @@ testweb09
 
 図のように、Dockerfileからビルドされたapacheweb-dockerfile:1.0を元に同じコンテナが9個起動してます。
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image2-1.png)
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image3-1.png)
 
 `docker ps -a`{{execute}}
 
@@ -126,7 +126,7 @@ b26e7070b45a   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   38 seconds 
 3f2c0f3eda01   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   40 seconds ago       Exited (0) 7 seconds ago                                           testweb01
 d92f2cf8234f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   About a minute ago   Up About a minute          0.0.0.0:8080->80/tcp, :::8080->80/tcp   testweb00
 ```
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image2-2.png)
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image3-2.png)
 
 ---
 **複数のコンテナの削除**
@@ -156,7 +156,7 @@ $ docker ps -a
 CONTAINER ID   IMAGE                      COMMAND                  CREATED              STATUS              PORTS                                   NAMES
 d92f2cf8234f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   About a minute ago   Up About a minute   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testweb00
 
-![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image2-3.png)
+![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image3-3.png)
 
 ```
 
