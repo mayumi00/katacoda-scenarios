@@ -84,7 +84,7 @@ httpdを起動します。ここで「systemctlを使わないのか？」とツ
  `curl http://localhost/index.html`{{execute}}
 
 ```text
-[root@1af9407b90df /]# curl http://localhost/index.html
+[root@fb322537fce3 /]# curl http://localhost/index.html
 <head><title>Apache on Docker Container</title></head><body><H1>Container 101 - Web</H1>Apache on Docker Container</body>
  ```
 

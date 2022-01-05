@@ -389,7 +389,9 @@ dev/  home/  lib64  media/       opt/  root/  sbin  sys/  usr/
 
 コンテナに変更を加えたとしても、同じコンテナイメージから再度作成すれば変更を加えないコンテナを作成することができます。これがコンテナの不変性 (Immutable)という特徴です。
 
-確認ができたので、次のステップのためにmycentos01コンテナを起動しておきます。
+`exit`{{execute}}
+
+確認ができたので、コンテナをexitで抜け（runで起動したのでコンテナは停止する）次のステップのためにmycentos01コンテナを起動しておきます。
 
 `docker start mycentos01`{{execute}}
 
