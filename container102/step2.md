@@ -64,7 +64,7 @@ index2.htmlが作成されたことと内容を確認します。
 
 作成したDockerfile2の内容を確認します。
 
-`cat Dockerfie2 `{{execute}}
+`cat Dockerfile2 `{{execute}}
 
 以下の内容になっていればOKです。
 
