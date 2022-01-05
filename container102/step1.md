@@ -4,43 +4,9 @@
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-1.png)　
 
-この環境は既にDockerが利用できる状態になっていますので、Dockerを利用してコンテナを起動して、動作を確認してみましょう。`docker version`{{execute}} ←このように表示されている部分をクリックすると右のTerminalでコマンドが実行されます。
-
-```text
-$ docker version
-Client: Docker Engine - Community
- Version:           20.10.9
- API version:       1.41
- Go version:        go1.16.8
- Git commit:        c2ea9bc
- Built:             Mon Oct  4 16:08:29 2021
- OS/Arch:           linux/amd64
- Context:           default
- Experimental:      true
-
-Server: Docker Engine - Community
- Engine:
-  Version:          20.10.9
-  API version:      1.41 (minimum version 1.12)
-  Go version:       go1.16.8
-  Git commit:       79ea9d3
-  Built:            Mon Oct  4 16:06:34 2021
-  OS/Arch:          linux/amd64
-  Experimental:     false
- containerd:
-  Version:          1.4.11
-  GitCommit:        5b46e404f6b9f661a205e28d59c982d3634148f8
- runc:
-  Version:          1.0.2
-  GitCommit:        v1.0.2-0-g52b36a2
- docker-init:
-  Version:          0.19.0
-  GitCommit:        de40ad0
-  ```
-  
 このステップではDockerfileを利用してコンテナイメージをビルドすることを学習します。
 
-Dockerfileを利用すると以下のような処理を行うイメージを作成することができます。
+Dockerfileを利用して以下のような処理を行うコンテナイメージを作成します。
 
 - ベースとなるCentOSコンテナイメージを取得する
 - CentOSにhttpd（Apache HTTP Server）をインストールする
@@ -55,10 +21,18 @@ Dockerfileを利用すると以下のような処理を行うイメージを作�
 
 `echo "<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>"  > index.html `{{execute}}
 
+index.htmlが作成されたことと内容を確認します。
+
+`cat index.html`{{execute}}
+
+```text
+<head><title>Apache on Docker Container</title></head><body><H1>Container 102 - Web</H1>Apache on Docker Container using Dockerfile</body>
+```
+
 ---
 **Dockerfileの作成**
 
-Dockerfileに行いたい処理を記述します。
+Dockerfileに実施したい処理を記述します。
 
 > Note: 今回はEditorを利用せずechoコマンドでファイルを作成します。
 
@@ -80,7 +54,7 @@ Dockerfileに行いたい処理を記述します。
 
 `echo "RUN sed -i -e \"s/#ServerName www.example.com/ServerName localhost/\" /etc/httpd/conf/httpd.conf"  >> Dockerfile `{{execute}}
 
-`RUN`は`FROM`で指定したコンテナイイメージに対してコマンドを実行します。`RUN`は複数使用可能です。`RUN`にはshell形式とexec形式があり、この例ではshell形式で記述しています。httpdのインストールとhttpd.confの設定を行っています。
+`RUN`は`FROM`で指定したコンテナイメージに対してコマンドを実行します。`RUN`は複数使用可能です。`RUN`の記述形式にはshell形式とexec形式があり、この例ではshell形式で記述しています。この例ではhttpdのインストールとhttpd.confの設定を行っています。
 
 ***COPY*** 
 
@@ -96,7 +70,7 @@ Dockerfileに行いたい処理を記述します。
 
 `echo "CMD [\"/usr/sbin/httpd\",\"-DFOREGROUND\"]" >> Dockerfile `{{execute}}
 
-`CMD`はコンテナが起動する際に実行するコマンドを指定します。記述方法はexec形式、shell形式、ENTRYPOINTのデフォルトパラメーターの３種類があります。Dockerfileでは`CMD`は１つしか記述できません。もし複数の`CMD`があった場合は、最後の`CMD`しか処理されません。記述方式はexec形式が推奨されており、[]内に、["コマンド","パラメータ1","パラメータ2"]のように記載します。この例では、/usr/sbin/httpdコマンドにパラメータ -DFOREGROUNDを指定してフォアグラウンドで実行します。
+`CMD`はコンテナが起動する際に実行するコマンドを指定します。記述方法はexec形式、shell形式、ENTRYPOINTのデフォルトパラメーターの3種類があります。Dockerfileでは`CMD`は1つしか記述できません。もし複数の`CMD`があった場合は、最後の`CMD`しか処理されません。記述方式はexec形式が推奨されており、[]内に、["コマンド","パラメータ1","パラメータ2"]のように記載します。この例では、/usr/sbin/httpdコマンドにパラメータ -DFOREGROUNDを指定してフォアグラウンドで実行します。
 
 作成したDockerfileの内容を確認します。
 
@@ -112,8 +86,15 @@ COPY index.html /var/www/html/index.html
 CMD ["/usr/sbin/httpd","-DFOREGROUND"]
 ```
 
-Dockerfileの記載方法はDockerfile リファレンスを参照してください。
-https://docs.docker.com/engine/reference/builder/
+Dockerfileとindex.htmlが存在していることを確認します。
+
+`ls `{{execute}}
+
+```text
+$ ls
+Dockerfile index.html
+```
+
 
 ---
 **コンテナイメージのビルド**
@@ -128,37 +109,36 @@ Dockerfileが作成できたので、これを利用してコンテナイメー�
  
 ```text
 $ docker build -t apacheweb-dockerfile:1.0 .
-Sending build context to Docker daemon  1.602MB
+Sending build context to Docker daemon    1.6MB
 Step 1/5 : FROM centos
-latest: Pulling from library/centos
-a1d0c7532777: Downloading [==================================================>]  83.52MB/83.52MB
 latest: Pulling from library/centos
 a1d0c7532777: Pull complete 
 Digest: sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
 Status: Downloaded newer image for centos:latest
  ---> 5d0da3dc9764
 Step 2/5 : RUN dnf install -y httpd
- ---> Running in 6ba7745852dd
-CentOS Linux 8 - AppStream                       41 MB/s | 8.4 MB     00:00    
-CentOS Linux 8 - BaseOS                          18 MB/s | 3.6 MB     00:00    
-CentOS Linux 8 - Extras                         309  B/s |  10 kB     00:34    
+ ---> Running in 7d02dc47a060
+CentOS Linux 8 - AppStream                       15 MB/s | 8.4 MB     00:00    
+CentOS Linux 8 - BaseOS                          21 MB/s | 4.6 MB     00:00    
+CentOS Linux 8 - Extras                         124 kB/s |  10 kB     00:00    
+  
 （略）                                                  
   mod_http2-1.15.7-3.module_el8.4.0+778+c970deab.x86_64                         
 
 Complete!
-Removing intermediate container 6ba7745852dd
- ---> ac63352f59be
+Removing intermediate container 7d02dc47a060
+ ---> 58e7ace5f648
 Step 3/5 : RUN sed -i -e "s/#ServerName www.example.com/ServerName localhost/" /etc/httpd/conf/httpd.conf
- ---> Running in 186ed67a3e14
-Removing intermediate container 186ed67a3e14
- ---> 4013705a208b
+ ---> Running in a8d56778c594
+Removing intermediate container a8d56778c594
+ ---> 2a7e5889f668
 Step 4/5 : COPY index.html /var/www/html/index.html
- ---> 64850eabb784
+ ---> ff60fe64934b
 Step 5/5 : CMD ["/usr/sbin/httpd","-DFOREGROUND"]
- ---> Running in 9aafd8345b5c
-Removing intermediate container 9aafd8345b5c
- ---> e6dd36800f1d
-Successfully built e6dd36800f1d
+ ---> Running in c4045609bcdb
+Removing intermediate container c4045609bcdb
+ ---> 111248c04df0
+Successfully built 111248c04df0
 Successfully tagged apacheweb-dockerfile:1.0
 ```
 
@@ -177,16 +157,16 @@ Successfully tagged apacheweb-dockerfile:1.0
 ```text
 $ docker images
 REPOSITORY             TAG       IMAGE ID       CREATED          SIZE
-apacheweb-dockerfile   1.0       e6dd36800f1d   22 seconds ago   278MB
+apacheweb-dockerfile   1.0       111248c04df0   12 seconds ago   280MB
 redis                  latest    b8477f2e393b   2 months ago     113MB
-mongo                  latest    c1a14d3979c5   2 months ago     691MB
-mariadb                10        b7220a722ce2   2 months ago     409MB
-mariadb                latest    b7220a722ce2   2 months ago     409MB
-ubuntu                 latest    597ce1600cf4   2 months ago     72.8MB
-postgres               12        fe603fe275ba   2 months ago     371MB
-postgres               latest    6ce504119cc8   2 months ago     374MB
-mysql                  8         2fe463762680   2 months ago     514MB
-mysql                  latest    2fe463762680   2 months ago     514MB
+mongo                  latest    c1a14d3979c5   3 months ago     691MB
+mariadb                10        b7220a722ce2   3 months ago     409MB
+mariadb                latest    b7220a722ce2   3 months ago     409MB
+ubuntu                 latest    597ce1600cf4   3 months ago     72.8MB
+postgres               12        fe603fe275ba   3 months ago     371MB
+postgres               latest    6ce504119cc8   3 months ago     374MB
+mysql                  8         2fe463762680   3 months ago     514MB
+mysql                  latest    2fe463762680   3 months ago     514MB
 centos                 latest    5d0da3dc9764   3 months ago     231MB
 alpine                 latest    14119a10abf4   4 months ago     5.59MB
 weaveworks/scope       1.11.4    a082d48f0b39   2 years ago      78.5MB
@@ -203,7 +183,7 @@ weaveworks/scope       1.11.4    a082d48f0b39   2 years ago      78.5MB
 
 ```text
 $ docker run -d -p 8080:80 --name testweb00  apacheweb-dockerfile:1.0
-d92f2cf8234f57fa883567078fa946f76326cf7ec7e93aa93e4df053b6b3377e
+51dd5dd37b1e7b391e9e2c01fa765df8616b8f1bb237500e31044c3b52f07d4b
 ```
 
 コンテナ一覧を表示します。
@@ -215,7 +195,7 @@ testweb00というコンテナが起動していることがわかります。
 ```text
 $ docker ps -a
 CONTAINER ID   IMAGE                      COMMAND                  CREATED         STATUS         PORTS                                   NAMES
-d92f2cf8234f   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   3 seconds ago   Up 2 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testweb00
+51dd5dd37b1e   apacheweb-dockerfile:1.0   "/usr/sbin/httpd -DF…"   4 seconds ago   Up 3 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   testweb00
 ```
 
 ---
@@ -247,20 +227,23 @@ https://[[HOST_SUBDOMAIN]]-8080-[[KATACODA_HOST]].environments.katacoda.com/
 
 コンテナ内のプロセスを見ると、httpdがフォアグラウンド（-DFOREGROUND）で起動していることがわかります。
 ```text
-[root@d92f2cf8234f /]# ps f -e
+[root@51dd5dd37b1e /]# ps f -e
     PID TTY      STAT   TIME COMMAND
     223 pts/0    Ss     0:00 /bin/bash
-    239 pts/0    R+     0:00  \_ ps f -e
+    237 pts/0    R+     0:00  \_ ps f -e
       1 ?        Ss     0:00 /usr/sbin/httpd -DFOREGROUND
       8 ?        S      0:00 /usr/sbin/httpd -DFOREGROUND
       9 ?        Sl     0:00 /usr/sbin/httpd -DFOREGROUND
      10 ?        Sl     0:00 /usr/sbin/httpd -DFOREGROUND
-     12 ?        Sl     0:00 /usr/sbin/httpd -DFOREGROUND
+     11 ?        Sl     0:00 /usr/sbin/httpd -DFOREGROUND
 ```
 
 `exit`{{execute}}
 
 Dockerfileを利用すると、Container 101の演習で手作業で行ったインストールや設定作業を自動的に行えることがわかります。
+
+Dockerfileの記載方法はDockerfile リファレンスを参照してください。
+https://docs.docker.com/engine/reference/builder/
 
 ---
 
