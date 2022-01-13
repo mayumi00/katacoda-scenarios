@@ -177,7 +177,7 @@ weaveworks/scope       1.11.4    a082d48f0b39   2 years ago      78.5MB
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image1-2.png)
 
-作成されたapacheweb-dockerfile:1.0イメージからtestweb00をバックグラウンドで起動します。httpdにアクセスするため、自ホストの8080番とコンテナの80番をバインドしています。
+作成されたapacheweb-dockerfile:1.0イメージからtestweb00をバックグラウンドで起動します。httpdにアクセスするため、自ホストの8080番とコンテナの80番をフォワードしています。
 
 `docker run -d -p 8080:80 --name testweb00  apacheweb-dockerfile:1.0`{{execute}}
 

@@ -1,4 +1,4 @@
-## コンテナイメージの作成
+## コンテナのステータス
 
 step3でhttpd（Apache HTTP Server）がインストールされたコンテナを作成しました。同じようなコンテナを生成する際に、同じようなステップを踏むのは手間になるので、このhttpdインストール済のコンテナを元にコンテナイメージを作成してみましょう。コンテナイメージは稼働中または停止中のコンテナいずれからも作成できます。
 
@@ -39,7 +39,7 @@ centos        latest    5d0da3dc9764   3 months ago     231MB
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image06.png)　
 
-作成したapachewebイメージを元にコンテナを起動します。作成したapachewebイメージにはタグを付けていたので、タグ（:1.0）も指定します。タグを指定しないとデフォルトでlatestを探そうとするのでイメージを見つけられずに「docker: Error response from daemon」のようなエラーが返ってきます。`-d（or --detach）オプション` はコンテナをバックグラウンドで実行し、コンテナIDを出力するものです。前のステップでローカルホストの8080番は既に割当済で使用中なので、8081番にバインドしてます。
+作成したapachewebイメージを元にコンテナを起動します。作成したapachewebイメージにはタグを付けていたので、タグ（:1.0）も指定します。タグを指定しないとデフォルトでlatestを探そうとするのでイメージを見つけられずに「docker: Error response from daemon」のようなエラーが返ってきます。`-d（or --detach）オプション` はコンテナをバックグラウンドで実行し、コンテナIDを出力するものです。前のステップでローカルホストの8080番は既に割当済で使用中なので、8081番にフォワードしてます。
 
 `docker run -d -p 8081:80 -it --name testweb2 apacheweb:1.0 /bin/bash`{{execute}}
 
@@ -58,15 +58,15 @@ execコマンドを利用してbashの利用を可能にします。
 
 コンテナ内のプロセスを確認します。
 
-`ps f -e`{{execute}}
+`ps f -ef`{{execute}}
 
 そもそも、作成したコンテナイメージは、httpdインストール済だがhttpdを自動起動する設定無しのコンテナを元にしているので、httpdは自動起動しません。
 
 ```text
-[root@2bb6bc5699d6 /]# ps f -e
+[root@2bb6bc5699d6 /]# ps f -ef
     PID TTY      STAT   TIME COMMAND
      15 pts/1    Ss     0:00 /bin/bash
-     29 pts/1    R+     0:00  \_ ps f -e
+     29 pts/1    R+     0:00  \_ ps f -ef
       1 pts/0    Ss+    0:00 /bin/bash
 ```
 
@@ -76,13 +76,13 @@ execコマンドを利用してbashの利用を可能にします。
 
 コンテナ内のプロセスを確認します。
 
-`ps f -e`{{execute}}
+`ps f -ef`{{execute}}
 
 ```text
-[root@2bb6bc5699d6 /]# ps f -e
+[root@2bb6bc5699d6 /]# ps f -ef
     PID TTY      STAT   TIME COMMAND
      15 pts/1    Ss     0:00 /bin/bash
-    247 pts/1    R+     0:00  \_ ps f -e
+    247 pts/1    R+     0:00  \_ ps f -ef
       1 pts/0    Ss+    0:00 /bin/bash
      31 ?        Ss     0:00 /usr/sbin/httpd
      32 ?        S      0:00  \_ /usr/sbin/httpd

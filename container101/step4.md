@@ -52,7 +52,7 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago     78.5MB
 ---
 **コンテナイメージからのコンテナの起動**
 
-作成したapachewebイメージを元にコンテナを起動します。作成したapachewebイメージにはタグを付けていたので、タグ（:1.0）も指定します。タグを指定しないとデフォルトでlatestを探そうとするのでイメージを見つけられずに「docker: Error response from daemon」のようなエラーが返ってきます。`-d（or --detach）オプション` はコンテナをバックグラウンドで実行し、コンテナIDを出力するものです。前のステップでローカルホストの8080番は既に割当済で使用中なので、8081番にバインドしてます。
+作成したapachewebイメージを元にコンテナを起動します。作成したapachewebイメージにはタグを付けていたので、タグ（:1.0）も指定します。タグを指定しないとデフォルトでlatestを探そうとするのでイメージを見つけられずに「docker: Error response from daemon」のようなエラーが返ってきます。`-d（or --detach）オプション` はコンテナをバックグラウンドで実行し、コンテナIDを出力するものです。前のステップでローカルホストの8080番は既に割当済で使用中なので、8081番にフォワードしてます。
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image4-2.png)
 
@@ -71,15 +71,15 @@ execコマンドを利用してbashの利用を可能にします。
 
 コンテナ内のプロセスを確認します。
 
-`ps f -e`{{execute}}
+`ps f -ef`{{execute}}
 
 そもそも、作成したコンテナイメージは、httpdインストール済ですがhttpdを自動起動する設定が無いのコンテナを元にしているので、httpdは自動起動しません。
 
 ```text
-[root@331b468aebaf /]# ps f -e
+[root@331b468aebaf /]# ps f -ef
     PID TTY      STAT   TIME COMMAND
      16 pts/1    Ss     0:00 /bin/bash
-     31 pts/1    R+     0:00  \_ ps f -e
+     31 pts/1    R+     0:00  \_ ps f -ef
       1 pts/0    Ss+    0:00 /bin/bash
 ```
 
@@ -89,13 +89,13 @@ execコマンドを利用してbashの利用を可能にします。
 
 コンテナ内のプロセスを確認します。
 
-`ps f -e`{{execute}}
+`ps f -ef`{{execute}}
 
 ```text
-[root@331b468aebaf /]# ps f -e
+[root@331b468aebaf /]# ps f -ef
     PID TTY      STAT   TIME COMMAND
      16 pts/1    Ss     0:00 /bin/bash
-    249 pts/1    R+     0:00  \_ ps f -e
+    249 pts/1    R+     0:00  \_ ps f -ef
       1 pts/0    Ss+    0:00 /bin/bash
      33 ?        Ss     0:00 /usr/sbin/httpd
      34 ?        S      0:00  \_ /usr/sbin/httpd

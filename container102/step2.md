@@ -164,7 +164,7 @@ weaveworks/scope       1.11.4    a082d48f0b39   2 years ago     78.5MB
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container102/images/image2-3.png)
 
-作成されたapacheweb-dockerfile:2.0イメージからtestweb20をバックグラウンドで起動します。httpdにアクセスするため、自ホストの8000番とコンテナの80番をバインドしています。
+作成されたapacheweb-dockerfile:2.0イメージからtestweb20をバックグラウンドで起動します。httpdにアクセスするため、自ホストの8000番とコンテナの80番をフォワードしています。
 
 `docker run -d -p 8000:80 --name testweb20  apacheweb-dockerfile:2.0`{{execute}}
 
@@ -211,14 +211,14 @@ https://[[HOST_SUBDOMAIN]]-8000-[[KATACODA_HOST]].environments.katacoda.com/
 
 `docker exec -it testweb20 /bin/bash`{{execute}}
 
-`ps f -e`{{execute}}
+`ps f -eff`{{execute}}
 
 コンテナ内のプロセスを見ると、httpdがフォアグラウンド（-DFOREGROUND）で起動していることがわかります。
 ```text
-[root@3125576c8511 /]# ps f -e
+[root@3125576c8511 /]# ps f -eff
     PID TTY      STAT   TIME COMMAND
     222 pts/0    Ss     0:00 /bin/bash
-    237 pts/0    R+     0:00  \_ ps f -e
+    237 pts/0    R+     0:00  \_ ps f -eff
       1 ?        Ss     0:00 /usr/sbin/httpd -DFOREGROUND
       7 ?        S      0:00 /usr/sbin/httpd -DFOREGROUND
       8 ?        Sl     0:00 /usr/sbin/httpd -DFOREGROUND

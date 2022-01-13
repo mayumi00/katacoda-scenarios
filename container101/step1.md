@@ -166,7 +166,7 @@ Status: Downloaded newer image for httpd:latest
 da36e29f033d3a85182ea91c805b69c8b3dbe1594bab74b59e26dc637e05da69
  ```
  
-hello-world同様に、自ホストにはhttpdイメージがなかったので、コンテナレジストリからダウンロードしていることがわかります。「-p 80:80」の意味は、ローカルホスト（自ホスト）の80番ポートとコンテナ内の80番ポートをバインドすることです。
+hello-world同様に、自ホストにはhttpdイメージがなかったので、コンテナレジストリからダウンロードしていることがわかります。「-p 80:80」の意味は、ローカルホスト（自ホスト）の80番ポートとコンテナ内の80番ポートをフォワードすることです。
 
  ` docker ps -a `{{execute}}
  
@@ -202,7 +202,7 @@ $ curl  http://localhost:80/
  
  ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image1-4.png)
  
-先程のhttpdコンテナイメージから新しいコンテナを作成します。ローカルホストの80番ポートは使用中なので、ローカルホストの81番ポートとコンテナ内の80番ポートをバインドします。コンテナ名はユニークでないといけないので、httpd2とします。
+先程のhttpdコンテナイメージから新しいコンテナを作成します。ローカルホストの80番ポートは使用中なので、ローカルホストの81番ポートとコンテナ内の80番ポートをフォワードします。コンテナ名はユニークでないといけないので、httpd2とします。
  
  `docker run -d --name httpd2 -p 81:80 httpd:latest `{{execute}}
  

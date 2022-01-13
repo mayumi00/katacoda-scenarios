@@ -84,7 +84,7 @@ weaveworks/scope   1.11.4    a082d48f0b39   2 years ago    78.5MB
 ---
 **インタラクティブな状態のコンテナの起動**
 
-それでは、このcentosイメージからコンテナを起動します。コンテナを起動する際に`--nameオプション`を付けるとコンテナに任意の名前をつけることができます。今回はmycentos01という名前を付けることにします。また、標準入力を受け付ける`-i（or --interactive）オプション`と疑似TTYの割当を行う`-t（or --tty）オプション`を組み合わせてbashをインタラクティブモードで起動すると、コンテナ内での操作が可能になります。
+それでは、このcentosイメージからコンテナを起動します。コンテナを起動する際に`--nameオプション`を付けるとコンテナに任意の名前をつけることができます。今回はmycentos01という名前を付けることにします。また、標準入力を受け付ける`-i（or --interactive）オプション`と疑似TTYの割当を行う`-t（or --tty）オプション`を組み合わせて、コンテナ内にインタラクティブなbashを起動すると、コンテナ内での操作が可能になります。
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-1.png)
 
@@ -148,13 +148,13 @@ Linux 3fcd0427f74b 5.4.0-88-generic #99-Ubuntu SMP Thu Sep 23 17:29:00 UTC 2021 
 ```
 コンテナ内でのプロセスの状態を確認します。
 
-`ps f -e`{{execute}}
+`ps f -ef`{{execute}}
 
 ```text
-[root@3fcd0427f74b /]# ps f -e
+[root@3fcd0427f74b /]# ps f -ef
     PID TTY      STAT   TIME COMMAND
       1 pts/0    Ss     0:00 /bin/bash
-     18 pts/0    R+     0:00 ps f -e
+     18 pts/0    R+     0:00 ps f -ef
 ```
 
 linuxのコマンドが使えることや、ファイルの内容を確認したところで、exitコマンドでコンテナから抜けます。
@@ -202,7 +202,7 @@ b157d4669472   hello-world    "/hello"             5 minutes ago        Exited (
 
 ![Test Image 1](https://raw.githubusercontent.com/mayumi00/katacoda-scenarios/main/container101/images/image2-2.png)
 
-起動はしましたが、標準入力を受け付けるオプションを指定しなかったので操作できない状態になってしまいました。そこで、実行中のコンテナ内において新たなコマンドを実行する`docker exec`コマンドを利用してbashの利用を可能にします。
+起動はしましたが、標準入力を受け付けるオプションを指定しなかったので操作できない状態になってしまいました。そこで、実行中のコンテナ内において新たなコマンドを実行する`docker exec`コマンドを利用してコンテナ内のbashを利用を可能にします。
 
 `docker exec -it mycentos01 /bin/bash`{{execute}}
 
@@ -214,7 +214,7 @@ $ docker exec -it mycentos01 /bin/bash
 ---
 **コンテナ内でのファイル作成と停止・起動による影響**
 
-再びbashが利用できる状態になったので、いくつかのコマンドを実行してみましょう。
+再びコンテナ内の操作が可能になったので、いくつかのコマンドを実行してみましょう。
 
 ***実施項目***
 - 現在存在するファイル/ディレクトリの表示
@@ -223,7 +223,7 @@ $ docker exec -it mycentos01 /bin/bash
 
 `ls -p`{{execute}}
 
-現在コンテナ内に存在するファイル/ディレクトリ一覧を表示します
+現在コンテナ内に存在するファイル/ディレクトリ一覧を表示します。
 
 ```text
 [root@3fcd0427f74b /]# ls -p
@@ -301,7 +301,7 @@ da36e29f033d   httpd:latest   "httpd-foreground"   6 minutes ago   Up 6 minutes 
 b157d4669472   hello-world    "/hello"             6 minutes ago   Exited (0) 6 minutes ago                                       trusting_shamir
 ```
 
-mycentos01が起動したので`docker exec`コマンドを利用してbashの利用を可能にします。
+mycentos01が起動したので`docker exec`コマンドを利用してコンテナ内のbashを利用を可能にします。
 
 `docker exec -it mycentos01 /bin/bash`{{execute}}
 
