@@ -1,0 +1,17 @@
+{
+    "title": "Container 101",
+    "description": "Container on Docker",
+    "icon": "fa-katacoda",
+    "courses": [
+      {
+        "course_id": "container101",
+        "title": "Container 101",
+        "description": "Run Container on Docker"
+      },
+      {
+        "course_id": "container102",
+        "title": "Container 102",
+        "description": "Use Dockerfile"
+      }
+    ]
+  }
